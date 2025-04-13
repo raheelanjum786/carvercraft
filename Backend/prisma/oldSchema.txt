@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String?
+  password  String
+  role      String   // e.g., "admin", "customer"
+  orders    Order[]  // Relation to Order
+  verificationCode String? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+     
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  categoryId  Int 
+  price       Float
+  description String?
+  benefits    String?
+  isLatest    Boolean  @default(false)
+  status      String   // e.g., "active", "inactive"
+  imageUrls   String   @db.Text  // Store JSON string of image URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+ category      Category       @relation(fields: [categoryId], references: [id])
+  orderProducts OrderProduct[]
+  expenses      Expense[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  status    String    @default("active") // "active" or "inactive"
+  products  Product[] 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Order {
+  id        Int            @id @default(autoincrement())
+  userId    Int      
+  total     Float
+  orderDate DateTime      @default(now())
+  status    String        // e.g., "pending", "completed", "canceled"
+  message   String?
+  sender    String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id])
+  orderProducts OrderProduct[]
+}
+
+model OrderProduct {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
+}
+
+model Gift {
+  id          Int      @id @default(autoincrement())
+  name        String
+  title       String
+  price       Float
+  description String?
+  benefits    String?
+  isReadyMade Boolean  @default(false)
+  imageUrls   String   @db.Text  // Store JSON string of image URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Employer {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  phone       String
+  position    String?
+  department  String?
+  startDate   DateTime?
+  salary      Float
+  status      String   @default("active")
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  title       String
+  category    String
+  amount      Float
+  date        DateTime
+  description String?  @db.Text
+  productId   Int?     // Optional relation to Product
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product     Product? @relation(fields: [productId], references: [id])
+}
