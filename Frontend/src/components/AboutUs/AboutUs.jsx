@@ -1,100 +1,91 @@
 import { motion } from "framer-motion";
-import { Suspense, useEffect } from "react";
-
+import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 const AboutUs = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1000,
+      duration: 1200,
       once: true,
     });
   }, []);
 
   return (
-    <div className="bg-[#131313] min-h-screen text-white py-8 sm:py-12 md:py-16 lg:py-20">
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="container mx-auto px-4 sm:px-6 lg:px-8"
-      >
-        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
-          <motion.h1
-            initial={{ y: -50 }}
-            animate={{ y: 0 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-[#B96A59] to-[#E0A387] text-transparent bg-clip-text"
-          >
-            About Cravy
-          </motion.h1>
-          <p className="text-[#E0A387] text-base sm:text-lg max-w-xl sm:max-w-2xl mx-auto px-4">
-            Fueling Your Active Lifestyle with Premium Energy Bars
+    <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-red-500 mb-6">
+            Our Journey
+          </h1>
+          <p className="text-orange-200 text-xl md:text-2xl font-light max-w-3xl mx-auto">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit
           </p>
-        </div>
+        </motion.div>
 
-        {/* Story Section */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 sm:mb-16 lg:mb-20 overflow-hidden">
-          <motion.div data-aos="fade-right" className="space-y-4 sm:space-y-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#E0A387]">
-              Our Story
+        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+          <motion.div
+            data-aos="fade-right"
+            className="bg-[#1f1f1f] rounded-2xl p-8 shadow-xl border border-orange-900/20"
+          >
+            <h2 className="text-3xl font-bold text-orange-400 mb-6">
+              Lorem Ipsum Dolor
             </h2>
-            <p className="text-[#B96A59] leading-relaxed text-sm sm:text-base">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p className="text-[#B96A59] leading-relaxed text-sm sm:text-base">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur.
-            </p>
-            <p className="text-[#B96A59] leading-relaxed text-sm sm:text-base">
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum. Sed ut perspiciatis
-              unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-              veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </p>
-            <p className="text-[#B96A59] leading-relaxed text-sm sm:text-base">
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
-              aut fugit, sed quia consequuntur magni dolores eos qui ratione
-              voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-              ipsum quia dolor sit amet, consectetur, adipisci velit.
-            </p>
+            <div className="space-y-4 text-orange-100/80">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation.
+              </p>
+              <p>
+                Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                cupidatat non proident, sunt in culpa qui officia.
+              </p>
+            </div>
           </motion.div>
-          <motion.div data-aos="fade-left" className="relative">
-            <div className="aspect-video rounded-lg overflow-hidden border-2 border-[#743A36]">
-              {/* <img
-                src={CravyPic}
-                alt="Natural Ingredients"
-                className="w-full h-full object-cover"
-              /> */}
+          <motion.div data-aos="fade-left" className="relative group">
+            <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-orange-500/20 to-red-500/20 p-1">
+              <div className="w-full h-full rounded-xl overflow-hidden relative">
+                {/* Image placeholder with stylish gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-red-500/10 animate-pulse" />
+              </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Additional Feature Section */}
-        <motion.div
-          data-aos="fade-up"
-          className="mt-12 sm:mt-16 lg:mt-20 text-center bg-[#491B1D] p-8 sm:p-12 rounded-lg border border-[#743A36]"
-        >
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#E0A387] mb-4 sm:mb-6">
-            Our Commitment to Excellence
-          </h2>
-          <p className="text-[#B96A59] max-w-xl sm:max-w-2xl lg:max-w-3xl mx-auto text-sm sm:text-base">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
+        <motion.div data-aos="fade-up" className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-red-500/10 to-orange-500/10 blur-3xl" />
+          <div className="relative bg-black/40 backdrop-blur-sm rounded-3xl p-10 text-center">
+            <h2 className="text-3xl font-bold text-orange-400 mb-6">
+              Our Values
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {["Quality", "Innovation", "Sustainability"].map(
+                (value, index) => (
+                  <div
+                    key={index}
+                    className="p-6 rounded-xl bg-gradient-to-br from-orange-900/20 to-red-900/20"
+                  >
+                    <h3 className="text-xl font-semibold text-orange-300 mb-3">
+                      {value}
+                    </h3>
+                    <p className="text-orange-100/70">
+                      Committed to excellence in every aspect of our product
+                      development and customer experience.
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };

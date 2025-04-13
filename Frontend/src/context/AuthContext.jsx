@@ -30,7 +30,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
 
-      return { success: true };
+      // Return user data along with success status
+      return { success: true, user };
     } catch (error) {
       return {
         success: false,

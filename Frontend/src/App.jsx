@@ -29,6 +29,8 @@ import AdminEmployerList from "./components/Admin/AdminEmployerList";
 import AdminExpenseManager from "./components/Admin/AdminExpenseManager";
 import AdminSubscribedNewsletter from "./components/Admin/AdminSubscribedNewsletter";
 import AdminUsers from "./components/Admin/AdminUsers";
+import Cart from "./components/Cart/Cart";
+import BuyNow from "./components/BuyNow/BuyNow";
 
 const App = () => {
   return (
@@ -95,7 +97,7 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute allowedRoles={["USER"]} />}>
-            {/* <Route
+            <Route
               path="/cart"
               element={
                 <>
@@ -103,16 +105,16 @@ const App = () => {
                   <Cart />
                 </>
               }
-            /> */}
+            />
 
-            {/* <Route
+            <Route
               path="/buyNow"
               element={
                 <>
                   <Navbar /> <BuyNow />
                 </>
               }
-            /> */}
+            />
 
             {/* Admin Routes */}
             <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>

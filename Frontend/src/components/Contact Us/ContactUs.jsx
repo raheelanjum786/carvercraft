@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const ContactUs = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto"
+        className="w-full mx-auto"
       >
         <div className="text-center mb-16">
           <motion.h2
@@ -68,7 +69,7 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <p className="text-gray-400">Call Us</p>
-                  <p className="text-white font-medium">+92 (322) 0624390</p>
+                  <p className="text-white font-medium">+32 328 23823 832</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -77,7 +78,7 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <p className="text-gray-400">Email Us</p>
-                  <p className="text-white font-medium">foodscravy@gmail.com</p>
+                  <p className="text-white font-medium">temporary@gmail.com</p>
                 </div>
               </div>
               <div className="pt-8">
@@ -87,21 +88,21 @@ const ContactUs = () => {
                     href="#"
                     className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
                   >
-                    <i className="fab fa-twitter"></i>
+                    <FaTwitter />
                   </motion.a>
                   <motion.a
                     whileHover={{ scale: 1.1 }}
                     href="#"
                     className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
                   >
-                    <i className="fab fa-linkedin"></i>
+                    <FaLinkedin />
                   </motion.a>
                   <motion.a
                     whileHover={{ scale: 1.1 }}
                     href="#"
                     className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
                   >
-                    <i className="fab fa-instagram"></i>
+                    <FaInstagram />
                   </motion.a>
                 </div>
               </div>

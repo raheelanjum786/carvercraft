@@ -39,7 +39,7 @@ const ProductDescription = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="max-w-7xl mx-auto"
+          className="w-full mx-auto"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left: Image Gallery */}

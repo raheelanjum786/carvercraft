@@ -20,7 +20,12 @@ const Login = () => {
     try {
       const result = await login(email, password);
       if (result.success) {
-        navigate("/");
+        // Check user role and redirect accordingly
+        if (result.user && result.user.role === "ADMIN") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
         setError(result.error);
       }
@@ -41,7 +46,7 @@ const Login = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#1a0405] to-[#310A0B] flex items-center justify-center overflow-hidden px-4 sm:px-6">
+    <div className="relative min-h-screen bg-[#131313] flex items-center justify-center overflow-hidden px-4 sm:px-6">
       <div className="absolute inset-0 bg-[url('path/to/pattern.png')] opacity-5"></div>
 
       <motion.div
@@ -176,149 +181,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// import { motion } from "framer-motion";
-
-// import { Suspense, useRef, useState } from "react";
-// import CravyLogo from "../../assets/logo.png";
-// import { Link, useNavigate } from "react-router-dom";
-
-// import { useAuth } from "../../context/AuthContext";
-
-// const Login = () => {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-//     setLoading(true);
-
-//     try {
-//       const result = await login(email, password);
-//       if (result.success) {
-//         navigate("/dashboard");
-//       } else {
-//         setError(result.error);
-//       }
-//     } catch (err) {
-//       setError("An unexpected error occurred");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // const handleSubmit = () => {};
-//   const formVariants = {
-//     hidden: { opacity: 0, y: 50 },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       transition: { duration: 0.6, ease: "easeOut" },
-//     },
-//   };
-
-//   return (
-//     <div className="relative min-h-screen bg-[#310A0B] flex items-center justify-center overflow-hidden px-4 sm:px-6">
-//       {/* Three.js Background */}
-
-//       {/* Login Container */}
-//       <motion.div
-//         initial="hidden"
-//         animate="visible"
-//         variants={formVariants}
-//         className="relative z-10 w-full max-w-sm p-6 rounded-xl bg-gradient-to-br from-[#B96A59]/20 to-[#743A36]/20 backdrop-blur-lg shadow-2xl"
-//       >
-//         {/* Logo */}
-//         <div className="flex justify-center mb-4">
-//           <img
-//             src={CravyLogo}
-//             alt="Logo"
-//             className="w-20 h-20 object-contain filter drop-shadow-lg"
-//           />
-//         </div>
-
-//         {/* Title */}
-//         <h2 className="text-2xl font-bold text-center text-[#E0A387] mb-4">
-//           Welcome Back
-//         </h2>
-
-//         {error && (
-//           <div className="mb-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-sm text-center">
-//             {error}
-//           </div>
-//         )}
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <input
-//               type="email"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Email"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <input
-//               type="password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Password"
-//               required
-//             />
-//           </div>
-
-//           {/* Remember Me & Forgot Password */}
-//           <div className="flex items-center justify-between text-xs text-[#E0A387]">
-//             <div className="flex items-center space-x-2">
-//               <input
-//                 type="checkbox"
-//                 className="w-3 h-3 rounded border-[#E0A387] text-[#B96A59] focus:ring-[#B96A59]"
-//               />
-//               <span>Remember me</span>
-//             </div>
-//             <Link
-//               to="/forgot-password"
-//               className="hover:text-[#B96A59] transition-colors duration-300"
-//             >
-//               Forgot Password?
-//             </Link>
-//           </div>
-
-//           <button
-//             type="submit"
-//             disabled={loading}
-//             className="w-full py-2 rounded-lg bg-[#B96A59] text-[#310A0B] font-semibold
-//             shadow-lg hover:bg-[#743A36] transition-all duration-300 text-sm disabled:opacity-50"
-//           >
-//             {loading ? "Signing in..." : "Sign In"}
-//           </button>
-
-//           {/* Sign Up Link */}
-//           <p className="text-center text-xs text-[#E0A387]">
-//             Don't have an account?{" "}
-//             <Link to="/signup">
-//               <span className="font-medium hover:text-[#B96A59] transition-colors duration-300 cursor-pointer">
-//                 Sign up
-//               </span>
-//             </Link>
-//           </p>
-//         </form>
-//       </motion.div>
-//     </div>
-//   );
-// };
-
-// export default Login;

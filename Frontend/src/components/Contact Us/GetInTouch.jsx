@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import Footer from "../Footer/Footer";
 import Navbar from "../../content/Navbar/Navbar";
+import { FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const GetInTouch = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ const GetInTouch = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-7xl mx-auto w-full"
+          className="w-full mx-auto w-full"
         >
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <motion.h2
@@ -100,21 +101,21 @@ const GetInTouch = () => {
                       href="#"
                       className="bg-[#310a0b] p-2 sm:p-3 rounded-full text-[#e0a387] hover:bg-[#b96a59] transition-colors"
                     >
-                      <i className="fab fa-twitter text-sm sm:text-base"></i>
+                      <FaTwitter />
                     </motion.a>
                     <motion.a
                       whileHover={{ scale: 1.1 }}
                       href="#"
                       className="bg-[#310a0b] p-2 sm:p-3 rounded-full text-[#e0a387] hover:bg-[#b96a59] transition-colors"
                     >
-                      <i className="fab fa-linkedin text-sm sm:text-base"></i>
+                      <FaLinkedin />
                     </motion.a>
                     <motion.a
                       whileHover={{ scale: 1.1 }}
                       href="#"
                       className="bg-[#310a0b] p-2 sm:p-3 rounded-full text-[#e0a387] hover:bg-[#b96a59] transition-colors"
                     >
-                      <i className="fab fa-instagram text-sm sm:text-base"></i>
+                      <FaInstagram />
                     </motion.a>
                   </div>
                 </div>

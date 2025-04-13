@@ -85,7 +85,7 @@ const BuyNow = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[#310A0B] pt-40 pb-20 px-4 sm:px-6 lg:px-8 relative">
+      <div className="min-h-screen bg-[#131313] pt-40 pb-20 px-4 sm:px-6 lg:px-8 relative">
         {/* Updated 3D Background Animation */}
         <div className="fixed top-0 left-0 w-full h-full -z-10">
           <Canvas camera={{ position: [0, 0, 5] }}>

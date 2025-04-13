@@ -39,47 +39,47 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div
-      className="relative h-[400px] sm:h-[450px] lg:h-[500px] w-full bg-gradient-to-br from-[#B96A59] to-[#743A36] shadow-lg
-    hover:shadow-[0_20px_50px_rgba(49,10,11,0.3)] transition-transform duration-500 transform hover:scale-105 rounded-lg overflow-hidden"
-    >
+    <div className="relative w-full max-w-sm mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
       {/* Image Section */}
-      <div className="h-2/3 w-full overflow-hidden">
+      <div className="relative h-64 overflow-hidden group">
         {selectedProduct.imageUrls && (
           <img
             src={`http://localhost:4000/api${
               JSON.parse(selectedProduct.imageUrls)[0]
             }`}
             alt="Product"
-            className="w-full h-full object-cover rounded-t-lg transition-transform duration-500 ease-in-out"
+            className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
           />
+        )}
+        {product.isNew && (
+          <span className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+            NEW
+          </span>
         )}
       </div>
 
       {/* Content Section */}
-      <div className="p-4 h-1/3 flex flex-col justify-between">
-        <Link to={`/products/${product.id}`} className="cursor-pointer">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#E0A387] hover:text-[#E0A0A0]">
+      <div className="p-6 bg-gradient-to-b from-white to-gray-50">
+        <Link to={`/products/${product.id}`} className="block">
+          <h2 className="text-2xl font-bold text-gray-800 hover:text-red-600 transition-colors duration-300 mb-2">
             {product.name}
-            {product.isNew && (
-              <span className="ml-2 px-2 py-1 bg-[#E0A387] text-[#310A0B] rounded text-xs">
-                NEW
-              </span>
-            )}
           </h2>
         </Link>
-        <p className="text-sm sm:text-base text-[#E0A387]/80 mt-2 line-clamp-2">
+
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
           {product.description}
         </p>
 
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-lg sm:text-xl font-bold text-[#E0A387]">
-            Rs.{product.price}
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold text-gray-900">
+            Rs.{product.price.toLocaleString()}
           </span>
           <button
             onClick={() => handleAddToCart(product, "product")}
-            className="px-4 py-2 bg-[#E0A387] text-[#310A0B] text-sm sm:text-base font-medium rounded
-            hover:bg-[#E0A0A0]/90 transition-transform duration-300 transform hover:scale-110"
+            className="px-6 py-2.5 bg-red-600 text-white rounded-full font-semibold 
+            transform transition-all duration-300 hover:bg-red-700 hover:scale-105 
+            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+            active:scale-95 shadow-md hover:shadow-lg"
           >
             Add to Cart
           </button>

@@ -1,4 +1,3 @@
-import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect } from "react";
 import api from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
@@ -80,7 +79,7 @@ const Cart = () => {
 
   return (
     <>
-      <div className="relative bg-[#310A0B] min-h-screen">
+      <div className="relative bg-[#131313] min-h-screen">
         <div className="absolute inset-0 " style={{ zIndex: 0 }}>
           <Canvas camera={{ position: [0, 0, 2] }}>
             <Suspense fallback={null}>
