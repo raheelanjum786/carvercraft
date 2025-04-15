@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="bg-[#131313] w-full min-h-screen overflow-hidden">
+      <div className="bg-[#131313] w-full min-h-screen overflow-hidden relative">
         <div ref={ref} className="relative min-h-screen">
           {/* Main Container */}
           <LampContainer>

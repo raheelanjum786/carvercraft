@@ -65,7 +65,7 @@ const CarouselProducts = () => {
   };
 
   return (
-    <div className="w-full py-8 sm:py-12 bg-[#E0A387]">
+    <div className="w-full py-8 sm:py-12 bg-[#131313]">
       <h2 className="text-2xl sm:text-3xl font-bold text-[#310A0B] text-center mb-6 sm:mb-8">
         Featured Products
       </h2>

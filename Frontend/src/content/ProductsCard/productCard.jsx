@@ -15,12 +15,6 @@ const ProductCard = ({ product }) => {
           quantity: 1,
           userId: item.userId,
         };
-      } else {
-        requestData = {
-          giftId: item.id,
-          quantity: 1,
-          userId: item.userId,
-        };
       }
 
       const response = await api.post(
@@ -42,7 +36,7 @@ const ProductCard = ({ product }) => {
     <div className="relative w-full max-w-sm mx-auto bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
       {/* Image Section */}
       <div className="relative h-64 overflow-hidden group">
-        {selectedProduct.imageUrls && (
+        {/* {selectedProduct.imageUrls && (
           <img
             src={`http://localhost:4000/api${
               JSON.parse(selectedProduct.imageUrls)[0]
@@ -50,7 +44,7 @@ const ProductCard = ({ product }) => {
             alt="Product"
             className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
           />
-        )}
+        )} */}
         {product.isNew && (
           <span className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
             NEW

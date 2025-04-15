@@ -12,7 +12,7 @@ const AboutUs = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] min-h-screen">
+    <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] min-h-screen overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

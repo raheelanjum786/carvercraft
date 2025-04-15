@@ -6,14 +6,27 @@ import Footer from "../Footer/Footer";
 
 const ProductDescription = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState({
+    name: "",
+    price: 0,
+    description: "",
+    category: "",
+    brand: "",
+    stock: 0,
+    rating: 0,
+    reviews: [],
+    images: [],
+    additionalInfo: "",
+  });
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await api.get(`/api/products/get/${id}`);
+        const response = await api.get(
+          `http://localhost:4000/api/products/get/${id}`
+        );
         setProduct(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -49,11 +62,11 @@ const ProductDescription = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#491b1d] to-[#310A0B] p-1"
               >
-                <img
-                  src={product.images[selectedImage]}
+                {/* <img
+                  src={product.images && product.images[selectedImage]}
                   alt={product.name}
                   className="w-full h-[400px] sm:h-[500px] object-cover rounded-xl"
-                />
+                /> */}
                 {product.isNew && (
                   <div className="absolute top-4 right-4 bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded-full font-medium text-sm tracking-wide">
                     NEW ARRIVAL
@@ -63,25 +76,26 @@ const ProductDescription = () => {
 
               {/* Thumbnail Gallery */}
               <div className="grid grid-cols-4 gap-3">
-                {product.images.map((img, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`cursor-pointer rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index
-                        ? "border-[#E0A387]"
-                        : "border-transparent"
-                    }`}
-                    onClick={() => setSelectedImage(index)}
-                  >
-                    <img
+                {product.images &&
+                  product.images.map((img, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`cursor-pointer rounded-lg overflow-hidden border-2 ${
+                        selectedImage === index
+                          ? "border-[#E0A387]"
+                          : "border-transparent"
+                      }`}
+                      onClick={() => setSelectedImage(index)}
+                    >
+                      {/* <img
                       src={img}
                       alt={`${product.name} view ${index + 1}`}
                       className="w-full h-20 object-cover"
-                    />
-                  </motion.div>
-                ))}
+                    /> */}
+                    </motion.div>
+                  ))}
               </div>
             </div>
 
