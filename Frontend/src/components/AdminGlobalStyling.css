@@ -1,0 +1,105 @@
+/* Admin Global Styling */
+.custom-table .ant-table {
+  background-color: rgba(73, 27, 29, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  background-color: rgba(49, 10, 11, 0.6);
+  color: #e0a387;
+  border-bottom: 1px solid #743a36;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid rgba(116, 58, 54, 0.3);
+  color: #e0a387;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+  background-color: rgba(116, 58, 54, 0.2);
+}
+
+.custom-table .ant-pagination-item {
+  background-color: rgba(49, 10, 11, 0.6);
+  border-color: #743a36;
+}
+
+.custom-table .ant-pagination-item a {
+  color: #e0a387;
+}
+
+.custom-table .ant-pagination-item-active {
+  background-color: #743a36;
+  border-color: #e0a387;
+}
+
+.custom-table .ant-pagination-prev .ant-pagination-item-link,
+.custom-table .ant-pagination-next .ant-pagination-item-link {
+  background-color: rgba(49, 10, 11, 0.6);
+  border-color: #743a36;
+  color: #e0a387;
+}
+
+.custom-table .ant-empty-description {
+  color: #e0a387;
+}
+
+/* Form styling */
+.ant-form-item-label > label {
+  color: #e0a387 !important;
+}
+
+.ant-input,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker {
+  background-color: rgba(49, 10, 11, 0.6) !important;
+  border-color: #743a36 !important;
+  color: #e0a387 !important;
+}
+
+.ant-input::placeholder,
+.ant-select-selection-placeholder {
+  color: rgba(224, 163, 135, 0.5) !important;
+}
+
+.ant-select-dropdown {
+  background-color: rgba(49, 10, 11, 0.9) !important;
+  border: 1px solid #743a36 !important;
+}
+
+.ant-select-item {
+  color: #e0a387 !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: rgba(116, 58, 54, 0.3) !important;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: rgba(116, 58, 54, 0.6) !important;
+}
+
+/* Modal styling */
+.ant-modal-content {
+  background-color: rgba(73, 27, 29, 0.95) !important;
+  border: 1px solid #743a36;
+}
+
+.ant-modal-header {
+  background-color: rgba(49, 10, 11, 0.6) !important;
+  border-bottom: 1px solid #743a36 !important;
+}
+
+.ant-modal-title {
+  color: #e0a387 !important;
+}
+
+.ant-modal-close-x {
+  color: #e0a387 !important;
+}
+
+.ant-modal-footer {
+  border-top: 1px solid #743a36 !important;
+}

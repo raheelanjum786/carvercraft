@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as THREE from "three";
 import gsap from "gsap";
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
 
 const AdminSettings = () => {
   const [showNewAdmin, setShowNewAdmin] = useState(false);
@@ -39,14 +37,12 @@ const AdminSettings = () => {
     e.preventDefault();
     const validationErrors = validatePasswordChange();
     if (Object.keys(validationErrors).length === 0) {
-      // Handle password change logic here
       console.log("Password change submitted:", formData);
     } else {
       setErrors(validationErrors);
     }
   };
 
-  // Add Three.js background effect
   useEffect(() => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -57,11 +53,10 @@ const AdminSettings = () => {
     );
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: true, // Add antialiasing
+      antialias: true,
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // Create container if it doesn't exist
     let container = document.querySelector(".three-bg");
     if (!container) {
       container = document.createElement("div");
@@ -70,7 +65,6 @@ const AdminSettings = () => {
     }
     container.appendChild(renderer.domElement);
 
-    // Set renderer background and pixel ratio
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -90,15 +84,14 @@ const AdminSettings = () => {
     const particles = new THREE.Points(
       geometry,
       new THREE.PointsMaterial({
-        color: "#E0A387",
+        color: "#3498DB",
         size: 2,
-        sizeAttenuation: true, // Enable size attenuation
+        sizeAttenuation: true,
       })
     );
     scene.add(particles);
     camera.position.z = 500;
 
-    // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
       particles.rotation.x += 0.0001;
@@ -125,7 +118,7 @@ const AdminSettings = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#310A0B] to-[#491B1D]">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#1A1A1A] to-[#2D2D2D]">
       <div className="three-bg absolute inset-0 -z-10" />
 
       <motion.div
@@ -134,7 +127,7 @@ const AdminSettings = () => {
         className="p-4 md:p-6 lg:p-8 text-white relative z-10"
       >
         <motion.h1
-          className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4"
+          className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-[#ECF0F1]"
           initial={{ x: -100 }}
           animate={{ x: 0 }}
           transition={{ type: "spring", stiffness: 100 }}
@@ -143,11 +136,11 @@ const AdminSettings = () => {
         </motion.h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <motion.div
-            className="bg-[#743A36]/40 backdrop-blur-sm rounded-lg p-4 md:p-6"
+            className="bg-[#2C3E50]/40 backdrop-blur-sm rounded-lg p-4 md:p-6"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <h2 className="text-xl font-semibold mb-4 text-[#E0A387]">
+            <h2 className="text-xl font-semibold mb-4 text-[#3498DB]">
               Change Password
             </h2>
             <form onSubmit={handlePasswordChange}>
@@ -156,10 +149,10 @@ const AdminSettings = () => {
                   <input
                     type="password"
                     placeholder="Current Password"
-                    className={`w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                    text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                    focus:ring-1 focus:ring-[#E0A387] transition-colors ${
-                      errors.currentPassword ? "border-red-500" : ""
+                    className={`w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                    text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                    focus:ring-1 focus:ring-[#3498DB] transition-colors ${
+                      errors.currentPassword ? "border-[#E74C3C]" : ""
                     }`}
                     value={formData.currentPassword}
                     onChange={(e) =>
@@ -170,7 +163,7 @@ const AdminSettings = () => {
                     }
                   />
                   {errors.currentPassword && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-[#E74C3C] text-sm mt-1">
                       {errors.currentPassword}
                     </p>
                   )}
@@ -179,10 +172,10 @@ const AdminSettings = () => {
                   <input
                     type="password"
                     placeholder="New Password"
-                    className={`w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                    text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                    focus:ring-1 focus:ring-[#E0A387] transition-colors ${
-                      errors.newPassword ? "border-red-500" : ""
+                    className={`w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                    text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                    focus:ring-1 focus:ring-[#3498DB] transition-colors ${
+                      errors.newPassword ? "border-[#E74C3C]" : ""
                     }`}
                     value={formData.newPassword}
                     onChange={(e) =>
@@ -190,7 +183,7 @@ const AdminSettings = () => {
                     }
                   />
                   {errors.newPassword && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-[#E74C3C] text-sm mt-1">
                       {errors.newPassword}
                     </p>
                   )}
@@ -199,10 +192,10 @@ const AdminSettings = () => {
                   <input
                     type="password"
                     placeholder="Confirm New Password"
-                    className={`w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                    text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                    focus:ring-1 focus:ring-[#E0A387] transition-colors ${
-                      errors.confirmPassword ? "border-red-500" : ""
+                    className={`w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                    text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                    focus:ring-1 focus:ring-[#3498DB] transition-colors ${
+                      errors.confirmPassword ? "border-[#E74C3C]" : ""
                     }`}
                     value={formData.confirmPassword}
                     onChange={(e) =>
@@ -213,14 +206,14 @@ const AdminSettings = () => {
                     }
                   />
                   {errors.confirmPassword && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-[#E74C3C] text-sm mt-1">
                       {errors.confirmPassword}
                     </p>
                   )}
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded hover:bg-[#c88f75] transition-colors"
+                  className="bg-[#3498DB] text-white px-4 py-2 rounded hover:bg-[#2980B9] transition-colors"
                 >
                   Update Password
                 </button>
@@ -228,16 +221,15 @@ const AdminSettings = () => {
             </form>
           </motion.div>
 
-          {/* add admin*/}
           <motion.div
-            className="bg-[#743A36]/40 backdrop-blur-sm rounded-lg p-4 md:p-6"
+            className="bg-[#2C3E50]/40 backdrop-blur-sm rounded-lg p-4 md:p-6"
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
             <button
               onClick={() => setShowNewAdmin(!showNewAdmin)}
-              className="w-full md:w-auto bg-gradient-to-r from-[#B96A59] to-[#E0A387] text-[#310A0B] px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+              className="w-full md:w-auto bg-gradient-to-r from-[#2C3E50] to-[#3498DB] text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300"
             >
               {showNewAdmin ? "Hide Form" : "Add New Admin"}
             </button>
@@ -254,16 +246,16 @@ const AdminSettings = () => {
                   }}
                   className="overflow-hidden"
                 >
-                  <h2 className="text-xl font-semibold mb-4 text-[#E0A387]">
+                  <h2 className="text-xl font-semibold mb-4 text-[#3498DB]">
                     New Admin Details
                   </h2>
                   <div className="space-y-4">
                     <input
                       type="text"
                       placeholder="Name"
-                      className="w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                      text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                      focus:ring-1 focus:ring-[#E0A387] transition-colors"
+                      className="w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                      text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                      focus:ring-1 focus:ring-[#3498DB] transition-colors"
                       value={newAdminData.name}
                       onChange={(e) =>
                         setNewAdminData({
@@ -275,9 +267,9 @@ const AdminSettings = () => {
                     <input
                       type="email"
                       placeholder="Email"
-                      className="w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                      text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                      focus:ring-1 focus:ring-[#E0A387] transition-colors"
+                      className="w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                      text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                      focus:ring-1 focus:ring-[#3498DB] transition-colors"
                       value={newAdminData.email}
                       onChange={(e) =>
                         setNewAdminData({
@@ -286,45 +278,12 @@ const AdminSettings = () => {
                         })
                       }
                     />
-                    {/* <div className="phone-input-container">
-                      <PhoneInput
-                        country={"pk"}
-                        value={newAdminData.phone}
-                        onChange={(phone) =>
-                          setNewAdminData({
-                            ...newAdminData,
-                            phone: phone,
-                          })
-                        }
-                        inputStyle={{
-                          width: "100%",
-                          height: "40px",
-                          fontSize: "16px",
-                          backgroundColor: "rgba(185, 106, 89, 0.2)",
-                          border: "1px solid #491B1D",
-                          color: "#E0A387",
-                        }}
-                        buttonStyle={{
-                          backgroundColor: "rgba(185, 106, 89, 0.2)",
-                          border: "1px solid #491B1D",
-                          borderRight: "none",
-                        }}
-                        dropdownStyle={{
-                          backgroundColor: "#743A36",
-                          color: "#E0A387",
-                        }}
-                        containerStyle={{
-                          width: "100%",
-                        }}
-                        containerClass="phone-input"
-                      />
-                    </div> */}
                     <input
                       type="password"
                       placeholder="Password"
-                      className="w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                      text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                      focus:ring-1 focus:ring-[#E0A387] transition-colors"
+                      className="w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                      text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                      focus:ring-1 focus:ring-[#3498DB] transition-colors"
                       value={newAdminData.password}
                       onChange={(e) =>
                         setNewAdminData({
@@ -335,9 +294,9 @@ const AdminSettings = () => {
                     />
                     <textarea
                       placeholder="Address"
-                      className="w-full p-2 rounded bg-[#B96A59]/20 border border-[#491B1D] 
-                      text-[#E0A387] placeholder-[#E0A387]/60 focus:outline-none focus:border-[#E0A387] 
-                      focus:ring-1 focus:ring-[#E0A387] transition-colors"
+                      className="w-full p-2 rounded bg-[#34495E]/20 border border-[#2C3E50] 
+                      text-white placeholder-[#ECF0F1]/60 focus:outline-none focus:border-[#3498DB] 
+                      focus:ring-1 focus:ring-[#3498DB] transition-colors"
                       value={newAdminData.address}
                       onChange={(e) =>
                         setNewAdminData({
@@ -347,7 +306,7 @@ const AdminSettings = () => {
                       }
                       rows="3"
                     />
-                    <button className="bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded hover:bg-[#c88f75] transition-colors">
+                    <button className="bg-[#3498DB] text-white px-4 py-2 rounded hover:bg-[#2980B9] transition-colors">
                       Save
                     </button>
                   </div>
@@ -360,35 +319,5 @@ const AdminSettings = () => {
     </div>
   );
 };
-
-// // Add these styles to your CSS file or add a style tag in your component
-// const styles = `
-//   .phone-input .selected-flag:hover,
-//   .phone-input .selected-flag:focus {
-//     background-color: rgba(185, 106, 89, 0.3) !important;
-//   }
-
-//   .phone-input .country-list {
-//     background-color: #743A36 !important;
-//     border: 1px solid #491B1D !important;
-//   }
-
-//   .phone-input .country-list .country:hover {
-//     background-color: #B96A59 !important;
-//   }
-
-//   .phone-input .country-list .country.highlight {
-//     background-color: #B96A59 !important;
-//   }
-
-//   .phone-input input::placeholder {
-//     color: rgba(224, 163, 135, 0.6) !important;
-//   }
-
-//   .phone-input input:focus {
-//     border-color: #E0A387 !important;
-//     box-shadow: 0 0 0 1px #E0A387 !important;
-//   }
-// `;
 
 export default AdminSettings;

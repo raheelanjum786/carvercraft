@@ -13,13 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { motion } from "framer-motion";
-import {
-  FaUsers,
-  FaBox,
-  FaGift,
-  FaShoppingCart,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaUsers, FaBox, FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { Table, Avatar } from "antd";
 import axios from "axios";
 
@@ -37,35 +31,39 @@ ChartJS.register(
 );
 import api from "../../utils/axios";
 
+/*
+ * Professional Color Palette:
+ * Primary: #2C3E50 (Dark Blue)
+ * Secondary: #34495E (Lighter Blue)
+ * Accent: #3498DB (Bright Blue)
+ * Text Primary: #FFFFFF (White)
+ * Text Secondary: #ECF0F1 (Light Gray)
+ * Background Primary: #1A1A1A (Almost Black)
+ * Background Secondary: #2D2D2D (Dark Gray)
+ * Success: #2ECC71 (Green)
+ * Warning: #F39C12 (Orange)
+ * Danger: #E74C3C (Red)
+ * Chart Colors: ["#3498DB", "#2ECC71", "#F39C12", "#E74C3C"]
+ */
+
 const AdminHome = () => {
   const [users, setUsers] = useState([]);
-  const [salesData] = useState({
+  const [salesData, setSalesData] = useState({
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
         label: "Sales",
         data: [3000, 3500, 4000, 3800, 4200, 4500],
-        borderColor: "#E0A387",
-        backgroundColor: "rgba(224, 163, 135, 0.2)",
+        borderColor: "#3498DB",
+        backgroundColor: "rgba(52, 152, 219, 0.2)",
         tension: 0.4,
-      },
-    ],
-  });
-
-  // Gift Type Distribution
-  const [giftTypeData, setGiftTypeData] = useState({
-    labels: ["Ready-Made Gifts", "Custom Gifts"],
-    datasets: [
-      {
-        data: [0, 0],
-        backgroundColor: ["#E0A387", "#B96A59"],
       },
     ],
   });
 
   // Add new state for products count
   const [totalProducts, setTotalProducts] = useState(0);
-  const [giftOrder, setGiftOrder] = useState(0);
+
   const [orders, setOrders] = useState(0);
   // Update categoryData state to be dynamic
   const [categoryData, setCategoryData] = useState({
@@ -73,7 +71,7 @@ const AdminHome = () => {
     datasets: [
       {
         data: [],
-        backgroundColor: ["#E0A387", "#B96A59", "#743A36"],
+        backgroundColor: ["#3498DB", "#2ECC71", "#F39C12", "#E74C3C"],
       },
     ],
   });
@@ -83,37 +81,25 @@ const AdminHome = () => {
     const fetchData = async () => {
       try {
         //fetching users
-        const userRes = await api.get(
-          "http://localhost:4000/api/auth/users/get-users"
-        );
+        const userRes = await api.get("/api/auth/users/get-users");
         const userData = await userRes.data;
         setUsers(userData);
+
         // Fetching categories and products
         const [categoriesRes, productsRes] = await Promise.all([
-          api.get("http://localhost:4000/api/categories/get"),
-          api.get("http://localhost:4000/api/products/get"),
+          api.get("/api/categories/get"),
+          api.get("/api/products/get"),
         ]);
 
         // Updating total products count
         setTotalProducts(productsRes.data.length);
 
-        const giftRes = await api.get(
-          "http://localhost:4000/api/giftOrder/getAll"
-        );
-
         // Processing categories data for the chart
         const categories = categoriesRes.data;
-        setGiftOrder(giftRes.data.length);
 
-        const orderRes = await api.get(
-          "http://localhost:4000/api/productOrder/getAll"
-        );
+        const orderRes = await api.get("/api/productOrder/getAll");
 
         setOrders(orderRes.data.length);
-
-        const giftDistributionRes = await api.get(
-          "http://localhost:4000/api/gifts/get"
-        );
 
         // Counting products per category
         const categoryCount = {};
@@ -131,31 +117,7 @@ const AdminHome = () => {
           datasets: [
             {
               data: Object.values(categoryCount),
-              backgroundColor: ["#E0A387", "#B96A59", "#743A36"],
-            },
-          ],
-        });
-
-        // Update gift type distribution data
-        const giftTypeCount = {
-          "Ready-Made Gifts": 0,
-          "Custom Gifts": 0,
-        };
-
-        giftDistributionRes.data.forEach((gift) => {
-          if (gift.type === "Ready-Made Gifts") {
-            giftTypeCount["Ready-Made Gifts"]++;
-          } else if (gift.type === "Custom Gifts") {
-            giftTypeCount["Custom Gifts"]++;
-          }
-        });
-
-        setGiftTypeData({
-          labels: Object.keys(giftTypeCount),
-          datasets: [
-            {
-              data: Object.values(giftTypeCount),
-              backgroundColor: ["#E0A387", "#B96A59"],
+              backgroundColor: ["#3498DB", "#2ECC71", "#F39C12", "#E74C3C"],
             },
           ],
         });
@@ -179,7 +141,7 @@ const AdminHome = () => {
           datasets: [
             {
               data: Object.values(orderStatusCount),
-              backgroundColor: ["#E0A387", "#B96A59", "#743A36", "#491B1D"],
+              backgroundColor: ["#3498DB", "#2ECC71", "#F39C12", "#E74C3C"],
             },
           ],
         });
@@ -206,7 +168,7 @@ const AdminHome = () => {
     datasets: [
       {
         data: [0, 0, 0, 0],
-        backgroundColor: ["#E0A387", "#B96A59", "#743A36", "#491B1D"],
+        backgroundColor: ["#3498DB", "#2ECC71", "#F39C12", "#E74C3C"],
       },
     ],
   });
@@ -220,10 +182,10 @@ const AdminHome = () => {
       key: "name",
       render: (text, record) => (
         <div className="flex items-center gap-3">
-          <Avatar icon={<FaUserCircle />} className="bg-[#743A36]" />
+          <Avatar icon={<FaUserCircle />} className="bg-[#34495E]" />
           <div>
-            <p className="text-[#E0A387] font-medium">{text}</p>
-            <p className="text-[#B96A59] text-sm">{record.email}</p>
+            <p className="text-white font-medium">{text}</p>
+            <p className="text-[#ECF0F1] text-sm">{record.email}</p>
           </div>
         </div>
       ),
@@ -236,8 +198,8 @@ const AdminHome = () => {
         <span
           className={`px-2 py-1 rounded-full text-sm ${
             status === "active"
-              ? "bg-green-500/20 text-green-500"
-              : "bg-red-500/20 text-red-500"
+              ? "bg-[#2ECC71]/20 text-[#2ECC71]"
+              : "bg-[#E74C3C]/20 text-[#E74C3C]"
           }`}
         >
           {status}
@@ -248,53 +210,90 @@ const AdminHome = () => {
       title: "Orders",
       dataIndex: "orders",
       key: "orders",
-      render: (orders) => <span className="text-[#E0A387]">{orders}</span>,
+      render: (orders) => <span className="text-white">{orders}</span>,
     },
     {
       title: "Last Active",
       dataIndex: "lastActive",
       key: "lastActive",
-      render: (time) => <span className="text-[#B96A59]">{time}</span>,
+      render: (time) => <span className="text-[#ECF0F1]">{time}</span>,
     },
   ];
+
+  // Add new state for sales data
+  const [salesOverview, setSalesOverview] = useState({
+    totalSales: 0,
+    uniqueCustomers: 0,
+    avgRevenue: 0,
+  });
+
+  // Add to your existing useEffect or create a new one
+  useEffect(() => {
+    const fetchSalesData = async () => {
+      try {
+        const salesRes = await api.get("/api/sales/overview");
+        const salesData = salesRes.data;
+
+        setSalesOverview(salesData.overview);
+
+        // Update sales chart data if needed
+        setSalesData({
+          labels: salesData.channelsData.map((item) => item.name),
+          datasets: [
+            {
+              label: "Sales",
+              data: salesData.channelsData.map(
+                (item) =>
+                  Object.values(item).reduce(
+                    (sum, val) => (typeof val === "number" ? sum + val : sum),
+                    0
+                  ) - 0
+              ),
+              borderColor: "#3498DB",
+              backgroundColor: "rgba(52, 152, 219, 0.2)",
+              tension: 0.4,
+            },
+          ],
+        });
+
+        // You can also update other charts with the sales data
+      } catch (error) {
+        console.error("Error fetching sales data:", error);
+      }
+    };
+
+    fetchSalesData();
+  }, []);
 
   const statsCards = [
     {
       title: "Total Users",
       value: users.length.toString(),
       icon: <FaUsers className="w-6 h-6" />,
-      color: "#E0A387",
+      color: "#3498DB",
     },
     {
       title: "Total Products",
       value: totalProducts.toString(),
       icon: <FaBox />,
-      color: "#B96A59",
-    },
-    {
-      title: "Gift Orders",
-      value: giftOrder.toString(),
-      icon: <FaGift />,
-      color: "#743A36",
+      color: "#2ECC71",
     },
     {
       title: "Total Orders",
       value: orders.toString(),
       icon: <FaShoppingCart />,
-      color: "#491B1D",
+      color: "#F39C12",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#310A0B] to-[#491B1D] p-6">
+    <div className="min-h-screen bg-[#1A1A1A] p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold text-[#E0A387] mb-8 ml-16">
-          Dashboard
-        </h1>
+        <h1 className="text-3xl font-bold text-white mb-8 ml-16">Dashboard</h1>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -304,11 +303,11 @@ const AdminHome = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+              className="bg-[#2D2D2D] p-6 rounded-lg shadow-xl"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#E0A387] text-sm">{card.title}</p>
+                  <p className="text-[#ECF0F1] text-sm">{card.title}</p>
                   <h3 className="text-2xl font-bold text-white mt-2">
                     {card.value}
                   </h3>
@@ -327,9 +326,9 @@ const AdminHome = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+            className="bg-[#2D2D2D] p-6 rounded-lg shadow-xl"
           >
-            <h2 className="text-xl font-bold text-[#E0A387] mb-4">
+            <h2 className="text-xl font-bold text-white mb-4">
               Sales Overview
             </h2>
             <Line
@@ -340,20 +339,20 @@ const AdminHome = () => {
                   y: {
                     beginAtZero: true,
                     grid: {
-                      color: "rgba(224, 163, 135, 0.1)",
+                      color: "rgba(255, 255, 255, 0.1)",
                     },
-                    ticks: { color: "#E0A387" },
+                    ticks: { color: "#ECF0F1" },
                   },
                   x: {
                     grid: {
-                      color: "rgba(224, 163, 135, 0.1)",
+                      color: "rgba(255, 255, 255, 0.1)",
                     },
-                    ticks: { color: "#E0A387" },
+                    ticks: { color: "#ECF0F1" },
                   },
                 },
                 plugins: {
                   legend: {
-                    labels: { color: "#E0A387" },
+                    labels: { color: "#ECF0F1" },
                   },
                 },
               }}
@@ -364,9 +363,9 @@ const AdminHome = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+            className="bg-[#2D2D2D] p-6 rounded-lg shadow-xl"
           >
-            <h2 className="text-xl font-bold text-[#E0A387] mb-4">
+            <h2 className="text-xl font-bold text-white mb-4">
               Product Categories
             </h2>
             <div className="h-[300px] flex items-center justify-center">
@@ -377,7 +376,7 @@ const AdminHome = () => {
                   plugins: {
                     legend: {
                       position: "bottom",
-                      labels: { color: "#E0A387" },
+                      labels: { color: "#ECF0F1" },
                     },
                   },
                 }}
@@ -392,11 +391,9 @@ const AdminHome = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+            className="bg-[#2D2D2D] p-6 rounded-lg shadow-xl"
           >
-            <h2 className="text-xl font-bold text-[#E0A387] mb-4">
-              Order Status
-            </h2>
+            <h2 className="text-xl font-bold text-white mb-4">Order Status</h2>
             <Bar
               data={orderStatusData}
               options={{
@@ -405,15 +402,15 @@ const AdminHome = () => {
                   y: {
                     beginAtZero: true,
                     grid: {
-                      color: "rgba(224, 163, 135, 0.1)",
+                      color: "rgba(255, 255, 255, 0.1)",
                     },
-                    ticks: { color: "#E0A387" },
+                    ticks: { color: "#ECF0F1" },
                   },
                   x: {
                     grid: {
-                      color: "rgba(224, 163, 135, 0.1)",
+                      color: "rgba(255, 255, 255, 0.1)",
                     },
-                    ticks: { color: "#E0A387" },
+                    ticks: { color: "#ECF0F1" },
                   },
                 },
                 plugins: {
@@ -429,34 +426,28 @@ const AdminHome = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+            className="bg-[#2D2D2D] p-6 rounded-lg shadow-xl"
           >
-            <h2 className="text-xl font-bold text-[#E0A387] mb-4">
-              Recent Orders
-            </h2>
+            <h2 className="text-xl font-bold text-white mb-4">Recent Orders</h2>
             <div className="space-y-4">
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between p-4 bg-[#743A36]/20 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-[#34495E]/30 rounded-lg"
                 >
                   <div>
-                    <p className="text-[#E0A387] font-medium">
-                      {order.customer}
-                    </p>
-                    <p className="text-sm text-[#B96A59]">#{order.id}</p>
+                    <p className="text-white font-medium">{order.customer}</p>
+                    <p className="text-sm text-[#ECF0F1]">#{order.id}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[#E0A387] font-medium">
-                      Rs.{order.amount}
-                    </p>
+                    <p className="text-white font-medium">Rs.{order.amount}</p>
                     <span
                       className={`text-sm px-2 py-1 rounded ${
                         order.status === "completed"
-                          ? "bg-green-500/20 text-green-500"
+                          ? "bg-[#2ECC71]/20 text-[#2ECC71]"
                           : order.status === "pending"
-                          ? "bg-yellow-500/20 text-yellow-500"
-                          : "bg-blue-500/20 text-blue-500"
+                          ? "bg-[#F39C12]/20 text-[#F39C12]"
+                          : "bg-[#3498DB]/20 text-[#3498DB]"
                       }`}
                     >
                       {order.status}
@@ -466,66 +457,41 @@ const AdminHome = () => {
               ))}
             </div>
           </motion.div>
-          {/* Gift Type Distribution */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
-          >
-            <h2 className="text-xl font-bold text-[#E0A387] mb-4">
-              Gift Type Distribution
-            </h2>
-            <div className="h-[300px] flex items-center justify-center">
-              <Doughnut
-                data={giftTypeData}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    legend: {
-                      position: "bottom",
-                      labels: { color: "#E0A387" },
-                    },
-                  },
-                }}
-              />
-            </div>
-          </motion.div>
+
           {/* User Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#E0A387]/5 backdrop-blur-sm p-4 sm:p-5 md:p-6 rounded-lg shadow-xl w-full"
+            className="bg-[#2D2D2D] p-4 sm:p-5 md:p-6 rounded-lg shadow-xl w-full"
           >
-            <div className="bg-[#E0A387]/5 backdrop-blur-sm p-3 sm:p-4 md:p-6 rounded-lg shadow-xl w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
-                <h2 className="text-base sm:text-lg md:text-xl font-bold text-[#E0A387]">
-                  Recent Users
-                </h2>
-                <button
-                  onClick={() => {
-                    /* Add navigation to full user list */
-                  }}
-                  className="mt-3 sm:mt-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#743A36] text-[#E0A387] rounded-md hover:bg-[#B96A59] transition duration-300 text-sm sm:text-base"
-                >
-                  View All
-                </button>
-              </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
+              <h2 className="text-base sm:text-lg md:text-xl font-bold text-white">
+                Recent Users
+              </h2>
+              <button
+                onClick={() => {
+                  /* Add navigation to full user list */
+                }}
+                className="mt-3 sm:mt-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#34495E] text-white rounded-md hover:bg-[#3498DB] transition duration-300 text-sm sm:text-base"
+              >
+                View All
+              </button>
+            </div>
 
-              <div className="overflow-hidden w-full">
-                <Table
-                  dataSource={users}
-                  columns={userColumns
-                    .map((col, index) => (index < 1 ? col : null))
-                    .filter(Boolean)} // Show only the first two columns
-                  pagination={{ pageSize: 3 }}
-                  className="user-table w-full"
-                  rowKey="id"
-                  style={{
-                    background: "transparent",
-                  }}
-                  scroll={{ x: true }}
-                />
-              </div>
+            <div className="overflow-hidden w-full">
+              <Table
+                dataSource={users}
+                columns={userColumns
+                  .map((col, index) => (index < 1 ? col : null))
+                  .filter(Boolean)} // Show only the first column
+                pagination={{ pageSize: 3 }}
+                className="user-table w-full"
+                rowKey="id"
+                style={{
+                  background: "transparent",
+                }}
+                scroll={{ x: true }}
+              />
             </div>
           </motion.div>
         </div>

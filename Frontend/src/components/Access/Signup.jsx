@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Suspense, useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
@@ -23,7 +23,6 @@ const Signup = () => {
     });
   };
 
-  // const handleSubmit = () => {};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -54,137 +53,218 @@ const Signup = () => {
     }
   };
 
+  // Funky animations
   const formVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 50, rotate: 2 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      rotate: 0,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5 },
     },
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-[#310A0B] to-[#1a0506] flex items-center justify-center overflow-hidden px-4 sm:px-6">
-      <div className="absolute inset-0 bg-[url('/path/to/pattern.png')] opacity-5"></div>
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 flex items-center justify-center overflow-hidden px-4 sm:px-6">
+      {/* Funky background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-yellow-300 opacity-20 blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-pink-400 opacity-20 blur-3xl"></div>
+      </div>
+
+      {/* Floating shapes */}
+      <motion.div
+        className="absolute top-20 left-20 w-12 h-12 bg-yellow-300 rounded-lg opacity-70"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 15, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+
+      <motion.div
+        className="absolute bottom-32 right-20 w-16 h-16 bg-pink-400 rounded-full opacity-70"
+        animate={{
+          y: [0, 30, 0],
+          x: [0, -20, 0],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+
+      <motion.div
+        className="absolute top-1/2 right-1/4 w-10 h-10 bg-green-400 rounded-lg opacity-70 rotate-45"
+        animate={{
+          y: [0, -15, 0],
+          x: [0, 15, 0],
+          rotate: [45, 90, 45],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
 
       <motion.div
         initial="hidden"
         animate="visible"
         variants={formVariants}
-        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-gradient-to-br from-[#B96A59]/10 to-[#743A36]/10 backdrop-blur-xl shadow-[0_0_40px_rgba(185,106,89,0.1)] border border-[#E0A387]/10"
+        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/20"
       >
-        <div className="flex justify-center mb-6">
-          <motion.img
-            whileHover={{ scale: 1.05 }}
-            // src={DemoLogo}
-            alt="Logo"
-            className="w-24 h-24 object-contain filter drop-shadow-[0_0_15px_rgba(224,163,135,0.3)]"
-          />
-        </div>
+        <motion.div
+          className="flex justify-center mb-6"
+          whileHover={{ scale: 1.1, rotate: [0, -5, 5, -5, 0] }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
+            <span className="text-4xl font-bold text-white">CC</span>
+          </div>
+        </motion.div>
 
         <motion.h2
-          className="text-3xl font-bold text-center text-[#E0A387] mb-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          variants={itemVariants}
+          className="text-3xl font-extrabold text-center text-white mb-6 tracking-tight"
+          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}
         >
           Create Account
         </motion.h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm text-center backdrop-blur-sm"
-            >
-              {error}
-            </motion.div>
-          )}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="mb-6 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-sm text-center backdrop-blur-sm"
+          >
+            {error}
+          </motion.div>
+        )}
 
-          <div className="space-y-4">
-            <motion.div whileHover={{ scale: 1.01 }} className="group">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg bg-[#E0A387]/5 border border-[#E0A387]/20 
-                text-[#E0A387] placeholder-[#E0A387]/40 focus:outline-none focus:border-[#E0A387]/60 
-                focus:ring-2 focus:ring-[#E0A387]/20 transition-all duration-300 text-sm
-                group-hover:bg-[#E0A387]/10"
-                placeholder="Full Name"
-                required
-              />
-            </motion.div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group"
+          >
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
+              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              transition-all duration-300 text-base"
+              placeholder="Full Name"
+              required
+            />
+          </motion.div>
 
-            <motion.div whileHover={{ scale: 1.01 }} className="group">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg bg-[#E0A387]/5 border border-[#E0A387]/20 
-                text-[#E0A387] placeholder-[#E0A387]/40 focus:outline-none focus:border-[#E0A387]/60 
-                focus:ring-2 focus:ring-[#E0A387]/20 transition-all duration-300 text-sm
-                group-hover:bg-[#E0A387]/10"
-                placeholder="Email"
-                required
-              />
-            </motion.div>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group"
+          >
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
+              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              transition-all duration-300 text-base"
+              placeholder="Email"
+              required
+            />
+          </motion.div>
 
-            <motion.div whileHover={{ scale: 1.01 }} className="group">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg bg-[#E0A387]/5 border border-[#E0A387]/20 
-                text-[#E0A387] placeholder-[#E0A387]/40 focus:outline-none focus:border-[#E0A387]/60 
-                focus:ring-2 focus:ring-[#E0A387]/20 transition-all duration-300 text-sm
-                group-hover:bg-[#E0A387]/10"
-                placeholder="Password"
-                required
-              />
-            </motion.div>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group"
+          >
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
+              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              transition-all duration-300 text-base"
+              placeholder="Password"
+              required
+            />
+          </motion.div>
 
-            <motion.div whileHover={{ scale: 1.01 }} className="group">
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg bg-[#E0A387]/5 border border-[#E0A387]/20 
-                text-[#E0A387] placeholder-[#E0A387]/40 focus:outline-none focus:border-[#E0A387]/60 
-                focus:ring-2 focus:ring-[#E0A387]/20 transition-all duration-300 text-sm
-                group-hover:bg-[#E0A387]/10"
-                placeholder="Confirm Password"
-                required
-              />
-            </motion.div>
-          </div>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group"
+          >
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
+              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              transition-all duration-300 text-base"
+              placeholder="Confirm Password"
+              required
+            />
+          </motion.div>
 
-          <div className="flex items-center space-x-3">
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center space-x-3"
+          >
             <input
               type="checkbox"
-              className="w-4 h-4 rounded border-[#E0A387] text-[#B96A59] 
-              focus:ring-[#B96A59] focus:ring-offset-0 transition-all duration-300
+              className="w-4 h-4 rounded border-2 border-white/30 text-purple-500 
+              focus:ring-purple-500 focus:ring-offset-0 transition-all duration-300
               cursor-pointer"
             />
-            <span className="text-sm text-[#E0A387]/80 hover:text-[#E0A387] transition-colors duration-300">
+            <span className="text-sm text-white/80 hover:text-white transition-colors duration-300">
               I agree to the Terms and Conditions
             </span>
-          </div>
+          </motion.div>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
+            variants={itemVariants}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.2)",
+            }}
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-[#B96A59] to-[#743A36] 
-            text-white font-semibold shadow-lg hover:from-[#743A36] hover:to-[#B96A59]
-            transition-all duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed
-            transform hover:shadow-[0_0_20px_rgba(185,106,89,0.3)]"
+            className="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 
+            text-white font-bold text-lg shadow-lg hover:from-yellow-500 hover:to-purple-700 
+            transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
           >
             {loading ? (
               <span className="flex items-center justify-center">
@@ -215,18 +295,20 @@ const Signup = () => {
             )}
           </motion.button>
 
-          <p className="text-center text-sm text-[#E0A387]/80">
+          <motion.p
+            variants={itemVariants}
+            className="text-center text-sm text-white/80 mt-4"
+          >
             Already have an account?{" "}
             <Link to="/login">
-              <span
-                className="font-medium text-[#E0A387] hover:text-[#B96A59] 
-              transition-colors duration-300 cursor-pointer underline decoration-dotted
-              underline-offset-4"
+              <motion.span
+                whileHover={{ scale: 1.05, color: "#ffffff" }}
+                className="font-bold text-white/90 underline decoration-wavy decoration-pink-500 underline-offset-4 cursor-pointer"
               >
                 Sign in
-              </span>
+              </motion.span>
             </Link>
-          </p>
+          </motion.p>
         </form>
       </motion.div>
     </div>
@@ -234,224 +316,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-// import { motion } from "framer-motion";
-// import { Canvas, useFrame } from "@react-three/fiber";
-// import { Points, PointMaterial } from "@react-three/drei";
-// import * as random from "maath/random";
-// import { Suspense, useRef, useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import DemoLogo from "../../assets/cravyLogo.png";
-// import { useAuth } from "../../context/AuthContext";
-
-// // StarField component (same as Login)
-// function StarField() {
-//   const ref = useRef();
-//   const [sphere] = useState(() =>
-//     random.inSphere(new Float32Array(5000), { radius: 1.5 })
-//   );
-
-//   useFrame((state, delta) => {
-//     ref.current.rotation.x -= delta / 15;
-//     ref.current.rotation.y -= delta / 20;
-//   });
-
-//   return (
-//     <group rotation={[0, 0, Math.PI / 4]}>
-//       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
-//         <PointMaterial
-//           transparent
-//           color="#B96A59"
-//           size={0.002}
-//           sizeAttenuation={true}
-//           depthWrite={false}
-//         />
-//       </Points>
-//     </group>
-//   );
-// }
-
-// const Signup = () => {
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//   });
-//   const [error, setError] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const { signup } = useAuth();
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   // const handleSubmit = () => {};
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     if (formData.password !== formData.confirmPassword) {
-//       setError("Passwords do not match");
-//       return;
-//     }
-
-//     setLoading(true);
-
-//     try {
-//       const result = await signup({
-//         name: formData.name,
-//         email: formData.email,
-//         password: formData.password,
-//       });
-
-//       if (result.success) {
-//         navigate("/login");
-//       } else {
-//         setError(result.error);
-//       }
-//     } catch (err) {
-//       setError("An unexpected error occurred");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const formVariants = {
-//     hidden: { opacity: 0, y: 50 },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       transition: { duration: 0.6, ease: "easeOut" },
-//     },
-//   };
-
-//   return (
-//     <div className="relative min-h-screen bg-[#310A0B] flex items-center justify-center overflow-hidden px-4 sm:px-6">
-//       <div className="absolute inset-0">
-//         <Canvas camera={{ position: [0, 0, 1] }}>
-//           <Suspense fallback={null}>
-//             <StarField />
-//           </Suspense>
-//         </Canvas>
-//       </div>
-
-//       <motion.div
-//         initial="hidden"
-//         animate="visible"
-//         variants={formVariants}
-//         className="relative z-10 w-full max-w-sm p-6 rounded-xl bg-gradient-to-br from-[#B96A59]/20 to-[#743A36]/20 backdrop-blur-lg shadow-2xl"
-//       >
-//         <div className="flex justify-center mb-4">
-//           <img
-//             src={DemoLogo}
-//             alt="Logo"
-//             className="w-20 h-20 object-contain filter drop-shadow-lg"
-//           />
-//         </div>
-
-//         <h2 className="text-2xl font-bold text-center text-[#E0A387] mb-4">
-//           Create Account
-//         </h2>
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           {error && (
-//             <div className="mb-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-sm text-center">
-//               {error}
-//             </div>
-//           )}
-
-//           <div>
-//             <input
-//               type="text"
-//               name="name"
-//               value={formData.name}
-//               onChange={handleChange}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Full Name"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <input
-//               type="email"
-//               name="email"
-//               value={formData.email}
-//               onChange={handleChange}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Email"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <input
-//               type="password"
-//               name="password"
-//               value={formData.password}
-//               onChange={handleChange}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Password"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <input
-//               type="password"
-//               name="confirmPassword"
-//               value={formData.confirmPassword}
-//               onChange={handleChange}
-//               className="w-full px-3 py-2 rounded-lg bg-[#E0A387]/10 border border-[#E0A387]/30
-//               text-[#E0A387] placeholder-[#E0A387]/50 focus:outline-none focus:border-[#E0A387]
-//               transition-all duration-300 text-sm"
-//               placeholder="Confirm Password"
-//               required
-//             />
-//           </div>
-
-//           <div className="flex items-center space-x-2">
-//             <input
-//               type="checkbox"
-//               className="w-3 h-3 rounded border-[#E0A387] text-[#B96A59] focus:ring-[#B96A59]"
-//             />
-//             <span className="text-xs text-[#E0A387]">
-//               I agree to the Terms and Conditions
-//             </span>
-//           </div>
-
-//           <button
-//             type="submit"
-//             disabled={loading}
-//             className="w-full py-2 rounded-lg bg-[#B96A59] text-[#310A0B] font-semibold
-//             shadow-lg hover:bg-[#743A36] transition-all duration-300 text-sm disabled:opacity-50"
-//           >
-//             {loading ? "Creating Account..." : "Sign Up"}
-//           </button>
-
-//           <p className="text-center text-xs text-[#E0A387]">
-//             Already have an account?{" "}
-//             <Link to="/login">
-//               <span className="font-medium hover:text-[#B96A59] transition-colors duration-300 cursor-pointer">
-//                 Sign in
-//               </span>
-//             </Link>
-//           </p>
-//         </form>
-//       </motion.div>
-//     </div>
-//   );
-// };
-
-// export default Signup;

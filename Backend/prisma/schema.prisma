@@ -8,16 +8,18 @@ datasource db {
 }
 
 model User {
-  id               Int      @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   name             String
-  email            String   @unique
+  email            String      @unique
   phone            String?
   password         String
   role             String // e.g., "admin", "customer"
   orders           Order[] // Relation to Order
+  cardOrders       CardOrder[] // Relation to CardOrder
   verificationCode String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  sales            Sale[]      // New relation to Sale
 }
 
 model Product {
@@ -60,11 +62,9 @@ model CartItem {
   id        Int  @id @default(autoincrement())
   cartId    Int
   productId Int?
-  giftId    Int? // Optional field for Gift relation
   quantity  Int  @default(1)
 
   product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
   cart    Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
 }
 
@@ -86,8 +86,7 @@ model Order {
 
   user          User           @relation(fields: [userId], references: [id])
   orderProducts OrderProduct[] // Relation to OrderProduct
-  
-  
+  sales         Sale[]         // New relation to Sale
 }
 
 model OrderProduct {
@@ -101,8 +100,6 @@ model OrderProduct {
 
   @@unique([orderId, productId])
 }
-
-
 
 model Employer {
   id          Int       @id @default(autoincrement())
@@ -139,12 +136,65 @@ model Subscriber {
   createdAt DateTime @default(now())
 }
 
-// prisma/schema.prisma
-
 model NewsletterLog {
   id             String   @id @default(cuid())
   subject        String
   content        String   @db.Text
   recipientCount Int
   sentAt         DateTime
+}
+
+model CardType {
+  id          Int         @id @default(autoincrement())
+  name        String    // e.g., "Silver", "Bronze", "Gold"
+  description String?
+  price       Float
+  imageUrl    String?   // Add this field to store the card image URL
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  cardOrders  CardOrder[]
+}
+
+model CardOrder {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  cardTypeId      Int
+  designUrl       String   // Path to uploaded design
+  quantity        Int      @default(1)
+  status          String   @default("pending") // "pending", "processing", "completed", "cancelled"
+  customerNotes   String?
+  totalPrice      Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id])
+  cardType        CardType @relation(fields: [cardTypeId], references: [id])
+}
+
+// Add these new models for sales tracking
+model Sale {
+  id            Int      @id @default(autoincrement())
+  amount        Float
+  orderId       Int?
+  source        String   // e.g., "facebook", "direct", "organic", "referral"
+  date          DateTime
+  customerId    Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  order         Order?   @relation(fields: [orderId], references: [id])
+  customer      User?    @relation(fields: [customerId], references: [id])
+}
+
+model SalesReport {
+  id             Int      @id @default(autoincrement())
+  month          String
+  year           Int
+  totalSales     Float
+  totalOrders    Int
+  averageRevenue Float
+  channelData    String   @db.Text  // JSON string for channel breakdown
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

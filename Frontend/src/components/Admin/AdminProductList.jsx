@@ -15,7 +15,7 @@ const AdminProductList = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  // Fetch products and categories when component mounts
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,7 +68,6 @@ const AdminProductList = () => {
     }
   };
 
-  // Filter and search functionality
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       filterCategory === "all" ||
@@ -95,21 +94,20 @@ const AdminProductList = () => {
       />
 
       <div
-        className={`min-h-screen bg-gradient-to-br from-[#310A0B] to-[#491B1D] p-6 flex-1 ${
+        className={`min-h-screen bg-[#1A1A1A] p-6 flex-1 ${
           isMobile ? "" : isOpen ? "ml-[256px]" : "ml-[84px]"
         }`}
       >
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#E0A387] mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#FFFFFF] mb-4 sm:mb-6">
           Product List
         </h1>
 
-        {/* Filters and Search */}
         <div className="mb-4 sm:mb-6 flex flex-wrap items-center gap-4">
           <div className="flex-1 min-w-[150px]">
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded"
+              className="w-full bg-[#2D2D2D] text-[#FFFFFF] px-4 py-2 rounded"
             >
               <option value="all">All Categories</option>
               {categories.map((category) => (
@@ -124,7 +122,7 @@ const AdminProductList = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded"
+              className="w-full bg-[#2D2D2D] text-[#FFFFFF] px-4 py-2 rounded"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -133,21 +131,20 @@ const AdminProductList = () => {
           </div>
 
           <div className="flex-1 relative min-w-[200px]">
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#310A0B]" />
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#ECF0F1]" />
             <input
               type="text"
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 p-2 bg-[#E0A387] text-[#310A0B] rounded"
+              className="w-full pl-10 p-2 bg-[#2D2D2D] text-[#FFFFFF] rounded"
             />
           </div>
         </div>
 
-        {/* Products Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-[#E0A387] border-collapse min-w-[800px]">
-            <thead className="bg-[#743A36]">
+          <table className="w-full text-[#FFFFFF] border-collapse min-w-[800px]">
+            <thead className="bg-[#2C3E50]">
               <tr>
                 <th className="p-4 text-left">Name</th>
                 <th className="p-4 text-left">Category</th>
@@ -161,7 +158,7 @@ const AdminProductList = () => {
               {filteredProducts.map((product) => (
                 <tr
                   key={product.id}
-                  className="border-b border-[#743A36] hover:bg-[#743A36]/20 cursor-pointer"
+                  className="border-b border-[#34495E] hover:bg-[#34495E]/20 cursor-pointer"
                 >
                   <td
                     className="p-4"
@@ -181,8 +178,8 @@ const AdminProductList = () => {
                     <span
                       className={`px-2 py-1 rounded text-sm ${
                         product.status === "active"
-                          ? "bg-green-500/20 text-green-500"
-                          : "bg-red-500/20 text-red-500"
+                          ? "bg-[#2ECC71]/20 text-[#2ECC71]"
+                          : "bg-[#E74C3C]/20 text-[#E74C3C]"
                       }`}
                     >
                       {product.status}
@@ -190,22 +187,22 @@ const AdminProductList = () => {
                   </td>
                   <td className="p-4">
                     {product.isLatest ? (
-                      <span className="text-green-500">Yes</span>
+                      <span className="text-[#2ECC71]">Yes</span>
                     ) : (
-                      <span className="text-red-500">No</span>
+                      <span className="text-[#E74C3C]">No</span>
                     )}
                   </td>
                   <td className="p-4">
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(product)}
-                        className="p-2 text-[#E0A387] hover:text-[#B96A59]"
+                        className="p-2 text-[#3498DB] hover:text-[#2980B9]"
                       >
                         <FaEdit />
                       </button>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="p-2 text-[#E0A387] hover:text-[#B96A59]"
+                        className="p-2 text-[#E74C3C] hover:text-[#C0392B]"
                       >
                         <FaTrash />
                       </button>
@@ -217,12 +214,11 @@ const AdminProductList = () => {
           </table>
         </div>
 
-        {/* Product Details/Edit Modal */}
         {isModalOpen && selectedProduct && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#743A36] p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-[#2C3E50] p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-[#E0A387]">
+                <h2 className="text-2xl font-bold text-[#FFFFFF]">
                   {isEditMode ? "Edit Product" : "Product Details"}
                 </h2>
                 <button
@@ -230,7 +226,7 @@ const AdminProductList = () => {
                     setIsModalOpen(false);
                     setIsEditMode(false);
                   }}
-                  className="text-[#E0A387] hover:text-[#E0A0A0] text-2xl"
+                  className="text-[#ECF0F1] hover:text-[#BDC3C7] text-2xl"
                 >
                   ✕
                 </button>
@@ -238,7 +234,6 @@ const AdminProductList = () => {
 
               <div className="space-y-4">
                 {isEditMode ? (
-                  // Edit Form
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -246,9 +241,8 @@ const AdminProductList = () => {
                     }}
                     className="space-y-4"
                   >
-                    {/* Add your edit form fields here */}
                     <div>
-                      <label className="block text-[#E0A387] mb-2">Name</label>
+                      <label className="block text-[#FFFFFF] mb-2">Name</label>
                       <input
                         type="text"
                         value={selectedProduct.name}
@@ -258,10 +252,9 @@ const AdminProductList = () => {
                             name: e.target.value,
                           })
                         }
-                        className="w-full p-2 bg-[#310A0B] text-[#E0A387] rounded"
+                        className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       />
                     </div>
-                    {/* Add more form fields as needed */}
                     <div className="flex justify-end gap-2">
                       <button
                         type="button"
@@ -269,20 +262,19 @@ const AdminProductList = () => {
                           setIsModalOpen(false);
                           setIsEditMode(false);
                         }}
-                        className="px-4 py-2 bg-[#310A0B] text-[#E0A387] rounded"
+                        className="px-4 py-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="px-4 py-2 bg-[#B96A59] text-[#E0A387] rounded"
+                        className="px-4 py-2 bg-[#3498DB] text-[#FFFFFF] rounded"
                       >
                         Save Changes
                       </button>
                     </div>
-                    {/* Add image upload field */}
                     <div>
-                      <label className="block text-[#E0A387] mb-2">
+                      <label className="block text-[#FFFFFF] mb-2">
                         Images
                       </label>
                       <input
@@ -290,23 +282,20 @@ const AdminProductList = () => {
                         multiple
                         accept="image/*"
                         onChange={(e) => {
-                          // Handle image upload
                           const files = Array.from(e.target.files);
                           setSelectedProduct({
                             ...selectedProduct,
                             images: files,
                           });
                         }}
-                        className="w-full p-2 bg-[#310A0B] text-[#E0A387] rounded"
+                        className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       />
                     </div>
                   </form>
                 ) : (
-                  // View Details
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Product Images */}
                     <div className="col-span-2">
-                      <p className="text-[#E0A387] font-semibold mb-2">
+                      <p className="text-[#FFFFFF] font-semibold mb-2">
                         Images:
                       </p>
                       <div className="flex gap-2 overflow-x-auto">
@@ -324,12 +313,12 @@ const AdminProductList = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="text-[#E0A387] font-semibold">Name:</p>
-                      <p className="text-[#E0A387]">{selectedProduct.name}</p>
+                      <p className="text-[#FFFFFF] font-semibold">Name:</p>
+                      <p className="text-[#ECF0F1]">{selectedProduct.name}</p>
                     </div>
                     <div>
-                      <p className="text-[#E0A387] font-semibold">Category:</p>
-                      <p className="text-[#E0A387]">
+                      <p className="text-[#FFFFFF] font-semibold">Category:</p>
+                      <p className="text-[#ECF0F1]">
                         {
                           categories.find(
                             (c) => c.id === selectedProduct.categoryId
@@ -338,24 +327,24 @@ const AdminProductList = () => {
                       </p>
                     </div>
                     <div>
-                      <p className="text-[#E0A387] font-semibold">Price:</p>
-                      <p className="text-[#E0A387]">${selectedProduct.price}</p>
+                      <p className="text-[#FFFFFF] font-semibold">Price:</p>
+                      <p className="text-[#ECF0F1]">${selectedProduct.price}</p>
                     </div>
                     <div>
-                      <p className="text-[#E0A387] font-semibold">Status:</p>
-                      <p className="text-[#E0A387]">{selectedProduct.status}</p>
+                      <p className="text-[#FFFFFF] font-semibold">Status:</p>
+                      <p className="text-[#ECF0F1]">{selectedProduct.status}</p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-[#E0A387] font-semibold">
+                      <p className="text-[#FFFFFF] font-semibold">
                         Description:
                       </p>
-                      <p className="text-[#E0A387]">
+                      <p className="text-[#ECF0F1]">
                         {selectedProduct.description}
                       </p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-[#E0A387] font-semibold">Benefits:</p>
-                      <p className="text-[#E0A387]">
+                      <p className="text-[#FFFFFF] font-semibold">Benefits:</p>
+                      <p className="text-[#ECF0F1]">
                         {selectedProduct.benefits}
                       </p>
                     </div>

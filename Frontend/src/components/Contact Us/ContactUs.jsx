@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import contactUs from "../../assets/contactUs.png";
+gsap.registerPlugin(ScrollTrigger);
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -10,162 +14,210 @@ const ContactUs = () => {
     message: "",
   });
 
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const cardContainer = document.getElementById("card-model-container");
+
+    if (cardContainer) {
+      // Create the scroll animation for this section
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+          id: "card-animation-contact",
+        },
+      });
+
+      // Final animation for the card - center it and make it prominent
+      tl.to(cardContainer, {
+        x: "10  vw",
+        y: "-20vh",
+        rotation: 0,
+        scale: 0.6,
+        duration: 1,
+      });
+
+      return () => {
+        ScrollTrigger.getById("card-animation-contact")?.kill();
+      };
+    }
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, subject, message } = formData;
-
-    // Create mailto link
     const mailtoLink = `mailto:raheelanjum255@gmail.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(
       `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     )}`;
-
-    // Open the mailto link
     window.location.href = mailtoLink;
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-[#131313] py-12 px-4 sm:px-6 lg:px-8">
+    <div ref={sectionRef} className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 ">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full mx-auto "
       >
         <div className="text-center mb-16">
           <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4"
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 2, -2, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mb-4"
           >
-            Get In Touch
+            Let's Connect!
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-gray-400 text-lg"
-          >
-            We're here to help and answer any questions you might have
+          <motion.p variants={itemVariants} className="text-gray-300 text-xl">
+            Drop us a line and let's create something awesome together
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 ">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
-            className="bg-gray-800 p-8 rounded-2xl shadow-2xl"
+            whileHover={{ scale: 1.02 }}
+            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-purple-500/20 relative"
           >
-            <h3 className="text-2xl font-bold text-white mb-8">
+            <div className="absolute bottom-0 translate-x-1/3 right-0 z-40 h-[400px] w-[400px]">
+              <img src={contactUs} alt="" />
+            </div>
+            <h3 className="text-3xl font-bold text-white mb-8 bg-clip-text">
               Contact Information
             </h3>
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-purple-500 p-3 rounded-full">
-                  <i className="fas fa-phone text-white"></i>
+            <div className="space-y-8">
+              <motion.div
+                whileHover={{ x: 10 }}
+                className="flex items-center space-x-4"
+              >
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-2xl">
+                  <i className="fas fa-phone text-white text-xl"></i>
                 </div>
                 <div>
-                  <p className="text-gray-400">Call Us</p>
-                  <p className="text-white font-medium">+32 328 23823 832</p>
+                  <p className="text-purple-300">Ring Ring</p>
+                  <p className="text-white font-medium text-lg">
+                    +32 328 23823 832
+                  </p>
                 </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="bg-pink-500 p-3 rounded-full">
-                  <i className="fas fa-envelope text-white"></i>
+              </motion.div>
+              <motion.div
+                whileHover={{ x: 10 }}
+                className="flex items-center space-x-4"
+              >
+                <div className="bg-gradient-to-r from-pink-500 to-red-500 p-4 rounded-2xl">
+                  <i className="fas fa-envelope text-white text-xl"></i>
                 </div>
                 <div>
-                  <p className="text-gray-400">Email Us</p>
-                  <p className="text-white font-medium">temporary@gmail.com</p>
+                  <p className="text-purple-300">Drop a Line</p>
+                  <p className="text-white font-medium text-lg">
+                    temporary@gmail.com
+                  </p>
                 </div>
-              </div>
+              </motion.div>
               <div className="pt-8">
-                <div className="flex space-x-4">
-                  <motion.a
-                    whileHover={{ scale: 1.1 }}
-                    href="#"
-                    className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
-                  >
-                    <FaTwitter />
-                  </motion.a>
-                  <motion.a
-                    whileHover={{ scale: 1.1 }}
-                    href="#"
-                    className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
-                  >
-                    <FaLinkedin />
-                  </motion.a>
-                  <motion.a
-                    whileHover={{ scale: 1.1 }}
-                    href="#"
-                    className="bg-gray-700 p-3 rounded-full text-white hover:bg-purple-500 transition-colors"
-                  >
-                    <FaInstagram />
-                  </motion.a>
+                <div className="flex space-x-6">
+                  {[FaTwitter, FaLinkedin, FaInstagram].map((Icon, index) => (
+                    <motion.a
+                      key={index}
+                      whileHover={{
+                        scale: 1.2,
+                        rotate: 360,
+                        y: -5,
+                      }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      href="#"
+                      className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-2xl text-white text-xl hover:shadow-lg hover:shadow-purple-500/50"
+                    >
+                      <Icon />
+                    </motion.a>
+                  ))}
                 </div>
               </div>
             </div>
           </motion.div>
 
           <motion.form
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8 }}
+            variants={itemVariants}
             onSubmit={handleSubmit}
-            className="bg-gray-800 p-8 rounded-2xl shadow-2xl"
+            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-purple-500/20"
           >
             <div className="grid grid-cols-1 gap-6">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  required
-                  className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  required
-                  className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  required
-                  className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                  onChange={(e) =>
-                    setFormData({ ...formData, subject: e.target.value })
-                  }
-                />
-              </div>
-              <div>
+              {[
+                { type: "text", placeholder: "Your Name", key: "name" },
+                { type: "email", placeholder: "Your Email", key: "email" },
+                { type: "text", placeholder: "Subject", key: "subject" },
+              ].map((input, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <input
+                    type={input.type}
+                    placeholder={input.placeholder}
+                    required
+                    className="w-full bg-purple-900/30 text-white placeholder-purple-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all backdrop-blur-sm"
+                    onChange={(e) =>
+                      setFormData({ ...formData, [input.key]: e.target.value })
+                    }
+                  />
+                </motion.div>
+              ))}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <textarea
                   placeholder="Your Message"
                   required
                   rows="4"
-                  className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all resize-none"
+                  className="w-full bg-purple-900/30 text-white placeholder-purple-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all backdrop-blur-sm resize-none"
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
                 ></textarea>
-              </div>
+              </motion.div>
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 20px rgba(236, 72, 153, 0.5)",
+                }}
+                whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium py-3 rounded-lg hover:opacity-90 transition-all"
+                className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white font-bold py-4 rounded-xl text-lg hover:opacity-90 transition-all"
               >
                 Send Message
               </motion.button>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaBars,
@@ -7,6 +7,7 @@ import {
   FaMoneyBill,
   FaSubscript,
   FaTimes,
+  FaCreditCard,
 } from "react-icons/fa";
 import {
   FaHome,
@@ -15,8 +16,6 @@ import {
   FaBoxes,
   FaUsers,
   FaClipboardList,
-  FaGift,
-  FaPen,
   FaCog,
 } from "react-icons/fa";
 
@@ -45,11 +44,14 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
     {
       path: "/admin/product/orders",
       icon: <FaClipboardList />,
-      label: "Orders",
+      label: "Product Orders",
     },
-    { path: "/admin/gift/orders", icon: <FaGift />, label: "Gift Orders" },
-    { path: "/admin/gift/create", icon: <FaPen />, label: "Create Gift" },
-    { path: "/admin/gift/list", icon: <FaList />, label: "Gifts List" },
+    { path: "/admin/card-types", icon: <FaCreditCard />, label: "Card Types" },
+    {
+      path: "/admin/card-orders",
+      icon: <FaClipboardList />,
+      label: "Card Orders",
+    },
     { path: "/admin/employers", icon: <FaUsers />, label: "Employer List" },
     { path: "/admin/sales", icon: <FaMoneyBill />, label: "Sales" },
     {
@@ -73,7 +75,7 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
     <>
       {/* Toggle Button */}
       <button
-        className="fixed top-5 left-4 z-50 p-2 rounded-lg bg-[#310A0B] text-[#E0A387] hover:bg-[#491B1D] transition-all duration-300"
+        className="fixed top-5 left-4 z-50 p-2 rounded-lg bg-[#2C3E50] text-white hover:bg-[#34495E] transition-all duration-300"
         onClick={toggleSidebar}
       >
         <FaBars size={24} />
@@ -86,13 +88,13 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
           width: isOpen ? "256px" : "84px",
           x: isMobile && !isOpen ? "-100%" : 0,
         }}
-        className={`fixed top-0 left-0 h-screen bg-[#310A0B] text-[#E0A387]
+        className={`fixed top-0 left-0 h-screen bg-[#1A1A1A] text-white
           overflow-hidden z-40 shadow-xl`}
       >
         {/* Mobile Close Button */}
         {isMobile && isOpen && (
           <button
-            className="absolute top-5 right-4 p-2 rounded-lg bg-[#491B1D] text-[#E0A387]"
+            className="absolute top-5 right-4 p-2 rounded-lg bg-[#2D2D2D] text-white"
             onClick={() => setIsOpen(false)}
           >
             <FaTimes size={24} />
@@ -101,7 +103,7 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
 
         <div className="flex flex-col h-full">
           {/* Logo/Header Section */}
-          <div className="p-6 pb-12 border-b border-[#743A36]/20">
+          <div className="p-6 pb-12 border-b border-[#2D2D2D]">
             {isOpen && (
               <h2 className="text-2xl font-bold text-center">Admin Panel</h2>
             )}
@@ -116,8 +118,8 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
                   whileHover={{ x: 6 }}
                   className={`rounded-lg overflow-hidden ${
                     location.pathname === item.path
-                      ? "bg-[#743A36]"
-                      : "hover:bg-[#491B1D]"
+                      ? "bg-[#3498DB]"
+                      : "hover:bg-[#2D2D2D]"
                   }`}
                 >
                   <Link
@@ -138,15 +140,15 @@ const SideBar = ({ isOpen, setIsOpen, isMobile, setIsMobile }) => {
           </nav>
 
           {/* Footer Section */}
-          <div className="p-6 border-t border-[#743A36]/20">
+          <div className="p-6 border-t border-[#2D2D2D]">
             {isOpen && (
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#743A36] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-[#34495E] flex items-center justify-center">
                   <FaUsers className="text-xl" />
                 </div>
                 <div>
                   <p className="font-medium">Admin User</p>
-                  <p className="text-sm text-[#E0A387]/60">Administrator</p>
+                  <p className="text-sm text-[#ECF0F1]">Administrator</p>
                 </div>
               </div>
             )}

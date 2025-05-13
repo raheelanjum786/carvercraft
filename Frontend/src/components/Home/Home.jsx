@@ -1,39 +1,69 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { LampContainer } from "../../content/ui/lampBg";
-import { useRef } from "react";
+import CardModel from "../Models/CardModel.jsx";
+import { Canvas } from "@react-three/fiber";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
+  const canvasRef = useRef(null);
+  const sectionRef = useRef(null);
+  const cardModelRef = useRef(null);
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  useEffect(() => {
+    // We'll target the Canvas element directly for animation
+    const cardModelElement = canvasRef.current.querySelector("canvas");
+
+    if (cardModelElement) {
+      // Create the scroll animation for just the card model
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#card-model-container",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          markers: false, // Ensure markers are disabled
+          id: "card-animation-home",
+        },
+      });
+
+      // Animation for scrolling down from Home section
+      tl.to(cardModelElement, {
+        scale: 0.5,
+        x: "30vw",
+        y: "0vh",
+        duration: 1,
+      });
+
+      return () => {
+        // Clean up ScrollTrigger when component unmounts
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    }
+  }, []);
 
   return (
     <>
-      <div className="bg-[#131313] w-full min-h-screen overflow-hidden relative">
-        <div ref={ref} className="relative min-h-screen">
-          {/* Main Container */}
-          <LampContainer>
-            <motion.h1
-              style={{ y, opacity }}
-              initial={{ opacity: 0.5, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.3,
-                duration: 0.8,
-                ease: "easeInOut",
-              }}
-              className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-9xl font-medium tracking-tight text-transparent md:text-10xl lg:text-12xl xl:text-14xl md:text-10xl lg:text-12xl xl:text-[13rem] 2xl:text-[14rem] transition-transform duration-700 ease-in-out hover:scale-110"
+      <div className="overflow-hidden relative z-20" ref={sectionRef}>
+        <div className="h-[100vh] w-full rounded-t-[200px] flex items-center justify-center second">
+          <div
+            ref={canvasRef}
+            id="card-model-container"
+            className="relative w-[80%] h-[90%] "
+          >
+            <Canvas
+              ref={cardModelRef}
+              camera={{ position: [0, 10, 20], fov: 50 }}
+              className="card-model-canvas"
             >
-              CarverCraft
-            </motion.h1>
-          </LampContainer>
+              <ambientLight intensity={2} />
+              <directionalLight position={[0, 20, 20]} intensity={2} />
+              <CardModel />
+            </Canvas>
+          </div>
         </div>
-        <div className="relative min-h-screen">{/* Main Container */}</div>
       </div>
     </>
   );

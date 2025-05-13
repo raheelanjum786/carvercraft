@@ -15,7 +15,6 @@ const AdminUsers = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Animation variants for Framer Motion
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -42,7 +41,7 @@ const AdminUsers = () => {
       responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (text, record) => (
         <span
-          style={{ cursor: "pointer", color: "#743A36" }}
+          style={{ cursor: "pointer", color: "#3498DB" }}
           onClick={() => handleRowClick(record)}
         >
           {text}
@@ -84,11 +83,11 @@ const AdminUsers = () => {
         >
           <EditOutlined
             onClick={() => handleEdit(user)}
-            style={{ color: "#743A36", cursor: "pointer", fontSize: "18px" }}
+            style={{ color: "#2ECC71", cursor: "pointer", fontSize: "18px" }}
           />
           <DeleteOutlined
             onClick={() => handleDelete(user.id)}
-            style={{ color: "#491B1D", cursor: "pointer", fontSize: "18px" }}
+            style={{ color: "#E74C3C", cursor: "pointer", fontSize: "18px" }}
           />
         </motion.div>
       ),
@@ -115,7 +114,6 @@ const AdminUsers = () => {
     setIsModalVisible(true);
   };
 
-  // const handleDelete = () => {};
   const handleDelete = async (userId) => {
     try {
       await fetch(`http://localhost:4000/auth/users/${userId}`, {
@@ -127,32 +125,8 @@ const AdminUsers = () => {
     }
   };
 
-  // const handleModalOk = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:4000/auth/users/${editingUser.id}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(editingUser),
-  //       }
-  //     );
-  //     if (response.ok) {
-  //       setUsers(
-  //         users.map((user) => (user.id === editingUser.id ? editingUser : user))
-  //       );
-  //       setIsModalVisible(false);
-  //     } else {
-  //       console.error("Error updating user:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating user:", error);
-  //   }
-  // };
-
   const handleModalOk = () => {};
+
   const filteredUsers = users.filter((user) =>
     Object.values(user).some((value) =>
       String(value).toLowerCase().includes(searchText.toLowerCase())
@@ -169,9 +143,9 @@ const AdminUsers = () => {
       title={
         <div
           style={{
-            color: "#310A0B",
+            color: "#FFFFFF",
             fontSize: "1.5rem",
-            borderBottom: "2px solid #743A36",
+            borderBottom: "2px solid #34495E",
             paddingBottom: "10px",
           }}
         >
@@ -185,8 +159,8 @@ const AdminUsers = () => {
           key="close"
           onClick={() => setDetailModalVisible(false)}
           style={{
-            backgroundColor: "#743A36",
-            color: "#E0A387",
+            backgroundColor: "#2C3E50",
+            color: "#FFFFFF",
             border: "none",
           }}
         >
@@ -212,7 +186,7 @@ const AdminUsers = () => {
               display: "grid",
               gap: "20px",
               padding: "20px",
-              backgroundColor: "rgba(224, 163, 135, 0.1)",
+              backgroundColor: "#2D2D2D",
               borderRadius: "8px",
             }}
           >
@@ -241,14 +215,14 @@ const AdminUsers = () => {
       <span
         style={{
           fontWeight: "bold",
-          color: "#743A36",
+          color: "#3498DB",
         }}
       >
         {label}:
       </span>
       <span
         style={{
-          color: "#491B1D",
+          color: "#ECF0F1",
           wordBreak: "break-word",
         }}
       >
@@ -267,7 +241,6 @@ const AdminUsers = () => {
           setIsMobile={setIsMobile}
         />
       </div>
-      {/* s */}
       <motion.div
         className={`p-6 flex-1 ${
           isMobile ? "" : isOpen ? "ml-[256px]" : "ml-[84px]"
@@ -279,13 +252,13 @@ const AdminUsers = () => {
           padding: "50px",
           minHeight: "100vh",
           position: "relative",
-          background: "linear-gradient(to bottom right, #310A0B, #743A36)",
+          background: "linear-gradient(to bottom right, #1A1A1A, #2D2D2D)",
         }}
       >
         <motion.h1
           variants={itemVariants}
           style={{
-            color: "#E0A387",
+            color: "#FFFFFF",
             marginBottom: "24px",
             fontSize: "2.5rem",
             fontWeight: "bold",
@@ -316,13 +289,12 @@ const AdminUsers = () => {
             style={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "rgba(224, 163, 135, 0.9)",
+              backgroundColor: "#2D2D2D",
               borderRadius: "8px",
-              color: "#310A0B",
+              color: "#ECF0F1",
             }}
           >
             No users found matching
-            {/* "{searchText}" */}
           </motion.div>
         ) : (
           <motion.div variants={itemVariants}>
@@ -331,10 +303,9 @@ const AdminUsers = () => {
               dataSource={filteredUsers}
               rowKey="id"
               style={{
-                backgroundColor: "rgba(224, 163, 135, 0.9)",
+                backgroundColor: "#2D2D2D",
                 borderRadius: "8px",
                 overflow: "auto",
-                backdropFilter: "blur(10px)",
               }}
               onRow={(record) => ({
                 onClick: () => handleRowClick(record),

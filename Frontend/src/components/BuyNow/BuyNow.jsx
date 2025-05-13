@@ -1,17 +1,22 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import api from "../../utils/axios";
 import Footer from "../Footer/Footer";
+import PaymentForm from "../Payment/PaymentForm";
 
-// Updated 3D Component with darker colors
+// Initialize Stripe with your publishable key
+const stripePromise = loadStripe("pk_test_your_stripe_publishable_key");
 
 const BuyNow = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const orderItems = location.state?.orderItems || [];
+  const [orderId, setOrderId] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -30,8 +35,8 @@ const BuyNow = () => {
 
   const createOrder = async (items, orderData) => {
     const productOrders = [];
+    let total = 0;
 
-    // Separate items into products and gifts
     items.forEach((item) => {
       const orderItem = {
         itemId: item.details.id,
@@ -41,23 +46,27 @@ const BuyNow = () => {
         customerEmail: orderData.email,
         customerPhone: orderData.phone,
         shippingAddress: orderData.address,
-        paymentMethod: orderData.paymentMethod,
+        paymentMethod: "online",
         status: "pending",
       };
 
       if (item.type === "product") {
         productOrders.push(orderItem);
+        total += item.details.price * item.quantity;
       }
     });
 
-    // Create product orders
     if (productOrders.length > 0) {
-      await api.post("http://localhost:4000/api/productOrder/create", {
-        orders: productOrders,
-      });
+      const response = await api.post(
+        "http://localhost:4000/api/productOrder/create",
+        {
+          orders: productOrders,
+        }
+      );
+      setOrderId(response.data.id);
+      setTotalAmount(total);
+      return response.data;
     }
-
-    // Create gift orders
   };
 
   const handleSubmit = async (e) => {
@@ -67,185 +76,111 @@ const BuyNow = () => {
     try {
       const orderData = {
         ...formData,
-        paymentMethod,
+        paymentMethod: "online",
       };
 
       await createOrder(orderItems, orderData);
-
-      // Show success message and redirect
-      alert("Order placed successfully!");
-      // navigate("/orders"); // Assuming you have an orders page
+      setShowPaymentForm(true);
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Failed to place order. Please try again.");
+      alert("😅 Oops! Something went wrong. Let's try that again!");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handlePaymentSuccess = (paymentIntent) => {
+    navigate("/order-success", {
+      state: {
+        message:
+          "Your order has been placed and payment has been received successfully!",
+        orderId: orderId,
+      },
+    });
+  };
+
+  const handlePaymentError = (error) => {
+    console.error("Payment error:", error);
+  };
+
   return (
     <>
-      <div className="min-h-screen bg-[#131313] pt-40 pb-20 px-4 sm:px-6 lg:px-8 relative">
-        {/* Updated 3D Background Animation */}
-        <div className="fixed top-0 left-0 w-full h-full -z-10">
-          <Canvas camera={{ position: [0, 0, 5] }}>
-            <color attach="background" args={["#310A0B"]} />
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
-            <AnimatedSphere />
-            <OrbitControls enableZoom={false} enablePan={false} />
-          </Canvas>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mx-auto"
-        >
-          <h1 className="text-4xl font-bold text-center text-[#E0A387] mb-12">
-            Complete Your Purchase
+      <div className="min-h-screen bg-[#041322] py-8 md:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold text-center text-[#E0A387] mb-8 md:mb-12">
+            🛍️ Complete Your Purchase 🎁
           </h1>
 
-          <div className="bg-[#491B1D]/90 backdrop-blur-md rounded-lg shadow-xl p-6">
-            <div className="flex justify-center space-x-8 mb-8">
-              <motion.label
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2 cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="cash"
-                  checked={paymentMethod === "cash"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="form-radio text-[#B96A59]"
-                />
-                <span className="text-[#E0A387]">Cash on Delivery</span>
-              </motion.label>
-
-              <motion.label
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2 cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="online"
-                  checked={paymentMethod === "online"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="form-radio text-[#B96A59]"
-                />
-                <span className="text-[#E0A387]">Online Payment</span>
-              </motion.label>
+          <div className="bg-[#491B1D]/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 md:p-8">
+            <div className="flex justify-center mb-6 md:mb-8">
+              <div className="text-[#E0A387] text-lg md:text-xl font-medium">
+                💳 Online Payment Only
+              </div>
             </div>
 
-            <AnimatePresence mode="wait">
-              {paymentMethod === "online" && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="bg-[#743A36] p-4 rounded-lg mb-6"
+            {showPaymentForm ? (
+              <Elements stripe={stripePromise}>
+                <PaymentForm
+                  amount={totalAmount}
+                  orderId={orderId}
+                  customerEmail={formData.email}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                />
+              </Elements>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+                {["name", "phone", "email", "address"].map((field) => (
+                  <div key={field}>
+                    <label className="block text-base md:text-lg font-medium text-[#E0A387] mb-2">
+                      {field.charAt(0).toUpperCase() + field.slice(1)}{" "}
+                      {field === "phone"
+                        ? "📞"
+                        : field === "email"
+                        ? "📧"
+                        : field === "address"
+                        ? "📍"
+                        : "👤"}
+                    </label>
+                    {field === "address" ? (
+                      <textarea
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleInputChange}
+                        required
+                        rows={4}
+                        className="mt-1 block w-full rounded-xl border-2 border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-lg focus:border-[#B96A59] focus:ring-[#B96A59] text-base md:text-lg p-3 md:p-4"
+                      />
+                    ) : (
+                      <input
+                        type={
+                          field === "email"
+                            ? "email"
+                            : field === "phone"
+                            ? "tel"
+                            : "text"
+                        }
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 block w-full rounded-xl border-2 border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-lg focus:border-[#B96A59] focus:ring-[#B96A59] text-base md:text-lg p-3 md:p-4"
+                      />
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center py-3 px-6 border-2 border-transparent rounded-xl shadow-xl text-base md:text-lg font-bold text-[#310A0B] bg-gradient-to-r from-[#E0A387] to-[#B96A59] hover:from-[#B96A59] hover:to-[#E0A387] focus:outline-none transition-colors"
                 >
-                  <div className="flex items-center justify-center">
-                    <span>😞</span>
-                    <span className="ml-2">We will be available soon!</span>
-                  </div>
-                  {/* <h3 className="text-lg font-semibold text-[#E0A387] mb-2">
-                  Bank Account Details
-                </h3>
-                <p className="text-[#E0A387]">Bank Name: Your Bank</p>
-                <p className="text-[#E0A387]">Account Number: XXXX-XXXX-XXXX</p>
-                <p className="text-[#E0A387]">
-                  Account Holder: Your Company Name
-                </p> */}
-                </motion.div>
-              )}
-
-              {paymentMethod && (
-                <motion.form
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                >
-                  <div>
-                    <label className="block text-sm font-medium text-[#E0A387]">
-                      Name
-                    </label>
-                    <motion.input
-                      whileFocus={{ scale: 1.01 }}
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full rounded-md border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-sm focus:border-[#B96A59] focus:ring-[#B96A59]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-[#E0A387]">
-                      Phone Number
-                    </label>
-                    <motion.input
-                      whileFocus={{ scale: 1.01 }}
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full rounded-md border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-sm focus:border-[#B96A59] focus:ring-[#B96A59]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-[#E0A387]">
-                      Email
-                    </label>
-                    <motion.input
-                      whileFocus={{ scale: 1.01 }}
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full rounded-md border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-sm focus:border-[#B96A59] focus:ring-[#B96A59]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-[#E0A387]">
-                      Address
-                    </label>
-                    <motion.textarea
-                      whileFocus={{ scale: 1.01 }}
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                      rows={4}
-                      className="mt-1 block w-full rounded-md border-[#743A36] bg-[#743A36]/50 text-[#E0A387] placeholder-[#B96A59] shadow-sm focus:border-[#B96A59] focus:ring-[#B96A59]"
-                    />
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-[#310A0B] bg-[#E0A387] hover:bg-[#B96A59] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B96A59] transition-colors duration-200"
-                  >
-                    {isLoading ? "Processing..." : "Done"}
-                  </motion.button>
-                </motion.form>
-              )}
-            </AnimatePresence>
+                  {isLoading ? "🔄 Processing..." : "✨ Continue to Payment ✨"}
+                </button>
+              </form>
+            )}
           </div>
-        </motion.div>
+        </div>
       </div>
       <Footer />
     </>

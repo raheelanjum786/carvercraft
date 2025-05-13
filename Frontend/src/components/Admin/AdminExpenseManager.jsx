@@ -98,7 +98,6 @@ const AdminExpenseManager = () => {
           productId: productData.id,
           productName: productData.name,
         };
-        // Remove the original product field
         delete formattedData.product;
       }
 
@@ -111,13 +110,6 @@ const AdminExpenseManager = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      // const response = await api.post(
-      //   "http://localhost:4000/api/expenses/create",
-      //   expenseData,
-      //   {
-      //     headers: { "Content-Type": "application/json" },
-      //   }
-      // );
 
       if (response.status !== 200) throw new Error("Failed to create expense");
 
@@ -222,7 +214,7 @@ const AdminExpenseManager = () => {
         />
       </div>
       <div
-        className={`min-h-screen bg-gradient-to-br from-[#310A0B] to-[#491B1D] p-3 sm:p-6 flex-1 ${
+        className={`min-h-screen bg-gradient-to-br from-[#1A1A1A] to-[#2D2D2D] p-3 sm:p-6 flex-1 ${
           isMobile ? "" : isOpen ? "ml-[256px]" : "ml-[84px]"
         }`}
       >
@@ -236,9 +228,9 @@ const AdminExpenseManager = () => {
             <Button
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "list"
-                  ? "bg-[#E0A387] text-[#310A0B]"
-                  : "bg-[#743A36] text-[#E0A387]"
-              } hover:bg-[#B96A59] transition-colors duration-300 shadow-lg`}
+                  ? "bg-[#3498DB] text-[#FFFFFF]"
+                  : "bg-[#2C3E50] text-[#ECF0F1]"
+              } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("list")}
             >
               Expense List
@@ -246,9 +238,9 @@ const AdminExpenseManager = () => {
             <Button
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "add"
-                  ? "bg-[#E0A387] text-[#310A0B]"
-                  : "bg-[#743A36] text-[#E0A387]"
-              } hover:bg-[#B96A59] transition-colors duration-300 shadow-lg`}
+                  ? "bg-[#3498DB] text-[#FFFFFF]"
+                  : "bg-[#2C3E50] text-[#ECF0F1]"
+              } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("add")}
             >
               Add Expense
@@ -256,9 +248,9 @@ const AdminExpenseManager = () => {
             <Button
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "monthly"
-                  ? "bg-[#E0A387] text-[#310A0B]"
-                  : "bg-[#743A36] text-[#E0A387]"
-              } hover:bg-[#B96A59] transition-colors duration-300 shadow-lg`}
+                  ? "bg-[#3498DB] text-[#FFFFFF]"
+                  : "bg-[#2C3E50] text-[#ECF0F1]"
+              } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("monthly")}
             >
               Monthly Overview
@@ -269,24 +261,24 @@ const AdminExpenseManager = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-[#E0A387]/5 backdrop-blur-sm p-4 sm:p-8 rounded-lg shadow-xl w-full mx-auto"
+              className="bg-[#2C3E50]/10 backdrop-blur-sm p-4 sm:p-8 rounded-lg shadow-xl w-full mx-auto"
             >
               <List
                 grid={{
                   gutter: 16,
-                  xs: 1, // 1 column for extra small screens
-                  sm: 1, // 1 column for small screens
-                  md: 2, // 2 columns for medium screens
-                  lg: 4, // 3 columns for large screens
-                  xl: 4, // 3 columns for extra large screens
+                  xs: 1,
+                  sm: 1,
+                  md: 2,
+                  lg: 4,
+                  xl: 4,
                 }}
                 dataSource={expenses}
                 renderItem={(expense) => (
                   <List.Item>
                     <Card
-                      className="border-[#E0A387]/20 h-full"
+                      className="border-[#34495E]/20 h-full"
                       style={{
-                        backgroundColor: "rgba(116, 58, 54, 0.2)",
+                        backgroundColor: "rgba(44, 62, 80, 0.2)",
                         transition: "all 0.3s ease",
                       }}
                       hoverable={false}
@@ -296,13 +288,12 @@ const AdminExpenseManager = () => {
                             <FaEdit
                               onClick={() => {
                                 setIsEditing(true);
-                                // setCurrentExpense(expense);
                                 editForm.setFieldsValue({
                                   ...expense,
                                   date: moment(expense.date),
                                 });
                               }}
-                              className=" text-[#E0A387] hover:text-[#B96A59] transition-colors"
+                              className="text-[#3498DB] hover:text-[#34495E] transition-colors"
                             />
                             <Popconfirm
                               title="Are you sure you want to delete this expense?"
@@ -311,7 +302,7 @@ const AdminExpenseManager = () => {
                               cancelText="No"
                               overlayClassName="custom-popconfirm"
                             >
-                              <FaTrash className="text-[#E0A387] hover:text-[#B96A59] transition-colors" />
+                              <FaTrash className="text-[#E74C3C] hover:text-[#34495E] transition-colors" />
                             </Popconfirm>
                           </div>
                         </>,
@@ -319,18 +310,18 @@ const AdminExpenseManager = () => {
                     >
                       <div className="p-3 sm:p-4">
                         <h3
-                          className="text-xl font-semibold text-[#E0A387] mb-2"
+                          className="text-xl font-semibold text-[#FFFFFF] mb-2"
                           onClick={() => showModal(expense)}
                         >
                           {expense.title}
                         </h3>
-                        <p className="text-[#B96A59] mb-2">
+                        <p className="text-[#ECF0F1] mb-2">
                           Category: {expense.category}
                         </p>
-                        <p className="text-[#E0A387] text-lg font-bold">
+                        <p className="text-[#3498DB] text-lg font-bold">
                           Rs.{expense.amount}
                         </p>
-                        <p className="text-[#B96A59] text-sm">
+                        <p className="text-[#ECF0F1] text-sm">
                           {moment(expense.date).format("MMMM D, YYYY")}
                         </p>
                       </div>
@@ -345,9 +336,9 @@ const AdminExpenseManager = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-[#E0A387]/5 backdrop-blur-sm p-4 sm:p-8 rounded-lg shadow-xl max-w-2xl mx-auto"
+              className="bg-[#2C3E50]/10 backdrop-blur-sm p-4 sm:p-8 rounded-lg shadow-xl max-w-2xl mx-auto"
             >
-              <h2 className="text-xl sm:text-2xl font-bold text-[#E0A387] mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] mb-4 sm:mb-6">
                 Add New Expense
               </h2>
               <Form
@@ -360,19 +351,19 @@ const AdminExpenseManager = () => {
                 <Form.Item
                   name="title"
                   label={
-                    <span className="text-base sm:text-lg text-[#E0A387]">
+                    <span className="text-base sm:text-lg text-[#FFFFFF]">
                       Title
                     </span>
                   }
                   rules={[{ required: true, message: "Please input title!" }]}
                 >
-                  <Input className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
+                  <Input className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
                 </Form.Item>
 
                 <Form.Item
                   name="product"
                   label={
-                    <span className="text-base sm:text-lg text-[#E0A387]">
+                    <span className="text-base sm:text-lg text-[#FFFFFF]">
                       Product (Optional)
                     </span>
                   }
@@ -384,18 +375,17 @@ const AdminExpenseManager = () => {
                     dropdownClassName="custom-select-dropdown"
                     allowClear
                     style={{
-                      backgroundColor: "#743A36",
+                      backgroundColor: "#34495E",
                     }}
                   >
                     {products?.map((product) => (
                       <Option
                         key={product._id}
-                        // Change this to pass an object with both id and name
                         value={JSON.stringify({
                           id: product._id,
                           name: product.name,
                         })}
-                        className="text-[#E0A387] hover:bg-[#743A36]/40"
+                        className="text-[#FFFFFF] hover:bg-[#34495E]/40"
                       >
                         <div className="flex justify-between items-center">
                           <span>{product.name}</span>
@@ -409,7 +399,7 @@ const AdminExpenseManager = () => {
                 <Form.Item
                   name="category"
                   label={
-                    <span className="text-[#E0A387] text-lg">Category</span>
+                    <span className="text-[#FFFFFF] text-lg">Category</span>
                   }
                   rules={[
                     { required: true, message: "Please select category!" },
@@ -420,14 +410,14 @@ const AdminExpenseManager = () => {
                     value=""
                     dropdownClassName="custom-select-dropdown"
                     style={{
-                      backgroundColor: "#743A36",
+                      backgroundColor: "#34495E",
                     }}
                   >
                     {categories.map((category) => (
                       <Option
                         key={category}
                         value={category}
-                        className="text-[#E0A387] hover:bg-[#743A36]/40"
+                        className="text-[#FFFFFF] hover:bg-[#34495E]/40"
                       >
                         {category}
                       </Option>
@@ -438,7 +428,7 @@ const AdminExpenseManager = () => {
                 <Form.Item
                   name="amount"
                   label={
-                    <span className="text-base sm:text-lg text-[#E0A387]">
+                    <span className="text-base sm:text-lg text-[#FFFFFF]">
                       Amount
                     </span>
                   }
@@ -446,26 +436,26 @@ const AdminExpenseManager = () => {
                 >
                   <Input
                     type="number"
-                    className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                    className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
                   />
                 </Form.Item>
 
                 <Form.Item
                   name="date"
                   label={
-                    <span className="text-base sm:text-lg text-[#E0A387]">
+                    <span className="text-base sm:text-lg text-[#FFFFFF]">
                       Date
                     </span>
                   }
                   rules={[{ required: true, message: "Please select date!" }]}
                 >
-                  <DatePicker className="w-full bg-[#743A36] border-[#E0A387] text-[#E0A387] h-12 text-lg rounded-lg" />
+                  <DatePicker className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg" />
                 </Form.Item>
 
                 <Form.Item
                   name="description"
                   label={
-                    <span className="text-base sm:text-lg text-[#E0A387]">
+                    <span className="text-base sm:text-lg text-[#FFFFFF]">
                       Description
                     </span>
                   }
@@ -474,7 +464,7 @@ const AdminExpenseManager = () => {
                   ]}
                 >
                   <Input.TextArea
-                    className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                    className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
                     rows={4}
                   />
                 </Form.Item>
@@ -483,7 +473,7 @@ const AdminExpenseManager = () => {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="bg-[#743A36] text-[#E0A387] hover:bg-[#B96A59] h-12 text-lg font-semibold w-full rounded-lg"
+                    className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] h-12 text-lg font-semibold w-full rounded-lg"
                   >
                     Add Expense
                   </Button>
@@ -499,13 +489,13 @@ const AdminExpenseManager = () => {
               className="space-y-6"
             >
               {/* Date Range Filter */}
-              <div className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl mb-6">
-                <h3 className="text-xl font-semibold text-[#E0A387] mb-4">
+              <div className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl mb-6">
+                <h3 className="text-xl font-semibold text-[#FFFFFF] mb-4">
                   Filter by Date Range
                 </h3>
                 <RangePicker
                   onChange={handleDateRangeChange}
-                  className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-12 text-lg rounded-lg"
+                  className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg"
                 />
               </div>
 
@@ -516,19 +506,19 @@ const AdminExpenseManager = () => {
                     title: "Total Expenses",
                     value: getStatistics().totalExpense,
                     icon: <FaMoneyBillWave />,
-                    color: "#E0A387",
+                    color: "#3498DB",
                   },
                   {
                     title: "Total Revenue",
                     value: getStatistics().totalRevenue,
                     icon: <FaChartLine />,
-                    color: "#B96A59",
+                    color: "#2ECC71",
                   },
                   {
                     title: "Total Sales",
                     value: getStatistics().totalSales,
                     icon: <FaShoppingCart />,
-                    color: "#743A36",
+                    color: "#F39C12",
                   },
                 ].map((stat, index) => (
                   <motion.div
@@ -536,11 +526,11 @@ const AdminExpenseManager = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl"
+                    className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl"
                   >
                     <Statistic
                       title={
-                        <span className="text-base sm:text-lg text-[#E0A387]">
+                        <span className="text-base sm:text-lg text-[#FFFFFF]">
                           {stat.title}
                         </span>
                       }
@@ -556,29 +546,29 @@ const AdminExpenseManager = () => {
               </div>
 
               {/* Filtered Expense List */}
-              <div className="bg-[#E0A387]/5 backdrop-blur-sm p-6 rounded-lg shadow-xl">
-                <h3 className="text-xl font-semibold text-[#E0A387] mb-4">
+              <div className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl">
+                <h3 className="text-xl font-semibold text-[#FFFFFF] mb-4">
                   Expense Details
                 </h3>
                 <List
                   dataSource={expenses}
                   renderItem={(expense) => (
                     <List.Item
-                      className="border-b border-[#E0A387]/20 py-4"
+                      className="border-b border-[#34495E]/20 py-4"
                       onClick={() => showModal(expense)}
                     >
                       <div className="flex justify-between items-center w-full">
                         <div>
-                          <h4 className="text-[#E0A387] text-lg font-semibold">
+                          <h4 className="text-[#FFFFFF] text-lg font-semibold">
                             {expense.title}
                           </h4>
-                          <p className="text-[#B96A59]">{expense.category}</p>
+                          <p className="text-[#ECF0F1]">{expense.category}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-[#E0A387] text-lg font-bold">
+                          <p className="text-[#3498DB] text-lg font-bold">
                             ${expense.amount}
                           </p>
-                          <p className="text-[#B96A59] text-sm">
+                          <p className="text-[#ECF0F1] text-sm">
                             {moment(expense.date).format("MMMM D, YYYY")}
                           </p>
                         </div>
@@ -600,27 +590,27 @@ const AdminExpenseManager = () => {
             width={600}
           >
             <div className="p-2 md:p-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#E0A387] mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] mb-4 sm:mb-6">
                 {currentExpense?.title}
               </h2>
-              <div className="bg-[#743A36]/20 p-2 md:p-6 rounded-lg space-y-2 md:space-y-4">
-                <div className="text-[#E0A387] text-lg">
+              <div className="bg-[#34495E]/20 p-2 md:p-6 rounded-lg space-y-2 md:space-y-4">
+                <div className="text-[#FFFFFF] text-lg">
                   <span className="font-semibold">Category:</span>{" "}
                   {currentExpense?.category}
                 </div>
-                <div className="text-[#E0A387] text-lg">
+                <div className="text-[#FFFFFF] text-lg">
                   <span className="font-semibold">Amount:</span> $
                   {currentExpense?.amount}
                 </div>
-                <div className="text-[#E0A387] text-lg">
+                <div className="text-[#FFFFFF] text-lg">
                   <span className="font-semibold">Date:</span>{" "}
                   {moment(currentExpense?.date).format("MMMM D, YYYY")}
                 </div>
-                <div className="text-[#E0A387] text-lg">
+                <div className="text-[#FFFFFF] text-lg">
                   <span className="font-semibold">Description:</span>
                   <p className="mt-2">{currentExpense?.description}</p>
                 </div>
-                <div className="text-[#E0A387] text-lg">
+                <div className="text-[#FFFFFF] text-lg">
                   <span className="font-semibold">Product:</span>
                   <p className="mt-2">{currentExpense?.product}</p>
                 </div>
@@ -628,7 +618,7 @@ const AdminExpenseManager = () => {
               <div className="flex justify-end mt-6">
                 <Button
                   onClick={() => setCurrentExpense(null)}
-                  className="bg-[#743A36] text-[#E0A387] hover:bg-[#B96A59] px-6 py-2 text-lg font-semibold"
+                  className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] px-6 py-2 text-lg font-semibold"
                 >
                   Close
                 </Button>
@@ -652,18 +642,18 @@ const AdminExpenseManager = () => {
               <Form.Item
                 name="title"
                 label={
-                  <span className="text-base sm:text-lg text-[#E0A387]">
+                  <span className="text-base sm:text-lg text-[#FFFFFF]">
                     Title
                   </span>
                 }
               >
-                <Input className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
+                <Input className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="category"
                 label={
-                  <span className="text-base sm:text-lg text-[#E0A387]">
+                  <span className="text-base sm:text-lg text-[#FFFFFF]">
                     Category
                   </span>
                 }
@@ -681,7 +671,7 @@ const AdminExpenseManager = () => {
               <Form.Item
                 name="amount"
                 label={
-                  <span className="text-base sm:text-lg text-[#E0A387]">
+                  <span className="text-base sm:text-lg text-[#FFFFFF]">
                     Amount
                   </span>
                 }
@@ -689,26 +679,26 @@ const AdminExpenseManager = () => {
               >
                 <Input
                   type="number"
-                  className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                  className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
                 />
               </Form.Item>
 
               <Form.Item
                 name="date"
                 label={
-                  <span className="text-base sm:text-lg text-[#E0A387]">
+                  <span className="text-base sm:text-lg text-[#FFFFFF]">
                     Date
                   </span>
                 }
                 rules={[{ required: true, message: "Please select date!" }]}
               >
-                <DatePicker className="w-full bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-12 text-lg rounded-lg" />
+                <DatePicker className="w-full bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="description"
                 label={
-                  <span className="text-base sm:text-lg text-[#E0A387]">
+                  <span className="text-base sm:text-lg text-[#FFFFFF]">
                     Description
                   </span>
                 }
@@ -717,7 +707,7 @@ const AdminExpenseManager = () => {
                 ]}
               >
                 <Input.TextArea
-                  className="bg-[#743A36]/20 border-[#E0A387] text-[#E0A387] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                  className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
                   rows={4}
                 />
               </Form.Item>
@@ -726,7 +716,7 @@ const AdminExpenseManager = () => {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  className="bg-[#743A36] text-[#E0A387] hover:bg-[#B96A59] w-full"
+                  className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] w-full"
                 >
                   Update Expense
                 </Button>

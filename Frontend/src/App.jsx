@@ -20,7 +20,7 @@ import Products from "./components/Products/Products";
 import ProtectedRoute from "./components/Access/ProtectedRoute";
 import AdminPage from "./Pages/AdminPage";
 import AdminCategories from "./components/Admin/AdminCategories";
-import AdminSettings from "../../../cravy/FrontEnd/src/components/Admin/AdminSettings";
+import AdminSettings from "./components/Admin/AdminSettings";
 import AdminProductOrders from "./components/Admin/AdminProductOrders";
 import AdminAddProduct from "./components/Admin/AdminAddProduct";
 import AdminProductList from "./components/Admin/AdminProductList";
@@ -31,6 +31,13 @@ import AdminSubscribedNewsletter from "./components/Admin/AdminSubscribedNewslet
 import AdminUsers from "./components/Admin/AdminUsers";
 import Cart from "./components/Cart/Cart";
 import BuyNow from "./components/BuyNow/BuyNow";
+// Import custom card components
+import CustomCardOrder from "./components/CustomCard/CustomCardOrder";
+import MyCardOrders from "./components/CustomCard/MyCardOrders";
+import OrderSuccess from "./components/CustomCard/OrderSuccess";
+import AdminCardTypes from "./components/Admin/AdminCardTypes";
+import AdminCardOrders from "./components/Admin/AdminCardOrders";
+import Background from "./content/ui/background";
 
 const App = () => {
   return (
@@ -47,8 +54,9 @@ const App = () => {
           <Route path="/auth/verify-otp" element={<VerifyOTP />} />
           <Route path="/auth/reset-password" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/bg" element={<Background />} />
           <Route
-            path="/about"
+            path="/about-us"
             element={
               <>
                 <Navbar />
@@ -57,7 +65,7 @@ const App = () => {
             }
           />
           <Route
-            path="/contact"
+            path="/contact-us"
             element={
               <>
                 <Navbar />
@@ -76,7 +84,7 @@ const App = () => {
             }
           />
           <Route
-            path="/allProducts"
+            path="/all-products"
             element={
               <>
                 {" "}
@@ -109,10 +117,37 @@ const App = () => {
             />
 
             <Route
-              path="/buyNow"
+              path="/buy-now"
               element={
                 <>
                   <Navbar /> <BuyNow />
+                </>
+              }
+            />
+            <Route
+              path="/custom-card-order"
+              element={
+                <>
+                  <Navbar />
+                  <CustomCardOrder />
+                </>
+              }
+            />
+            <Route
+              path="/my-orders"
+              element={
+                <>
+                  <Navbar />
+                  <MyCardOrders />
+                </>
+              }
+            />
+            <Route
+              path="/order-success"
+              element={
+                <>
+                  <Navbar />
+                  <OrderSuccess />
                 </>
               }
             />
@@ -140,6 +175,8 @@ const App = () => {
                 path="/admin/subscription"
                 element={<AdminSubscribedNewsletter />}
               />
+              <Route path="/admin/card-types" element={<AdminCardTypes />} />
+              <Route path="/admin/card-orders" element={<AdminCardOrders />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

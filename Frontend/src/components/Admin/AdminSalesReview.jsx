@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   LineChart,
@@ -23,6 +23,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import SideBar from "./SideBar";
+import api from "../../utils/axios";
 
 const channelsData = [
   { name: "Jan", facebook: 4000, direct: 2400, organic: 2400, referral: 1500 },
@@ -41,22 +42,66 @@ const revenueData = [
 const AdminSalesReview = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [salesOverview, setSalesOverview] = useState({
+    totalSales: 0,
+    uniqueCustomers: 0,
+    avgRevenue: 0,
+  });
+  const [channelsData, setChannelsData] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
+
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
 
+  useEffect(() => {
+    const fetchSalesData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(
+          "http://localhost:4000/api/sales/overview"
+        );
+        const data = response.data;
+
+        setSalesOverview(data.overview);
+        setChannelsData(data.channelsData);
+        setTopProducts(data.topProducts);
+      } catch (error) {
+        console.error("Error fetching sales data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSalesData();
+  }, []);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(value);
+  };
+
   const statCards = [
     {
       title: "Sales",
-      amount: "$230,220",
+      amount: formatCurrency(salesOverview.totalSales),
       increase: "+55%",
       icon: <TrendingUp />,
     },
-    { title: "Customers", amount: "3,200", increase: "+12%", icon: <Users /> },
+    {
+      title: "Customers",
+      amount: salesOverview.uniqueCustomers.toLocaleString(),
+      increase: "+12%",
+      icon: <Users />,
+    },
     {
       title: "Avg. Revenue",
-      amount: "$1,200",
+      amount: formatCurrency(salesOverview.avgRevenue),
       increase: "+$213",
       icon: <DollarSign />,
     },
@@ -73,19 +118,11 @@ const AdminSalesReview = () => {
         />
       </div>
       <div
-        className={`min-h-screen bg-gradient-to-br from-[#310A0B] to-[#491B1D] p-6 flex-1 ${
+        className={`min-h-screen bg-[#1A1A1A] p-6 flex-1 ${
           isMobile ? "" : isOpen ? "ml-[256px]" : "ml-[84px]"
         }`}
       >
-        {/* <div className="h-full w-full overflow-x-hidden">
-        <SideBar /> */}
-        <div
-          className="
-       
-         grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-4 bg-[#E0A387] rounded-lg"
-        >
-          {/*  h-screen w-screen ml-16*/}
-          {/* Stat Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-4 bg-[#2D2D2D] rounded-lg">
           {statCards.map((card, index) => (
             <motion.div
               key={index}
@@ -93,26 +130,26 @@ const AdminSalesReview = () => {
               initial="hidden"
               animate="visible"
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-[#310A0B] rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+              className="bg-[#2C3E50] rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
             >
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-[#E0A387]">
+                    <span className="text-lg font-bold text-[#FFFFFF]">
                       {card.title}
                     </span>
                     <motion.div
                       whileHover={{ scale: 1.1 }}
-                      className="p-2 bg-[#E0A387]/10 rounded-full text-[#E0A387]"
+                      className="p-2 bg-[#34495E] rounded-full text-[#3498DB]"
                     >
                       {card.icon}
                     </motion.div>
                   </div>
                   <div className="mt-4">
-                    <h5 className="text-2xl font-bold text-[#B96A59]">
-                      {card.amount}
+                    <h5 className="text-2xl font-bold text-[#ECF0F1]">
+                      {loading ? "Loading..." : card.amount}
                     </h5>
-                    <span className="inline-flex items-center mt-1 text-sm text-[#743A36]">
+                    <span className="inline-flex items-center mt-1 text-sm text-[#3498DB]">
                       {card.increase}
                       <span className="text-xs ml-1">since last month</span>
                     </span>
@@ -121,143 +158,86 @@ const AdminSalesReview = () => {
               </div>
             </motion.div>
           ))}
-          {/* Channels Card */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="bg-[#310A0B] rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-4"
+            className="bg-[#2C3E50] rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-4"
           >
             <div className="flex justify-between items-center mb-6">
-              <h6 className="text-xl font-bold text-[#E0A387]">Channels</h6>
+              <h6 className="text-xl font-bold text-[#FFFFFF]">Channels</h6>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-[#E0A387]/80 hover:bg-[#E0A387] text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                className="bg-[#3498DB] hover:bg-[#2980B9] text-white font-semibold py-2 px-4 rounded-lg transition-colors"
               >
                 See traffic channels
               </motion.button>
             </div>
 
             <div className="h-64 mb-6">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={channelsData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="facebook" stroke="#4F46E5" />
-                  <Line type="monotone" dataKey="direct" stroke="#10B981" />
-                  <Line type="monotone" dataKey="organic" stroke="#F59E0B" />
-                  <Line type="monotone" dataKey="referral" stroke="#8B5CF6" />
-                </LineChart>
-              </ResponsiveContainer>
+              {loading ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-[#ECF0F1]">Loading chart data...</p>
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={channelsData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#34495E" />
+                    <XAxis dataKey="name" stroke="#ECF0F1" />
+                    <YAxis stroke="#ECF0F1" />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="facebook" stroke="#3498DB" />
+                    <Line type="monotone" dataKey="direct" stroke="#2ECC71" />
+                    <Line type="monotone" dataKey="organic" stroke="#F39C12" />
+                    <Line type="monotone" dataKey="referral" stroke="#E74C3C" />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </motion.div>
-          {/* Revenue Card */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-[#310A0B] rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-4"
-          >
-            <h6 className="text-xl font-bold text-[#E0A387] mb-6">Revenue</h6>
-            <div className="h-64 mb-6">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="facebook" fill="#4F46E5" />
-                  <Bar dataKey="google" fill="#EF4444" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </motion.div>
-          {/* Top Selling Products */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-[#310A0B] rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-4"
+            className="bg-[#2C3E50] rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-4"
           >
-            <h6 className="text-xl font-bold text-[#E0A387] mb-6">
+            <h6 className="text-xl font-bold text-[#FFFFFF] mb-6">
               Top Selling Products
             </h6>
-            <div className="overflow-x-auto rounded-xl">
-              <table className="min-w-full divide-y divide-gray-200 ">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Value
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ads Spent
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Refunds
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {[
-                    {
-                      name: "Nike v22 Running",
-                      value: "$130,992",
-                      spent: "$9,500",
-                      refunds: { count: 13, up: true },
-                    },
-                    {
-                      name: "Business Kit",
-                      value: "$80,250",
-                      spent: "$4,200",
-                      refunds: { count: 40, up: false },
-                    },
-                  ].map((product, index) => (
-                    <motion.tr
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            className="h-10 w-10 rounded-full bg-gray-200"
-                          />
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {product.name}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {product.value}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {product.spent}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex items-center">
-                          {product.refunds.count}
-                          {product.refunds.up ? (
-                            <ChevronUp className="ml-2 text-green-500" />
-                          ) : (
-                            <ChevronDown className="ml-2 text-red-500" />
-                          )}
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {loading ? (
+              <p className="text-[#ECF0F1]">Loading top products...</p>
+            ) : (
+              <div className="space-y-4">
+                {topProducts.map((product, index) => (
+                  <div
+                    key={product.id}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center">
+                      <div className="bg-[#34495E] w-8 h-8 rounded-full flex items-center justify-center text-[#3498DB] mr-3">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <h6 className="text-[#FFFFFF] font-medium">
+                          {product.name}
+                        </h6>
+                        <p className="text-[#ECF0F1] text-sm">
+                          {product.quantity} units sold
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[#3498DB] font-bold">
+                        {formatCurrency(product.revenue)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

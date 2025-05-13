@@ -61,16 +61,23 @@ const ProductDescription = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#491b1d] to-[#310A0B] p-1"
+                whileHover={{ scale: 1.02, rotate: 1 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                {/* <img
+                <img
                   src={product.images && product.images[selectedImage]}
                   alt={product.name}
-                  className="w-full h-[400px] sm:h-[500px] object-cover rounded-xl"
-                /> */}
+                  className="w-full h-[400px] sm:h-[500px] object-cover rounded-xl hover:saturate-150 transition-all duration-300"
+                />
                 {product.isNew && (
-                  <div className="absolute top-4 right-4 bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded-full font-medium text-sm tracking-wide">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500 }}
+                    className="absolute top-4 right-4 bg-[#E0A387] text-[#310A0B] px-4 py-2 rounded-full font-medium text-sm tracking-wide transform rotate-3 shadow-lg"
+                  >
                     NEW ARRIVAL
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
 
@@ -80,8 +87,8 @@ const ProductDescription = () => {
                   product.images.map((img, index) => (
                     <motion.div
                       key={index}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.1, rotate: 3 }}
+                      whileTap={{ scale: 0.9 }}
                       className={`cursor-pointer rounded-lg overflow-hidden border-2 ${
                         selectedImage === index
                           ? "border-[#E0A387]"
@@ -89,11 +96,11 @@ const ProductDescription = () => {
                       }`}
                       onClick={() => setSelectedImage(index)}
                     >
-                      {/* <img
-                      src={img}
-                      alt={`${product.name} view ${index + 1}`}
-                      className="w-full h-20 object-cover"
-                    /> */}
+                      <img
+                        src={img}
+                        alt={`${product.name} view ${index + 1}`}
+                        className="w-full h-20 object-cover transition-all duration-300 hover:brightness-110"
+                      />
                     </motion.div>
                   ))}
               </div>
@@ -192,14 +199,14 @@ const ProductDescription = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex-1 py-3 px-6 bg-[#E0A387] text-[#310A0B] font-bold rounded-lg 
-                    hover:bg-[#d89275] transition-all duration-300 flex items-center justify-center"
+                    whileHover={{ scale: 1.05, rotate: 1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex-1 py-3 px-6 bg-gradient-to-r from-[#E0A387] to-[#d89275] text-[#310A0B] font-bold rounded-lg 
+                    hover:from-[#d89275] hover:to-[#E0A387] transition-all duration-300 flex items-center justify-center shadow-lg"
                     disabled={product.stock === 0}
                   >
                     <svg
-                      className="w-5 h-5 mr-2"
+                      className="w-5 h-5 mr-2 animate-pulse"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -213,6 +220,27 @@ const ProductDescription = () => {
                     </svg>
                     Add to Cart
                   </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05, rotate: -1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex-1 py-3 px-6 bg-transparent border-2 border-[#E0A387] text-[#E0A387] font-bold rounded-lg 
+                    hover:bg-[#491b1d] transition-all duration-300 flex items-center justify-center"
+                  >
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                    Wishlist
+                  </motion.button>
                 </div>
               </div>
 
@@ -221,10 +249,17 @@ const ProductDescription = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="mt-8 bg-gradient-to-br from-[#491b1d] to-[#310A0B] rounded-2xl p-8 shadow-xl"
+                whileHover={{ scale: 1.01 }}
+                className="mt-8 bg-gradient-to-br from-[#491b1d] to-[#310A0B] rounded-2xl p-8 shadow-xl border border-[#E0A387]/20"
               >
-                <h3 className="text-xl font-bold text-[#E0A387] mb-4">
+                <h3 className="text-xl font-bold text-[#E0A387] mb-4 relative inline-block">
                   Additional Information
+                  <motion.div
+                    className="absolute -bottom-1 left-0 h-1 bg-[#E0A387]"
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ delay: 1, duration: 0.8 }}
+                  />
                 </h3>
                 <div className="text-[#E0A387]/80">
                   <p>{product.additionalInfo}</p>

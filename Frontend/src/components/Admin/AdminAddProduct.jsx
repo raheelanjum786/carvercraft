@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FaUpload, FaImages, FaTrash } from "react-icons/fa";
 import SideBar from "../../components/Admin/SideBar";
 import axios from "axios";
-// import { Alert } from "@mui/material";
 import { Alert } from "antd";
 import api from "../../utils/axios";
 
@@ -141,45 +140,43 @@ const AdminAddProduct = () => {
       />
 
       <div
-        className={`min-h-screen bg-gradient-to-br from-[#310A0B] to-[#491B1D] p-6 flex-1 ${
+        className={`min-h-screen bg-[#1A1A1A] p-6 flex-1 ${
           isMobile ? "" : isOpen ? "ml-[256px]" : "ml-[84px]"
         }`}
       >
-        <div className="p-4 md:p-6 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto bg-[#E0A387]/5 backdrop-blur-sm rounded-lg shadow-xl">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#E0A387] mb-6 text-center">
+        <div className="p-4 md:p-6 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto bg-[#2D2D2D] rounded-lg shadow-xl">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6 text-center">
             Add New Product
           </h1>
 
           {alert.show && (
-            <Alert severity={alert.type} sx={{ mb: 2 }}>
-              {alert.message}
-            </Alert>
+            <Alert message={alert.message} type={alert.type} className="mb-4" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Input */}
             <div>
-              <label className="block text-[#E0A387] mb-2">Product Name</label>
+              <label className="block text-white mb-2">Product Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-[#743A36] rounded-md focus:outline-none focus:ring-2 focus:ring-[#B96A59] bg-[#310A0B]/60 text-[#E0A387]"
+                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white"
                 required
               />
             </div>
 
             {/* Category Dropdown */}
             <div>
-              <label className="block text-[#E0A387] mb-2">Category</label>
+              <label className="block text-white mb-2">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-[#743A36] rounded-md focus:outline-none focus:ring-2 focus:ring-[#B96A59] bg-[#310A0B]/60 text-[#E0A387]"
+                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white"
                 required
               >
                 <option value="">Select Category</option>
@@ -193,11 +190,9 @@ const AdminAddProduct = () => {
 
             {/* Image Upload */}
             <div>
-              <label className="block text-[#E0A387] mb-2">
-                Product Images
-              </label>
+              <label className="block text-white mb-2">Product Images</label>
               <div className="flex flex-wrap gap-4">
-                <label className="flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 border-2 border-dashed border-[#743A36] rounded-lg hover:border-[#B96A59] cursor-pointer">
+                <label className="flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 border-2 border-dashed border-[#34495E] rounded-lg hover:border-[#3498DB] cursor-pointer">
                   <input
                     type="file"
                     multiple
@@ -205,7 +200,7 @@ const AdminAddProduct = () => {
                     onChange={handleImageUpload}
                     className="hidden"
                   />
-                  <FaUpload className="text-[#E0A387] text-xl" />
+                  <FaUpload className="text-white text-xl" />
                 </label>
 
                 {images.map((image, index) => (
@@ -221,7 +216,7 @@ const AdminAddProduct = () => {
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 p-1 bg-[#310A0B]/80 rounded-full text-[#E0A387] hover:text-[#B96A59]"
+                      className="absolute top-1 right-1 p-1 bg-[#2C3E50]/80 rounded-full text-white hover:text-[#3498DB]"
                     >
                       <FaTrash size={14} />
                     </button>
@@ -232,40 +227,40 @@ const AdminAddProduct = () => {
 
             {/* Price Input */}
             <div>
-              <label className="block text-[#E0A387] mb-2">Price</label>
+              <label className="block text-white mb-2">Price</label>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) =>
                   setFormData({ ...formData, price: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-[#743A36] rounded-md focus:outline-none focus:ring-2 focus:ring-[#B96A59] bg-[#310A0B]/60 text-[#E0A387]"
+                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white"
                 required
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-[#E0A387] mb-2">Description</label>
+              <label className="block text-white mb-2">Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-[#743A36] rounded-md focus:outline-none focus:ring-2 focus:ring-[#B96A59] bg-[#310A0B]/60 text-[#E0A387] min-h-[100px]"
+                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white min-h-[100px]"
                 required
               />
             </div>
 
             {/* Benefits */}
             <div>
-              <label className="block text-[#E0A387] mb-2">Benefits</label>
+              <label className="block text-white mb-2">Benefits</label>
               <textarea
                 value={formData.benefits}
                 onChange={(e) =>
                   setFormData({ ...formData, benefits: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-[#743A36] rounded-md focus:outline-none focus:ring-2 focus:ring-[#B96A59] bg-[#310A0B]/60 text-[#E0A387] min-h-[100px]"
+                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white min-h-[100px]"
                 required
               />
             </div>
@@ -279,9 +274,9 @@ const AdminAddProduct = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, isLatest: e.target.checked })
                 }
-                className="w-4 h-4 text-[#B96A59] bg-[#310A0B] border-[#743A36] focus:ring-[#B96A59]"
+                className="w-4 h-4 text-[#3498DB] bg-[#2C3E50] border-[#34495E] focus:ring-[#3498DB]"
               />
-              <label htmlFor="isLatest" className="text-[#E0A387]">
+              <label htmlFor="isLatest" className="text-white">
                 Mark as Latest Product
               </label>
             </div>
@@ -289,7 +284,7 @@ const AdminAddProduct = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full md:w-auto px-6 py-3 bg-[#743A36] text-[#E0A387] rounded-md hover:bg-[#B96A59] transition duration-300"
+              className="w-full md:w-auto px-6 py-3 bg-[#3498DB] text-white rounded-md hover:bg-[#2980B9] transition duration-300"
             >
               Add Product
             </button>
