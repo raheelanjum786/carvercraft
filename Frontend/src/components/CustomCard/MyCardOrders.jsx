@@ -13,7 +13,7 @@ const MyCardOrders = () => {
     const fetchOrders = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124/api/cardOrders/user"
+          "http://51.21.182.124/api/api/cardOrders/user"
         );
         setOrders(response.data);
       } catch (error) {
@@ -33,7 +33,9 @@ const MyCardOrders = () => {
     }
 
     try {
-      await api.post(`http://51.21.182.124/api/cardOrders/${orderId}/cancel`);
+      await api.post(
+        `http://51.21.182.124/api/api/cardOrders/${orderId}/cancel`
+      );
 
       // Update the order status in the UI
       setOrders(

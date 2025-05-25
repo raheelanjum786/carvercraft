@@ -18,7 +18,7 @@ const AdminCategories = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124/api/categories/get"
+          "http://51.21.182.124/api/api/categories/get"
         );
         setCategories(response.data);
       } catch (error) {
@@ -40,7 +40,7 @@ const AdminCategories = () => {
 
     try {
       const response = await api.post(
-        "http://51.21.182.124/api/categories/add",
+        "http://51.21.182.124/api/api/categories/add",
         newCategoryObj
       );
       setCategories([...categories, response.data]);
@@ -55,7 +55,7 @@ const AdminCategories = () => {
   const deleteCategory = async (id) => {
     try {
       // Convert id to number since Prisma expects an integer
-      await api.delete(`http://51.21.182.124/api/categories/${id}`);
+      await api.delete(`http://51.21.182.124/api/api/categories/${id}`);
       setCategories(categories.filter((category) => category.id !== id));
     } catch (error) {
       console.error("Error deleting category:", error);
@@ -80,7 +80,7 @@ const AdminCategories = () => {
     if (!editingCategory.name.trim()) return;
     try {
       const response = await api.put(
-        `http://51.21.182.124/api/categories/${editingCategory.id}`,
+        `http://51.21.182.124/api/api/categories/${editingCategory.id}`,
         editingCategory
       );
       setCategories(

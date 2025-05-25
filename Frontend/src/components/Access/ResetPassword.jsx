@@ -33,7 +33,7 @@ const ResetPassword = () => {
 
     try {
       const response = await api.post(
-        "http://51.21.182.124/api/auth/users/reset-password",
+        "http://51.21.182.124/api/api/auth/users/reset-password",
         {
           email,
           password,

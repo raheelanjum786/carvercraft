@@ -20,7 +20,7 @@ const CustomCardOrder = () => {
     const fetchCardTypes = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124/api/cardTypes/getAll"
+          "http://51.21.182.124/api/api/cardTypes/getAll"
         );
         setCardTypes(response.data);
         if (response.data.length > 0) {
@@ -100,7 +100,7 @@ const CustomCardOrder = () => {
       formData.append("design", designFile);
 
       const response = await api.post(
-        "http://51.21.182.124/api/cardOrders/create",
+        "http://51.21.182.124/api/api/cardOrders/create",
         formData,
         {
           headers: {
@@ -315,7 +315,7 @@ const CustomCardOrder = () => {
                       {type.imageUrl && (
                         <div className="mb-3 h-32 overflow-hidden rounded group">
                           <motion.img
-                            src={`http://51.21.182.124/api${type.imageUrl}`}
+                            src={`http://51.21.182.124/api/api${type.imageUrl}`}
                             alt={type.name}
                             className="w-full h-full object-cover"
                             whileHover={{ scale: 1.1 }}

@@ -17,7 +17,7 @@ const AdminProductOrders = () => {
     const fetchOrders = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124/api/productOrder/getAll"
+          "http://51.21.182.124/api/api/productOrder/getAll"
         );
         setOrders(response.data);
       } catch (error) {

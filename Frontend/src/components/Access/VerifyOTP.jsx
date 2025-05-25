@@ -29,7 +29,7 @@ const VerifyOTP = () => {
 
     try {
       const response = await api.post(
-        "http://51.21.182.124/api/auth/users/verify-otp",
+        "http://51.21.182.124/api/api/auth/users/verify-otp",
         {
           email,
           code: otp,

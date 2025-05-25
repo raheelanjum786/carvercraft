@@ -62,7 +62,7 @@ const AdminSalesReview = () => {
       try {
         setLoading(true);
         const response = await api.get(
-          "http://51.21.182.124/api/sales/overview"
+          "http://51.21.182.124/api/api/sales/overview"
         );
         const data = response.data;
 

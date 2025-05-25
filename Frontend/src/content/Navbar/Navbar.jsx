@@ -28,7 +28,7 @@ const Navbar = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124/api/categories/get"
+          "http://51.21.182.124/api/api/categories/get"
         );
         setCategories(response.data);
       } catch (error) {

@@ -39,7 +39,7 @@ const PaymentForm = ({
     const createPaymentIntent = async () => {
       try {
         const response = await api.post(
-          "http://51.21.182.124/api/stripe/create-payment-intent",
+          "http://51.21.182.124/api/api/stripe/create-payment-intent",
           {
             amount,
             orderId,

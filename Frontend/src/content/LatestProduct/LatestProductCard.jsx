@@ -12,7 +12,9 @@ const LatestProductCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("http://51.21.182.124/api/products/get");
+        const response = await api.get(
+          "http://51.21.182.124/api/api/products/get"
+        );
         const data = response.data;
         const latestProducts = data.filter((product) => product.isLatest);
         setProducts(latestProducts);
@@ -34,7 +36,7 @@ const LatestProductCard = () => {
       };
 
       const response = await api.post(
-        "http://51.21.182.124/api/cart/add",
+        "http://51.21.182.124/api/api/cart/add",
         requestData
       );
       if (response.status === 200) {
@@ -128,7 +130,7 @@ const LatestProductCard = () => {
                         src={
                           imageUrl.startsWith("http")
                             ? imageUrl
-                            : `http://51.21.182.124/api${imageUrl}`
+                            : `http://51.21.182.124/api/api${imageUrl}`
                         }
                         alt={`Product ${index + 1}`}
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-3 ${
@@ -147,7 +149,7 @@ const LatestProductCard = () => {
                         src={
                           imageUrl.startsWith("http")
                             ? imageUrl
-                            : `http://51.21.182.124/api${imageUrl}`
+                            : `http://51.21.182.124/api/api${imageUrl}`
                         }
                         alt="Product"
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-3 ${

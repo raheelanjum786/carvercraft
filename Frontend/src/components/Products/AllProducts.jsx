@@ -14,7 +14,9 @@ const AllProducts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("http://51.21.182.124/api/products/get");
+        const response = await api.get(
+          "http://51.21.182.124/api/api/products/get"
+        );
         setProducts(response.data);
         setIsLoading(false);
       } catch (error) {
