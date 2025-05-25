@@ -28,7 +28,7 @@ const AdminCardTypes = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "http://13.60.44.89:4000/api/cardTypes/getAll"
+        "http://51.21.182.124:4000/api/cardTypes/getAll"
       );
       setCardTypes(response.data);
     } catch (error) {
@@ -97,7 +97,7 @@ const AdminCardTypes = () => {
 
       if (editingId) {
         await api.put(
-          `http://13.60.44.89:4000/api/cardTypes/update/${editingId}`,
+          `http://51.21.182.124:4000/api/cardTypes/update/${editingId}`,
           submitData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -106,7 +106,7 @@ const AdminCardTypes = () => {
         alert("Card type updated successfully");
       } else {
         await api.post(
-          "http://13.60.44.89:4000/api/cardTypes/create",
+          "http://51.21.182.124:4000/api/cardTypes/create",
           submitData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -126,7 +126,7 @@ const AdminCardTypes = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this card type?")) {
       try {
-        await api.delete(`http://13.60.44.89:4000/api/cardTypes/${id}`);
+        await api.delete(`http://51.21.182.124:4000/api/cardTypes/${id}`);
         alert("Card type deleted successfully");
         fetchCardTypes();
       } catch (error) {
@@ -251,7 +251,7 @@ const AdminCardTypes = () => {
                       <td className="p-2">
                         {type.imageUrl ? (
                           <img
-                            src={`http://13.60.44.89:4000/api${type.imageUrl}`}
+                            src={`http://51.21.182.124:4000/api${type.imageUrl}`}
                             alt="Card Type"
                             className="w-16 h-10 object-cover rounded"
                             onError={(e) => {

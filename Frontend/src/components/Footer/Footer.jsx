@@ -20,7 +20,7 @@ const Footer = () => {
 
     try {
       const response = await axios.post(
-        "http://13.60.44.89:4000/api/newsletter/subscribe",
+        "http://51.21.182.124:4000/api/newsletter/subscribe",
         { email }
       );
       setStatus({ type: "success", message: response.data.message });

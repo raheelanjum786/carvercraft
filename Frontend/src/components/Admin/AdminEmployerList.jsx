@@ -34,7 +34,7 @@ const AdminEmployerList = () => {
   const fetchEmployers = async () => {
     try {
       const response = await api.get(
-        "http://13.60.44.89:4000/api/employers/getAll"
+        "http://51.21.182.124:4000/api/employers/getAll"
       );
       const data = await response.data;
       setEmployers(data);
@@ -51,7 +51,7 @@ const AdminEmployerList = () => {
 
     try {
       const response = await api.post(
-        "http://13.60.44.89:4000/api/employers/create",
+        "http://51.21.182.124:4000/api/employers/create",
         formData
       );
       if (response.status === 201) {
@@ -87,7 +87,7 @@ const AdminEmployerList = () => {
     // Fix: Use the passed id parameter instead of data.id
     try {
       const response = await api.delete(
-        `http://13.60.44.89:4000/api/employers/${id}`
+        `http://51.21.182.124:4000/api/employers/${id}`
       );
       if (response.status === 200) {
         // Fix: Check status instead of response.ok
@@ -104,7 +104,7 @@ const AdminEmployerList = () => {
       const { id: formId, createdAt, updatedAt, ...updateData } = formData;
 
       const response = await api.put(
-        `http://13.60.44.89:4000/api/employers/update/${id}`,
+        `http://51.21.182.124:4000/api/employers/update/${id}`,
         updateData
       );
       if (response.status === 200) {

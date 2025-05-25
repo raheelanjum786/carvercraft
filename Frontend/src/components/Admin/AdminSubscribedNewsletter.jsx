@@ -35,7 +35,7 @@ const AdminSubscribedNewsletter = () => {
     setLoading(true);
     try {
       const response = await api.get(
-        "http://13.60.44.89:4000/api/newsletter/subscribers"
+        "http://51.21.182.124:4000/api/newsletter/subscribers"
       );
       setSubscribers(response.data);
     } catch (error) {
@@ -48,7 +48,7 @@ const AdminSubscribedNewsletter = () => {
   const fetchLogs = async () => {
     try {
       const response = await api.get(
-        "http://13.60.44.89:4000/api/newsletter/logs"
+        "http://51.21.182.124:4000/api/newsletter/logs"
       );
       setLogs(response.data);
     } catch (error) {
@@ -78,7 +78,7 @@ const AdminSubscribedNewsletter = () => {
     setLoading(true);
     try {
       const response = await api.post(
-        "http://13.60.44.89:4000/api/newsletter/send-newsletter",
+        "http://51.21.182.124:4000/api/newsletter/send-newsletter",
         {
           emails: selectedEmails,
           subject: emailContent.subject,

@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await API.post(
-        "http://13.60.44.89:4000/api/auth/users/login",
+        "http://51.21.182.124:4000/api/auth/users/login",
         {
           email,
           password,
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const response = await API.post(
-        "http://13.60.44.89:4000/api/auth/users/signup",
+        "http://51.21.182.124:4000/api/auth/users/signup",
         userData
       );
       return { success: true };

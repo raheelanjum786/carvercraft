@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://13.60.44.89:4000", // Match the port in your server.js
+  baseURL: "http://51.21.182.124:4000", // Match the port in your server.js
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
