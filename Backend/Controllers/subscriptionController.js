@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 
 // Configure email transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail", // or any other email service
+  service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER, // your email
-    pass: process.env.EMAIL_PASSWORD, // your app-specific password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 

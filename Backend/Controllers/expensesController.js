@@ -49,10 +49,13 @@ const expenseController = {
   createExpense: async (req, res) => {
     try {
       console.log("Received Data:", req.body);
-      const { productId, amount, date, ...otherData } = req.body;
+      const { productId, amount, date, productName, ...otherData } = req.body;
 
       // Validate amount
       const parsedAmount = parseFloat(amount);
+      if (isNaN(parsedAmount)) {
+        return res.status(400).json({ error: "Invalid amount provided." });
+      }
 
       // Validate date
       const parsedDate = new Date(date);
@@ -60,6 +63,7 @@ const expenseController = {
         return res.status(400).json({ error: "Invalid date provided." });
       }
 
+      // Remove productName from data as it's not in the schema
       const expense = await prisma.expense.create({
         data: {
           ...otherData,
@@ -82,6 +86,7 @@ const expenseController = {
       });
       res.status(201).json(expense);
     } catch (error) {
+      console.error("Expense creation error:", error);
       res.status(400).json({ error: error.message });
     }
   },

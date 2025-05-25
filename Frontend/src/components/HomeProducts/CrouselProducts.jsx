@@ -83,24 +83,32 @@ const CarouselProducts = () => {
   };
 
   return (
-    <div ref={sectionRef} className="w-full py-8 sm:py-12">
-      <h2 className="text-2xl sm:text-3xl font-bold text-[#310A0B] text-center mb-6 sm:mb-8">
-        Featured Products
-      </h2>
-      {/* Products Container */}
-      <Carousel
-        responsive={responsive}
-        itemClass="p-[40px]"
-        autoPlay={true}
-        autoPlaySpeed={5000}
-        stopAutoPlayOnHover={true}
-        infinite={true}
-        transitionDuration={500}
-      >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </Carousel>
+    <div ref={sectionRef} className="w-full bg-[#041322]">
+      {/* Funky background elements */}
+      <div className="absolute  ">
+        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 rounded-full bg-funky-orange opacity-10 blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full bg-funky-green opacity-10 blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10">
+        <h2 className="text-2xl sm:text-3xl font-bold text-funky-teal text-center mb-6 sm:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-funky-pink to-funky-teal">
+          Featured Products
+        </h2>
+        {/* Products Container */}
+        <Carousel
+          responsive={responsive}
+          itemClass="p-[40px]"
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          stopAutoPlayOnHover={true}
+          infinite={true}
+          transitionDuration={500}
+        >
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Carousel>
+      </div>
     </div>
   );
 };

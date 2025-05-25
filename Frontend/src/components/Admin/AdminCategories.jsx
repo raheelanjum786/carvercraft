@@ -54,6 +54,7 @@ const AdminCategories = () => {
 
   const deleteCategory = async (id) => {
     try {
+      // Convert id to number since Prisma expects an integer
       await api.delete(`http://localhost:4000/api/categories/${id}`);
       setCategories(categories.filter((category) => category.id !== id));
     } catch (error) {

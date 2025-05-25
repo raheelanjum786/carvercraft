@@ -37,9 +37,11 @@ const AdminProductList = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await api.delete(`http://localhost:4000/api/products/${productId}`);
+        // Refresh the products list after successful deletion
         setProducts(products.filter((product) => product.id !== productId));
       } catch (error) {
         console.error("Error deleting product:", error);
+        alert("Failed to delete product. Please try again.");
       }
     }
   };
@@ -52,10 +54,30 @@ const AdminProductList = () => {
 
   const handleUpdate = async (updatedProduct) => {
     try {
+      const productData = new FormData();
+
+      productData.append("name", updatedProduct.name);
+      productData.append("category", updatedProduct.categoryId);
+      productData.append("price", updatedProduct.price);
+      productData.append("description", updatedProduct.description || "");
+      productData.append("isLatest", updatedProduct.isLatest || false);
+
+      if (updatedProduct.images && updatedProduct.images.length > 0) {
+        updatedProduct.images.forEach((image) => {
+          productData.append("images", image);
+        });
+      }
+
       const response = await api.put(
-        `http://localhost:4000/api/products/${updatedProduct.id}`,
-        updatedProduct
+        `http://localhost:4000/api/products/update/${updatedProduct.id}`,
+        productData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+
       setProducts(
         products.map((product) =>
           product.id === response.data.id ? response.data : product
@@ -65,6 +87,7 @@ const AdminProductList = () => {
       setIsEditMode(false);
     } catch (error) {
       console.error("Error updating product:", error);
+      alert("Failed to update product. Please try again.");
     }
   };
 
@@ -173,7 +196,7 @@ const AdminProductList = () => {
                   <td className="p-4">
                     {categories.find((c) => c.id === product.categoryId)?.name}
                   </td>
-                  <td className="p-4">Rs.{product.price}</td>
+                  <td className="p-4">€{product.price}</td>
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 rounded text-sm ${
@@ -255,24 +278,83 @@ const AdminProductList = () => {
                         className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       />
                     </div>
-                    <div className="flex justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsModalOpen(false);
-                          setIsEditMode(false);
-                        }}
-                        className="px-4 py-2 bg-[#34495E] text-[#FFFFFF] rounded"
+
+                    {/* Category Dropdown */}
+                    <div>
+                      <label className="block text-[#FFFFFF] mb-2">
+                        Category
+                      </label>
+                      <select
+                        value={selectedProduct.categoryId}
+                        onChange={(e) =>
+                          setSelectedProduct({
+                            ...selectedProduct,
+                            categoryId: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-4 py-2 bg-[#3498DB] text-[#FFFFFF] rounded"
-                      >
-                        Save Changes
-                      </button>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
+
+                    {/* Price Input */}
+                    <div>
+                      <label className="block text-[#FFFFFF] mb-2">Price</label>
+                      <input
+                        type="number"
+                        value={selectedProduct.price}
+                        onChange={(e) =>
+                          setSelectedProduct({
+                            ...selectedProduct,
+                            price: e.target.value,
+                          })
+                        }
+                        className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
+                      />
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                      <label className="block text-[#FFFFFF] mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        value={selectedProduct.description || ""}
+                        onChange={(e) =>
+                          setSelectedProduct({
+                            ...selectedProduct,
+                            description: e.target.value,
+                          })
+                        }
+                        className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded min-h-[100px]"
+                      />
+                    </div>
+
+                    {/* Latest Product Checkbox */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="isLatest"
+                        checked={selectedProduct.isLatest || false}
+                        onChange={(e) =>
+                          setSelectedProduct({
+                            ...selectedProduct,
+                            isLatest: e.target.checked,
+                          })
+                        }
+                        className="w-4 h-4 text-[#3498DB] bg-[#2C3E50] border-[#34495E]"
+                      />
+                      <label htmlFor="isLatest" className="text-[#FFFFFF]">
+                        Mark as Latest Product
+                      </label>
+                    </div>
+
+                    {/* Images */}
                     <div>
                       <label className="block text-[#FFFFFF] mb-2">
                         Images
@@ -291,6 +373,58 @@ const AdminProductList = () => {
                         className="w-full p-2 bg-[#34495E] text-[#FFFFFF] rounded"
                       />
                     </div>
+
+                    {/* Current Images Preview */}
+                    {selectedProduct.imageUrls && (
+                      <div>
+                        <label className="block text-[#FFFFFF] mb-2">
+                          Current Images
+                        </label>
+                        <div className="flex gap-2 overflow-x-auto">
+                          {(() => {
+                            try {
+                              const images = JSON.parse(
+                                selectedProduct.imageUrls
+                              );
+                              return images.map((imageUrl, index) => (
+                                <div key={index} className="relative">
+                                  <img
+                                    src={`http://localhost:4000/api${imageUrl}`}
+                                    alt={`Product ${index + 1}`}
+                                    className="w-24 h-24 object-cover rounded"
+                                  />
+                                </div>
+                              ));
+                            } catch (error) {
+                              return (
+                                <p className="text-[#E74C3C]">
+                                  Error loading images
+                                </p>
+                              );
+                            }
+                          })()}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsModalOpen(false);
+                          setIsEditMode(false);
+                        }}
+                        className="px-4 py-2 bg-[#34495E] text-[#FFFFFF] rounded"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-[#3498DB] text-[#FFFFFF] rounded"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
                   </form>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -299,17 +433,32 @@ const AdminProductList = () => {
                         Images:
                       </p>
                       <div className="flex gap-2 overflow-x-auto">
-                        {selectedProduct.imageUrls &&
-                          JSON.parse(selectedProduct.imageUrls).map(
-                            (imageUrl, index) => (
-                              <img
-                                key={index}
-                                src={`http://localhost:4000/api${imageUrl}`}
-                                alt={`Product ${index + 1}`}
-                                className="w-32 h-32 object-cover rounded"
-                              />
-                            )
-                          )}
+                        {selectedProduct.imageUrls ? (
+                          (() => {
+                            try {
+                              const images = JSON.parse(
+                                selectedProduct.imageUrls
+                              );
+                              return images.map((imageUrl, index) => (
+                                <img
+                                  key={index}
+                                  src={`http://localhost:4000/api${imageUrl}`}
+                                  alt={`Product ${index + 1}`}
+                                  className="w-32 h-32 object-cover rounded"
+                                />
+                              ));
+                            } catch (error) {
+                              console.error("Error parsing image URLs:", error);
+                              return (
+                                <p className="text-[#E74C3C]">
+                                  Error loading images
+                                </p>
+                              );
+                            }
+                          })()
+                        ) : (
+                          <p className="text-[#ECF0F1]">No images available</p>
+                        )}
                       </div>
                     </div>
                     <div>

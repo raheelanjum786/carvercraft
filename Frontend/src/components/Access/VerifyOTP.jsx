@@ -70,31 +70,19 @@ const VerifyOTP = () => {
     },
   };
 
-  // Generate random funky background patterns
-  const generatePattern = () => {
-    const patterns = [
-      "radial-gradient(circle at 10% 20%, #FF6B6B 0%, #556270 90%)",
-      "linear-gradient(45deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%)",
-      "linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)",
-      "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
-      "linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%)",
-    ];
-    return patterns[Math.floor(Math.random() * patterns.length)];
-  };
-
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-700 via-pink-600 to-orange-500 flex items-center justify-center overflow-hidden px-4 sm:px-6">
+    <div className="relative min-h-screen bg-[#041322] flex items-center justify-center overflow-hidden px-4 sm:px-6">
       {/* Funky background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-yellow-300 opacity-20 blur-3xl"></div>
-        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-pink-400 opacity-20 blur-3xl"></div>
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-funky-orange opacity-10 blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-funky-teal opacity-10 blur-3xl"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-funky-pink opacity-10 blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-funky-green opacity-10 blur-3xl"></div>
       </div>
 
       {/* Floating shapes */}
       <motion.div
-        className="absolute top-20 left-20 w-12 h-12 bg-yellow-300 rounded-lg opacity-70"
+        className="absolute top-20 left-20 w-12 h-12 bg-funky-orange opacity-30 rounded-lg"
         animate={{
           y: [0, -20, 0],
           rotate: [0, 15, 0],
@@ -108,7 +96,7 @@ const VerifyOTP = () => {
       />
 
       <motion.div
-        className="absolute bottom-32 right-20 w-16 h-16 bg-pink-400 rounded-full opacity-70"
+        className="absolute bottom-32 right-20 w-16 h-16 bg-funky-pink opacity-30 rounded-full"
         animate={{
           y: [0, 30, 0],
           x: [0, -20, 0],
@@ -122,7 +110,7 @@ const VerifyOTP = () => {
       />
 
       <motion.div
-        className="absolute top-1/2 right-1/4 w-10 h-10 bg-green-400 rounded-lg opacity-70 rotate-45"
+        className="absolute top-1/2 right-1/4 w-10 h-10 bg-funky-teal opacity-30 rounded-lg rotate-45"
         animate={{
           y: [0, -15, 0],
           x: [0, 15, 0],
@@ -139,21 +127,21 @@ const VerifyOTP = () => {
         initial="hidden"
         animate="visible"
         variants={formVariants}
-        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/20"
+        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-gradient-to-br from-funky-pink/10 to-funky-teal/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-funky-pink/30"
       >
         <motion.div
           className="flex justify-center mb-6"
           whileHover={{ scale: 1.1, rotate: [0, -5, 5, -5, 0] }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
+          <div className="w-24 h-24 bg-gradient-to-br from-funky-orange via-funky-pink to-funky-teal rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
             <span className="text-4xl font-bold text-white">CC</span>
           </div>
         </motion.div>
 
         <motion.h2
           variants={itemVariants}
-          className="text-3xl font-extrabold text-center text-white mb-2 tracking-tight"
+          className="text-3xl font-extrabold text-center text-funky-orange mb-2 tracking-tight"
           style={{ textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}
         >
           Verify Your OTP
@@ -161,7 +149,7 @@ const VerifyOTP = () => {
 
         <motion.p
           variants={itemVariants}
-          className="text-center text-white/80 mb-8"
+          className="text-center text-funky-green mb-8"
         >
           Enter the verification code sent to your email
         </motion.p>
@@ -176,13 +164,11 @@ const VerifyOTP = () => {
               type="text"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
-              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
-              transition-all duration-300 text-lg tracking-wider text-center"
-              placeholder="Enter OTP"
+              className="w-full px-5 py-4 rounded-xl bg-black/30 border-2 border-funky-pink/50 
+              text-funky-green placeholder-funky-green/60 focus:outline-none focus:border-funky-teal focus:ring-2 focus:ring-funky-teal/30 
+              transition-all duration-300 text-base"
+              placeholder="Enter verification code"
               required
-              maxLength={6}
-              style={{ letterSpacing: "0.5em" }}
             />
           </motion.div>
 
@@ -190,7 +176,7 @@ const VerifyOTP = () => {
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-green-300 text-center font-medium"
+              className="text-funky-green text-center font-medium"
             >
               {message}
             </motion.p>
@@ -200,68 +186,64 @@ const VerifyOTP = () => {
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-red-300 text-center font-medium"
+              className="text-funky-pink text-center font-medium"
             >
               {error}
             </motion.p>
           )}
 
-          <motion.button
+          <motion.div
             variants={itemVariants}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.2)",
-            }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 
-            text-white font-bold text-lg shadow-lg hover:from-yellow-500 hover:to-purple-700 
-            transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex flex-col space-y-4"
           >
-            {isLoading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Verifying...
-              </span>
-            ) : (
-              "Verify & Continue"
-            )}
-          </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-4 px-6 bg-gradient-to-r from-funky-pink to-funky-teal hover:from-funky-teal hover:to-funky-pink 
+              text-white font-bold rounded-xl shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Verifying...
+                </span>
+              ) : (
+                "Verify Code"
+              )}
+            </motion.button>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-center text-white/80 mt-4"
-          >
-            Didn't receive the code?{" "}
-            <Link to="/forgot-password">
-              <motion.span
-                whileHover={{ scale: 1.05, color: "#ffffff" }}
-                className="font-bold text-white/90 underline decoration-wavy decoration-pink-500 underline-offset-4 cursor-pointer"
-              >
-                Resend
-              </motion.span>
-            </Link>
-          </motion.p>
+            <div className="text-center">
+              <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
+                <Link
+                  to="/auth/forgot-password"
+                  className="text-funky-teal hover:text-funky-pink transition-colors duration-300"
+                >
+                  Didn't receive a code? Try again
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
         </form>
       </motion.div>
     </div>

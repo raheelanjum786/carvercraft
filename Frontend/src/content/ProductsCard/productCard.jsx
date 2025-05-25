@@ -26,6 +26,7 @@ const ProductCard = ({ product }) => {
         "http://localhost:4000/api/cart/add",
         requestData
       );
+      console.log("requestData", requestData);
 
       if (response.status === 200) {
         alert("Woohoo! 🎉 Item zoomed into your cart!");
@@ -50,15 +51,21 @@ const ProductCard = ({ product }) => {
     >
       {/* Image Section */}
       <div className="relative h-64 overflow-hidden group">
-        {/* {selectedProduct.imageUrls && (
+        {product.imageUrls && (
           <img
-            src={`http://localhost:4000/api${
-              JSON.parse(selectedProduct.imageUrls)[0]
-            }`}
-            alt="Product"
+            src={(() => {
+              try {
+                // Try to parse as JSON first
+                const parsedUrls = JSON.parse(product.imageUrls);
+                return `http://localhost:4000/api${parsedUrls}`;
+              } catch (error) {
+                return product.imageUrls;
+              }
+            })()}
+            alt={product.name}
             className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
           />
-        )} */}
+        )}
         {product.isNew && (
           <span className="absolute top-4 right-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
             ✨ NEW ✨
@@ -69,24 +76,24 @@ const ProductCard = ({ product }) => {
       {/* Content Section */}
       <div className="p-6 backdrop-blur-sm bg-white/30">
         <Link to={`/products/${product.id}`} className="block">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent hover:from-pink-600 hover:to-purple-600 transition-all duration-300 mb-2">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-funky-pink to-funky-teal bg-clip-text text-transparent hover:from-funky-teal hover:to-funky-pink transition-all duration-300 mb-2">
             {product.name}
           </h2>
         </Link>
 
-        <p className="text-gray-700 text-sm mb-4 line-clamp-2 italic">
+        <p className="text-funky-green text-sm mb-4 line-clamp-2 italic">
           {product.description}
         </p>
 
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            ₹{product.price.toLocaleString()}
+          <span className="text-2xl font-bold bg-gradient-to-r from-funky-pink to-funky-orange bg-clip-text text-transparent">
+            €.{product.price.toLocaleString()}
           </span>
           <button
             onClick={() => handleAddToCart(product, "product")}
-            className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-bold
-            transform transition-all duration-300 hover:from-pink-500 hover:to-purple-500 hover:scale-110
-            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
+            className="px-6 py-2.5 bg-gradient-to-r from-funky-pink to-funky-teal text-white rounded-full font-bold
+            transform transition-all duration-300 hover:from-funky-teal hover:to-funky-pink hover:scale-110
+            focus:outline-none focus:ring-2 focus:ring-funky-green focus:ring-offset-2
             active:scale-95 shadow-lg hover:shadow-xl"
           >
             🛒 Add to Cart

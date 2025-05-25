@@ -165,7 +165,7 @@ const AdminProductOrders = () => {
                           {order.orderProducts[0].quantity}
                         </td>
                         <td className="p-2 sm:p-4 text-xs sm:text-sm">
-                          Rs.{order.total}
+                          €{order.total}
                         </td>
                         <td className="p-2 sm:p-4 text-xs sm:text-sm hidden sm:table-cell">
                           {new Date(order.createdAt).toLocaleDateString()}
@@ -262,7 +262,7 @@ const AdminProductOrders = () => {
                     ["Address", selectedOrder.shippingAddress],
                     ["Product", selectedOrder.orderProducts[0].product.name],
                     ["Quantity", selectedOrder.orderProducts[0].quantity],
-                    ["Price", `$${selectedOrder.total}`],
+                    ["Price", `€${selectedOrder.total}`],
                     ["Status", selectedOrder.status],
                     [
                       "Date",

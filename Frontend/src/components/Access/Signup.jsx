@@ -79,18 +79,18 @@ const Signup = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 flex items-center justify-center overflow-hidden px-4 sm:px-6">
+    <div className="relative min-h-screen bg-[#041322] flex items-center justify-center overflow-hidden px-4 sm:px-6">
       {/* Funky background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-yellow-300 opacity-20 blur-3xl"></div>
-        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-pink-400 opacity-20 blur-3xl"></div>
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-funky-orange opacity-20 blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-funky-teal opacity-20 blur-3xl"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-funky-pink opacity-20 blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-funky-red opacity-20 blur-3xl"></div>
       </div>
 
       {/* Floating shapes */}
       <motion.div
-        className="absolute top-20 left-20 w-12 h-12 bg-yellow-300 rounded-lg opacity-70"
+        className="absolute top-20 left-20 w-12 h-12 bg-funky-orange rounded-lg opacity-70"
         animate={{
           y: [0, -20, 0],
           rotate: [0, 15, 0],
@@ -104,7 +104,7 @@ const Signup = () => {
       />
 
       <motion.div
-        className="absolute bottom-32 right-20 w-16 h-16 bg-pink-400 rounded-full opacity-70"
+        className="absolute bottom-32 right-20 w-16 h-16 bg-funky-pink rounded-full opacity-70"
         animate={{
           y: [0, 30, 0],
           x: [0, -20, 0],
@@ -118,7 +118,7 @@ const Signup = () => {
       />
 
       <motion.div
-        className="absolute top-1/2 right-1/4 w-10 h-10 bg-green-400 rounded-lg opacity-70 rotate-45"
+        className="absolute top-1/2 right-1/4 w-10 h-10 bg-funky-green rounded-lg opacity-70 rotate-45"
         animate={{
           y: [0, -15, 0],
           x: [0, 15, 0],
@@ -142,14 +142,14 @@ const Signup = () => {
           whileHover={{ scale: 1.1, rotate: [0, -5, 5, -5, 0] }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
+          <div className="w-24 h-24 bg-gradient-to-br from-funky-orange via-funky-pink to-funky-teal rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
             <span className="text-4xl font-bold text-white">CC</span>
           </div>
         </motion.div>
 
         <motion.h2
           variants={itemVariants}
-          className="text-3xl font-extrabold text-center text-white mb-6 tracking-tight"
+          className="text-3xl font-extrabold text-center text-funky-teal mb-6 tracking-tight"
           style={{ textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}
         >
           Create Account
@@ -176,8 +176,8 @@ const Signup = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
-              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-funky-teal/30 
+              text-white placeholder-white/60 focus:outline-none focus:border-funky-pink/70 
               transition-all duration-300 text-base"
               placeholder="Full Name"
               required
@@ -244,11 +244,11 @@ const Signup = () => {
           >
             <input
               type="checkbox"
-              className="w-4 h-4 rounded border-2 border-white/30 text-purple-500 
-              focus:ring-purple-500 focus:ring-offset-0 transition-all duration-300
+              className="w-4 h-4 rounded border-2 border-white/30 text-funky-pink 
+              focus:ring-funky-teal focus:ring-offset-0 transition-all duration-300
               cursor-pointer"
             />
-            <span className="text-sm text-white/80 hover:text-white transition-colors duration-300">
+            <span className="text-sm text-funky-green hover:text-white transition-colors duration-300">
               I agree to the Terms and Conditions
             </span>
           </motion.div>
@@ -262,8 +262,8 @@ const Signup = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 
-            text-white font-bold text-lg shadow-lg hover:from-yellow-500 hover:to-purple-700 
+            className="w-full py-4 rounded-xl bg-gradient-to-r from-funky-orange via-funky-pink to-funky-teal 
+            text-white font-bold text-lg shadow-lg hover:from-funky-teal hover:to-funky-pink 
             transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
           >
             {loading ? (
@@ -297,13 +297,13 @@ const Signup = () => {
 
           <motion.p
             variants={itemVariants}
-            className="text-center text-sm text-white/80 mt-4"
+            className="text-center text-sm text-funky-green mt-4"
           >
             Already have an account?{" "}
             <Link to="/login">
               <motion.span
-                whileHover={{ scale: 1.05, color: "#ffffff" }}
-                className="font-bold text-white/90 underline decoration-wavy decoration-pink-500 underline-offset-4 cursor-pointer"
+                whileHover={{ scale: 1.05, color: "#19D7E8" }}
+                className="font-bold text-funky-teal underline decoration-wavy decoration-funky-pink underline-offset-4 cursor-pointer"
               >
                 Sign in
               </motion.span>

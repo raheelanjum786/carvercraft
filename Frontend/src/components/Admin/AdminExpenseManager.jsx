@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Modal,
   Button,
-  Form,
-  Input,
   Select,
   DatePicker,
   List,
@@ -34,15 +32,16 @@ const AdminExpenseManager = () => {
   const [currentExpense, setCurrentExpense] = useState(null);
   const [dateRange, setDateRange] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [editForm] = Form.useForm();
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
+  const [monthlyData, setMonthlyData] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  // Fetch all expenses
   const fetchExpenses = async () => {
     try {
       setLoading(true);
@@ -50,7 +49,6 @@ const AdminExpenseManager = () => {
         "http://localhost:4000/api/expenses/getAll"
       );
       const data = await response.data;
-      console.log(data);
       setExpenses(data);
     } catch (err) {
       setError(err.message);
@@ -81,31 +79,49 @@ const AdminExpenseManager = () => {
     fetchProducts();
   }, []);
 
-  // Create expense
-  const onFinish = async (expenseData) => {
-    console.log(expenseData);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
+  const handleSelectChange = (value, name) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleDateChange = (date, dateString) => {
+    setFormData((prev) => ({
+      ...prev,
+      date: dateString,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      let formattedData = {
-        ...expenseData,
-        date: moment(expenseData.date).format("YYYY-MM-DD"),
+      let submitData = {
+        ...formData,
+        date: moment(formData.date).format("YYYY-MM-DD"),
       };
 
-      if (expenseData.product) {
-        const productData = JSON.parse(expenseData.product);
-        formattedData = {
-          ...formattedData,
+      if (formData.product) {
+        const productData = JSON.parse(formData.product);
+        submitData = {
+          ...submitData,
           productId: productData.id,
           productName: productData.name,
         };
-        delete formattedData.product;
+        delete submitData.product;
       }
-
-      console.log("Submitting expense:", formattedData);
 
       const response = await api.post(
         "http://localhost:4000/api/expenses/create",
-        formattedData,
+        submitData,
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -116,21 +132,50 @@ const AdminExpenseManager = () => {
       message.success("Expense created successfully");
       await fetchExpenses();
       setActiveTab("list");
+      setFormData({});
     } catch (err) {
       message.error(err.response?.data?.message || err.message);
       setError(err.response?.data?.message || err.message);
     }
   };
 
-  // Update expense
   const handleEditExpense = async (e) => {
-    const formData = new FormData(e.target);
-    const updatedData = Object.fromEntries(formData);
-
+    e.preventDefault();
     try {
+      let submitData = {
+        ...formData,
+        date: moment(formData.date).format("YYYY-MM-DD"),
+      };
+
+      if (formData.product) {
+        try {
+          const productData = JSON.parse(formData.product);
+          submitData = {
+            ...submitData,
+            productId: productData.id,
+            productName: productData.name,
+          };
+          delete submitData.product;
+        } catch (parseError) {
+          console.error("Error parsing product data:", parseError);
+
+          message.error("Invalid product data selected.");
+          return;
+        }
+      } else {
+        submitData.productId = null;
+        delete submitData.productName;
+      }
+
+      submitData.amount = parseFloat(submitData.amount);
+      if (isNaN(submitData.amount)) {
+        message.error("Invalid amount provided.");
+        return;
+      }
+
       const response = await api.put(
         `http://localhost:4000/api/expenses/update/${currentExpense.id}`,
-        updatedData,
+        submitData,
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -138,15 +183,17 @@ const AdminExpenseManager = () => {
 
       if (response.status !== 200) throw new Error("Failed to update expense");
 
+      message.success("Expense updated successfully");
       await fetchExpenses();
       setIsEditing(false);
       setCurrentExpense(null);
+      setFormData({});
     } catch (err) {
+      message.error(err.response?.data?.message || err.message);
       setError(err.response?.data?.message || err.message);
     }
   };
 
-  // Delete expense
   const handleDeleteExpense = async (id) => {
     if (!window.confirm("Are you sure you want to delete this expense?"))
       return;
@@ -164,7 +211,6 @@ const AdminExpenseManager = () => {
     }
   };
 
-  // Calculate statistics
   const getStatistics = () => {
     const totalExpense = expenses.reduce(
       (sum, exp) => sum + Number(exp.amount),
@@ -203,6 +249,50 @@ const AdminExpenseManager = () => {
     setDateRange(dates);
   };
 
+  const fetchMonthlyData = async (year = new Date().getFullYear()) => {
+    try {
+      setLoading(true);
+
+      const monthlyStats = Array(12)
+        .fill(0)
+        .map(() => ({
+          total: 0,
+          expenses: [],
+          categories: {},
+        }));
+
+      expenses.forEach((expense) => {
+        const expenseDate = new Date(expense.date);
+        const expenseYear = expenseDate.getFullYear();
+
+        if (expenseYear === year) {
+          const month = expenseDate.getMonth();
+          monthlyStats[month].total += Number(expense.amount);
+          monthlyStats[month].expenses.push(expense);
+
+          if (!monthlyStats[month].categories[expense.category]) {
+            monthlyStats[month].categories[expense.category] = 0;
+          }
+          monthlyStats[month].categories[expense.category] += Number(
+            expense.amount
+          );
+        }
+      });
+
+      setMonthlyData(monthlyStats);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (expenses.length > 0) {
+      fetchMonthlyData(selectedYear);
+    }
+  }, [expenses, selectedYear]);
+
   return (
     <>
       <div className="flex">
@@ -223,13 +313,12 @@ const AdminExpenseManager = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Navigation Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
             <Button
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "list"
                   ? "bg-[#3498DB] text-[#FFFFFF]"
-                  : "bg-[#2C3E50] text-[#ECF0F1]"
+                  : "bg-[#2C3E50] text-[#ECF0F0]"
               } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("list")}
             >
@@ -239,7 +328,7 @@ const AdminExpenseManager = () => {
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "add"
                   ? "bg-[#3498DB] text-[#FFFFFF]"
-                  : "bg-[#2C3E50] text-[#ECF0F1]"
+                  : "bg-[#2C3E50] text-[#ECF0F0]"
               } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("add")}
             >
@@ -249,7 +338,7 @@ const AdminExpenseManager = () => {
               className={`px-6 py-2 text-lg font-semibold ${
                 activeTab === "monthly"
                   ? "bg-[#3498DB] text-[#FFFFFF]"
-                  : "bg-[#2C3E50] text-[#ECF0F1]"
+                  : "bg-[#2C3E50] text-[#ECF0F0]"
               } hover:bg-[#34495E] transition-colors duration-300 shadow-lg`}
               onClick={() => setActiveTab("monthly")}
             >
@@ -288,10 +377,7 @@ const AdminExpenseManager = () => {
                             <FaEdit
                               onClick={() => {
                                 setIsEditing(true);
-                                editForm.setFieldsValue({
-                                  ...expense,
-                                  date: moment(expense.date),
-                                });
+                                setFormData(expense);
                               }}
                               className="text-[#3498DB] hover:text-[#34495E] transition-colors"
                             />
@@ -302,7 +388,10 @@ const AdminExpenseManager = () => {
                               cancelText="No"
                               overlayClassName="custom-popconfirm"
                             >
-                              <FaTrash className="text-[#E74C3C] hover:text-[#34495E] transition-colors" />
+                              <FaTrash
+                                onClick={() => handleDeleteExpense(expense.id)}
+                                className="text-[#E74C3C] hover:text-[#34495E] transition-colors cursor-pointer"
+                              />
                             </Popconfirm>
                           </div>
                         </>,
@@ -315,13 +404,13 @@ const AdminExpenseManager = () => {
                         >
                           {expense.title}
                         </h3>
-                        <p className="text-[#ECF0F1] mb-2">
+                        <p className="text-[#ECF0F0] mb-2">
                           Category: {expense.category}
                         </p>
                         <p className="text-[#3498DB] text-lg font-bold">
-                          Rs.{expense.amount}
+                          €.{expense.amount}
                         </p>
-                        <p className="text-[#ECF0F1] text-sm">
+                        <p className="text-[#ECF0F0] text-sm">
                           {moment(expense.date).format("MMMM D, YYYY")}
                         </p>
                       </div>
@@ -341,38 +430,252 @@ const AdminExpenseManager = () => {
               <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] mb-4 sm:mb-6">
                 Add New Expense
               </h2>
-              <Form
-                name="basic"
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                layout="vertical"
-                className="space-y-6"
-              >
-                <Form.Item
-                  name="title"
-                  label={
-                    <span className="text-base sm:text-lg text-[#FFFFFF]">
-                      Title
-                    </span>
-                  }
-                  rules={[{ required: true, message: "Please input title!" }]}
-                >
-                  <Input className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
-                </Form.Item>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    required
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg px-3"
+                  />
+                </div>
 
-                <Form.Item
-                  name="product"
-                  label={
-                    <span className="text-base sm:text-lg text-[#FFFFFF]">
-                      Product (Optional)
-                    </span>
-                  }
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Product (Optional)
+                  </label>
+                  <select
+                    className="w-full custom-select h-12 text-lg rounded-lg bg-[#34495E]"
+                    onChange={(e) =>
+                      handleSelectChange(e.target.value, "product")
+                    }
+                    disabled={productsLoading}
+                  >
+                    <option value="">Select a product (optional)</option>
+                    {products?.map((product) => (
+                      <option
+                        key={product._id}
+                        value={JSON.stringify({
+                          id: product._id,
+                          name: product.name,
+                        })}
+                        className="text-[#FFFFFF] hover:bg-[#34495E]"
+                      >
+                        {product.name} - €{product.price}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[#FFFFFF] text-lg">Category</label>
+                  <select
+                    className="w-full h-12 text-lg rounded-lg bg-[#34495E] text-[#FFFFFF] px-3"
+                    onChange={(e) =>
+                      handleSelectChange(e.target.value, "category")
+                    }
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option
+                        key={category}
+                        value={category}
+                        className="text-[#FFFFFF] hover:bg-[#34495E]"
+                      >
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Amount
+                  </label>
+                  <input
+                    type="number"
+                    name="amount"
+                    required
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg px-3"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    onChange={(e) => handleDateChange(e.target.value)}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg px-3"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    required
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-24 text-base sm:text-lg rounded-lg px-3 py-2"
+                    rows={4}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] h-12 text-lg font-semibold rounded-lg"
                 >
+                  Add Expense
+                </button>
+              </form>
+            </motion.div>
+          )}
+
+          {activeTab === "monthly" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#2C3E50]/10 backdrop-blur-sm p-4 sm:p-8 rounded-lg shadow-xl w-full mx-auto"
+            >
+              <div className="mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] mb-4">
+                  Monthly Expense Overview - {selectedYear}
+                </h2>
+
+                <div className="flex justify-between items-center mb-6">
+                  <Button
+                    onClick={() => setSelectedYear((prev) => prev - 1)}
+                    className="bg-[#2C3E50] text-[#ECF0F0] hover:bg-[#34495E]"
+                  >
+                    Previous Year
+                  </Button>
+                  <span className="text-[#FFFFFF] text-lg font-semibold">
+                    {selectedYear}
+                  </span>
+                  <Button
+                    onClick={() => setSelectedYear((prev) => prev + 1)}
+                    className="bg-[#2C3E50] text-[#ECF0F0] hover:bg-[#34495E]"
+                    disabled={selectedYear >= new Date().getFullYear()}
+                  >
+                    Next Year
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {monthlyData.map((data, index) => (
+                    <Card
+                      key={index}
+                      className="border-[#34495E]/20"
+                      style={{
+                        backgroundColor: "rgba(44, 62, 80, 0.2)",
+                        transition: "all 0.3s ease",
+                      }}
+                      title={
+                        <span className="text-[#FFFFFF]">
+                          {moment().month(index).format("MMMM")}
+                        </span>
+                      }
+                    >
+                      <Statistic
+                        title={
+                          <span className="text-[#ECF0F0]">Total Expenses</span>
+                        }
+                        value={data.total.toFixed(2)}
+                        precision={2}
+                        prefix="€"
+                        valueStyle={{ color: "#3498DB" }}
+                      />
+
+                      <div className="mt-4">
+                        <h4 className="text-[#ECF0F0] mb-2">
+                          Category Breakdown:
+                        </h4>
+                        <ul className="space-y-1">
+                          {Object.entries(data.categories).map(
+                            ([category, amount]) => (
+                              <li
+                                key={category}
+                                className="flex justify-between"
+                              >
+                                <span className="text-[#ECF0F0]">
+                                  {category}
+                                </span>
+                                <span className="text-[#3498DB]">
+                                  €{amount.toFixed(2)}
+                                </span>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+
+                      <div className="mt-4">
+                        <p className="text-[#ECF0F0]">
+                          {data.expenses.length} expense
+                          {data.expenses.length !== 1 ? "s" : ""} this month
+                        </p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {isEditing && (
+            <Modal
+              title="Edit Expense"
+              open={isEditing}
+              onCancel={() => {
+                setIsEditing(false);
+                setFormData({});
+              }}
+              footer={null}
+              className="custom-modal"
+            >
+              <form onSubmit={handleEditExpense} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    required
+                    value={formData.title || ""}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg px-3"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Product (Optional)
+                  </label>
                   <Select
-                    className="custom-select h-12 text-lg rounded-lg"
+                    className="w-full custom-select h-12 text-lg rounded-lg"
                     placeholder="Select a product (optional)"
                     loading={productsLoading}
-                    dropdownClassName="custom-select-dropdown"
+                    value={
+                      formData.product
+                        ? formData.product
+                        : formData.productId
+                        ? JSON.stringify({
+                            id: formData.productId,
+                            name: formData.productName,
+                          })
+                        : undefined
+                    }
+                    onChange={(value) => handleSelectChange(value, "product")}
                     allowClear
                     style={{
                       backgroundColor: "#34495E",
@@ -385,30 +688,24 @@ const AdminExpenseManager = () => {
                           id: product._id,
                           name: product.name,
                         })}
-                        className="text-[#FFFFFF] hover:bg-[#34495E]/40"
+                        className="text-[#FFFFFF] hover:bg-[#34495E]"
                       >
                         <div className="flex justify-between items-center">
                           <span>{product.name}</span>
-                          <span>Rs.{product.price}</span>
+                          <span>€{product.price}</span>
                         </div>
                       </Option>
                     ))}
                   </Select>
-                </Form.Item>
+                </div>
 
-                <Form.Item
-                  name="category"
-                  label={
-                    <span className="text-[#FFFFFF] text-lg">Category</span>
-                  }
-                  rules={[
-                    { required: true, message: "Please select category!" },
-                  ]}
-                >
+                <div className="space-y-2">
+                  <label className="text-[#FFFFFF] text-lg">Category</label>
                   <Select
-                    className="custom-select h-12 text-lg rounded-lg"
-                    value=""
-                    dropdownClassName="custom-select-dropdown"
+                    className="w-full custom-select h-12 text-lg rounded-lg"
+                    value={formData.category || undefined}
+                    onChange={(value) => handleSelectChange(value, "category")}
+                    required
                     style={{
                       backgroundColor: "#34495E",
                     }}
@@ -417,312 +714,62 @@ const AdminExpenseManager = () => {
                       <Option
                         key={category}
                         value={category}
-                        className="text-[#FFFFFF] hover:bg-[#34495E]/40"
+                        className="text-[#FFFFFF] hover:bg-[#34495E]"
                       >
                         {category}
                       </Option>
                     ))}
                   </Select>
-                </Form.Item>
+                </div>
 
-                <Form.Item
-                  name="amount"
-                  label={
-                    <span className="text-base sm:text-lg text-[#FFFFFF]">
-                      Amount
-                    </span>
-                  }
-                  rules={[{ required: true, message: "Please input amount!" }]}
-                >
-                  <Input
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Amount
+                  </label>
+                  <input
                     type="number"
-                    className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                    name="amount"
+                    required
+                    value={formData.amount || ""}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg px-3"
                   />
-                </Form.Item>
+                </div>
 
-                <Form.Item
-                  name="date"
-                  label={
-                    <span className="text-base sm:text-lg text-[#FFFFFF]">
-                      Date
-                    </span>
-                  }
-                  rules={[{ required: true, message: "Please select date!" }]}
-                >
-                  <DatePicker className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg" />
-                </Form.Item>
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Date
+                  </label>
+                  <DatePicker
+                    value={formData.date ? moment(formData.date) : null}
+                    onChange={handleDateChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg"
+                  />
+                </div>
 
-                <Form.Item
-                  name="description"
-                  label={
-                    <span className="text-base sm:text-lg text-[#FFFFFF]">
-                      Description
-                    </span>
-                  }
-                  rules={[
-                    { required: true, message: "Please input description!" },
-                  ]}
-                >
-                  <Input.TextArea
-                    className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
+                <div className="space-y-2">
+                  <label className="text-base sm:text-lg text-[#FFFFFF]">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    required
+                    value={formData.description || ""}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#34495E] border-[#3498DB] text-[#FFFFFF] h-24 text-base sm:text-lg rounded-lg px-3 py-2"
                     rows={4}
                   />
-                </Form.Item>
-
-                <Form.Item className="mb-0" label={null}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] h-12 text-lg font-semibold w-full rounded-lg"
-                  >
-                    Add Expense
-                  </Button>
-                </Form.Item>
-              </Form>
-            </motion.div>
-          )}
-
-          {activeTab === "monthly" && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-6"
-            >
-              {/* Date Range Filter */}
-              <div className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl mb-6">
-                <h3 className="text-xl font-semibold text-[#FFFFFF] mb-4">
-                  Filter by Date Range
-                </h3>
-                <RangePicker
-                  onChange={handleDateRangeChange}
-                  className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg"
-                />
-              </div>
-
-              {/* Statistics Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {[
-                  {
-                    title: "Total Expenses",
-                    value: getStatistics().totalExpense,
-                    icon: <FaMoneyBillWave />,
-                    color: "#3498DB",
-                  },
-                  {
-                    title: "Total Revenue",
-                    value: getStatistics().totalRevenue,
-                    icon: <FaChartLine />,
-                    color: "#2ECC71",
-                  },
-                  {
-                    title: "Total Sales",
-                    value: getStatistics().totalSales,
-                    icon: <FaShoppingCart />,
-                    color: "#F39C12",
-                  },
-                ].map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl"
-                  >
-                    <Statistic
-                      title={
-                        <span className="text-base sm:text-lg text-[#FFFFFF]">
-                          {stat.title}
-                        </span>
-                      }
-                      value={stat.value}
-                      valueStyle={{
-                        color: stat.color,
-                        fontSize: "1.5rem",
-                        "@media (min-width: 640px)": { fontSize: "2rem" },
-                      }}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Filtered Expense List */}
-              <div className="bg-[#2C3E50]/10 backdrop-blur-sm p-6 rounded-lg shadow-xl">
-                <h3 className="text-xl font-semibold text-[#FFFFFF] mb-4">
-                  Expense Details
-                </h3>
-                <List
-                  dataSource={expenses}
-                  renderItem={(expense) => (
-                    <List.Item
-                      className="border-b border-[#34495E]/20 py-4"
-                      onClick={() => showModal(expense)}
-                    >
-                      <div className="flex justify-between items-center w-full">
-                        <div>
-                          <h4 className="text-[#FFFFFF] text-lg font-semibold">
-                            {expense.title}
-                          </h4>
-                          <p className="text-[#ECF0F1]">{expense.category}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[#3498DB] text-lg font-bold">
-                            ${expense.amount}
-                          </p>
-                          <p className="text-[#ECF0F1] text-sm">
-                            {moment(expense.date).format("MMMM D, YYYY")}
-                          </p>
-                        </div>
-                      </div>
-                    </List.Item>
-                  )}
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {/* View Details Modal */}
-          <Modal
-            title={null}
-            open={!!currentExpense}
-            onCancel={() => setCurrentExpense(null)}
-            footer={null}
-            className="custom-modal"
-            width={600}
-          >
-            <div className="p-2 md:p-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] mb-4 sm:mb-6">
-                {currentExpense?.title}
-              </h2>
-              <div className="bg-[#34495E]/20 p-2 md:p-6 rounded-lg space-y-2 md:space-y-4">
-                <div className="text-[#FFFFFF] text-lg">
-                  <span className="font-semibold">Category:</span>{" "}
-                  {currentExpense?.category}
                 </div>
-                <div className="text-[#FFFFFF] text-lg">
-                  <span className="font-semibold">Amount:</span> $
-                  {currentExpense?.amount}
-                </div>
-                <div className="text-[#FFFFFF] text-lg">
-                  <span className="font-semibold">Date:</span>{" "}
-                  {moment(currentExpense?.date).format("MMMM D, YYYY")}
-                </div>
-                <div className="text-[#FFFFFF] text-lg">
-                  <span className="font-semibold">Description:</span>
-                  <p className="mt-2">{currentExpense?.description}</p>
-                </div>
-                <div className="text-[#FFFFFF] text-lg">
-                  <span className="font-semibold">Product:</span>
-                  <p className="mt-2">{currentExpense?.product}</p>
-                </div>
-              </div>
-              <div className="flex justify-end mt-6">
-                <Button
-                  onClick={() => setCurrentExpense(null)}
-                  className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] px-6 py-2 text-lg font-semibold"
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          </Modal>
 
-          <Modal
-            title="Edit Expense"
-            open={isEditing}
-            onCancel={() => setIsEditing(false)}
-            footer={null}
-            className="custom-modal"
-          >
-            <Form
-              form={editForm}
-              onFinish={handleEditExpense}
-              layout="vertical"
-              className="space-y-6"
-            >
-              <Form.Item
-                name="title"
-                label={
-                  <span className="text-base sm:text-lg text-[#FFFFFF]">
-                    Title
-                  </span>
-                }
-              >
-                <Input className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg" />
-              </Form.Item>
-
-              <Form.Item
-                name="category"
-                label={
-                  <span className="text-base sm:text-lg text-[#FFFFFF]">
-                    Category
-                  </span>
-                }
-                rules={[{ required: true, message: "Please select category!" }]}
-              >
-                <Select className="custom-select h-12 text-lg">
-                  {categories.map((category) => (
-                    <Option key={category} value={category}>
-                      {category}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="amount"
-                label={
-                  <span className="text-base sm:text-lg text-[#FFFFFF]">
-                    Amount
-                  </span>
-                }
-                rules={[{ required: true, message: "Please input amount!" }]}
-              >
-                <Input
-                  type="number"
-                  className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="date"
-                label={
-                  <span className="text-base sm:text-lg text-[#FFFFFF]">
-                    Date
-                  </span>
-                }
-                rules={[{ required: true, message: "Please select date!" }]}
-              >
-                <DatePicker className="w-full bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-12 text-lg rounded-lg" />
-              </Form.Item>
-
-              <Form.Item
-                name="description"
-                label={
-                  <span className="text-base sm:text-lg text-[#FFFFFF]">
-                    Description
-                  </span>
-                }
-                rules={[
-                  { required: true, message: "Please input description!" },
-                ]}
-              >
-                <Input.TextArea
-                  className="bg-[#34495E]/20 border-[#3498DB] text-[#FFFFFF] h-10 sm:h-12 text-base sm:text-lg rounded-lg"
-                  rows={4}
-                />
-              </Form.Item>
-
-              <Form.Item className="mb-0">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] w-full"
+                <button
+                  type="submit"
+                  className="w-full bg-[#3498DB] text-[#FFFFFF] hover:bg-[#34495E] h-12 text-lg font-semibold rounded-lg"
                 >
                   Update Expense
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
+                </button>
+              </form>
+            </Modal>
+          )}
         </motion.div>
       </div>
     </>

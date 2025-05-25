@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaUpload, FaImages, FaTrash } from "react-icons/fa";
 import SideBar from "../../components/Admin/SideBar";
-import axios from "axios";
-import { Alert } from "antd";
+import { Alert, Modal } from "antd";
 import api from "../../utils/axios";
 
 const AdminAddProduct = () => {
@@ -11,11 +10,11 @@ const AdminAddProduct = () => {
     category: "",
     price: "",
     description: "",
-    benefits: "",
     isLatest: false,
   });
   const [images, setImages] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
   const [categories, setCategories] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,6 +45,11 @@ const AdminAddProduct = () => {
     fetchCategories();
   }, []);
 
+  const handlePreview = (imageUrl) => {
+    setPreviewImage(imageUrl);
+    setPreviewOpen(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -65,7 +69,6 @@ const AdminAddProduct = () => {
       productData.append("category", formData.category);
       productData.append("price", formData.price);
       productData.append("description", formData.description);
-      productData.append("benefits", formData.benefits);
       productData.append("isLatest", formData.isLatest);
 
       // Append images
@@ -95,7 +98,6 @@ const AdminAddProduct = () => {
         category: "",
         price: "",
         description: "",
-        benefits: "",
         isLatest: false,
       });
       setImages([]);
@@ -138,6 +140,14 @@ const AdminAddProduct = () => {
         isMobile={isMobile}
         setIsMobile={setIsMobile}
       />
+
+      <Modal
+        open={previewOpen}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <img alt="preview" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
 
       <div
         className={`min-h-screen bg-[#1A1A1A] p-6 flex-1 ${
@@ -211,7 +221,8 @@ const AdminAddProduct = () => {
                     <img
                       src={image.url}
                       alt={`Preview ${index}`}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-lg cursor-pointer"
+                      onClick={() => handlePreview(image.url)}
                     />
                     <button
                       type="button"
@@ -246,19 +257,6 @@ const AdminAddProduct = () => {
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white min-h-[100px]"
-                required
-              />
-            </div>
-
-            {/* Benefits */}
-            <div>
-              <label className="block text-white mb-2">Benefits</label>
-              <textarea
-                value={formData.benefits}
-                onChange={(e) =>
-                  setFormData({ ...formData, benefits: e.target.value })
                 }
                 className="w-full px-4 py-2 border border-[#34495E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB] bg-[#2C3E50] text-white min-h-[100px]"
                 required

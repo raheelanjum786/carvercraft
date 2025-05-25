@@ -1,10 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import contactUs from "../../assets/contactUs.png";
-gsap.registerPlugin(ScrollTrigger);
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -16,35 +13,7 @@ const ContactUs = () => {
 
   const sectionRef = useRef(null);
 
-  useEffect(() => {
-    const cardContainer = document.getElementById("card-model-container");
-
-    if (cardContainer) {
-      // Create the scroll animation for this section
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top center",
-          end: "bottom center",
-          scrub: true,
-          id: "card-animation-contact",
-        },
-      });
-
-      // Final animation for the card - center it and make it prominent
-      tl.to(cardContainer, {
-        x: "10  vw",
-        y: "-20vh",
-        rotation: 0,
-        scale: 0.6,
-        duration: 1,
-      });
-
-      return () => {
-        ScrollTrigger.getById("card-animation-contact")?.kill();
-      };
-    }
-  }, []);
+  // Remove the useEffect with GSAP animation
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,13 +49,22 @@ const ContactUs = () => {
   };
 
   return (
-    <div ref={sectionRef} className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 ">
+    <div
+      ref={sectionRef}
+      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 relative contact-section"
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-funky-pink opacity-10 blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-funky-teal opacity-10 blur-3xl"></div>
+      </div>
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full mx-auto "
+        className="w-full mx-auto relative z-10"
       >
+        {/* Rest of the JSX remains the same */}
         <div className="text-center mb-16">
           <motion.h2
             animate={{
@@ -98,55 +76,78 @@ const ContactUs = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mb-4"
+            className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-funky-pink via-funky-teal to-funky-orange mb-4"
           >
             Let's Connect!
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-gray-300 text-xl">
+          <motion.p
+            variants={itemVariants}
+            className="text-funky-green text-xl"
+          >
             Drop us a line and let's create something awesome together
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 ">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-purple-500/20 relative"
+            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-funky-pink/20 relative overflow-hidden group"
           >
-            <div className="absolute bottom-0 translate-x-1/3 right-0 z-40 h-[400px] w-[400px]">
+            {/* Animated border effect */}
+            <div className="absolute inset-0 overflow-hidden opacity-30">
+              <div className="absolute w-full h-1 bg-white/30 top-0 animate-slide-right"></div>
+              <div className="absolute w-full h-1 bg-white/30 bottom-0 animate-slide-left"></div>
+              <div className="absolute h-full w-1 bg-white/30 left-0 animate-slide-down"></div>
+              <div className="absolute h-full w-1 bg-white/30 right-0 animate-slide-up"></div>
+            </div>
+
+            <div className="absolute -inset-full top-0 block w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transform -skew-x-12 group-hover:animate-shine"></div>
+
+            <div className="absolute bottom-0 translate-x-1/3 right-0 -z-10 md:h-[400px] md:w-[400px] animate-hover-glow">
               <img src={contactUs} alt="" />
             </div>
-            <h3 className="text-3xl font-bold text-white mb-8 bg-clip-text">
+
+            <h3 className="text-3xl font-bold text-funky-teal mb-8 bg-clip-text relative">
               Contact Information
+              {/* Animated underline */}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-funky-pink to-funky-teal group-hover:w-full transition-all duration-700"></span>
             </h3>
+
             <div className="space-y-8">
               <motion.div
                 whileHover={{ x: 10 }}
                 className="flex items-center space-x-4"
               >
-                <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-2xl">
-                  <i className="fas fa-phone text-white text-xl"></i>
+                <div className="bg-gradient-to-r from-funky-pink to-funky-orange p-4 rounded-2xl relative overflow-hidden group">
+                  <i className="fas fa-phone text-white text-xl relative z-10"></i>
+                  {/* Icon pulse effect */}
+                  <div className="absolute inset-0 bg-white/20 scale-0 rounded-2xl group-hover:scale-150 opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
                 </div>
                 <div>
-                  <p className="text-purple-300">Ring Ring</p>
-                  <p className="text-white font-medium text-lg">
+                  <p className="text-funky-teal">Ring Ring</p>
+                  <p className="text-funky-green font-medium text-lg">
                     +32 328 23823 832
                   </p>
                 </div>
               </motion.div>
+
               <motion.div
                 whileHover={{ x: 10 }}
                 className="flex items-center space-x-4"
               >
-                <div className="bg-gradient-to-r from-pink-500 to-red-500 p-4 rounded-2xl">
-                  <i className="fas fa-envelope text-white text-xl"></i>
+                <div className="bg-gradient-to-r from-funky-pink to-funky-red p-4 rounded-2xl relative overflow-hidden group">
+                  <i className="fas fa-envelope text-white text-xl relative z-10"></i>
+                  {/* Icon pulse effect */}
+                  <div className="absolute inset-0 bg-white/20 scale-0 rounded-2xl group-hover:scale-150 opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
                 </div>
                 <div>
-                  <p className="text-purple-300">Drop a Line</p>
-                  <p className="text-white font-medium text-lg">
+                  <p className="text-funky-teal">Drop a Line</p>
+                  <p className="text-funky-green font-medium text-lg">
                     temporary@gmail.com
                   </p>
                 </div>
               </motion.div>
+
               <div className="pt-8">
                 <div className="flex space-x-6">
                   {[FaTwitter, FaLinkedin, FaInstagram].map((Icon, index) => (
@@ -159,9 +160,11 @@ const ContactUs = () => {
                       }}
                       transition={{ type: "spring", stiffness: 300 }}
                       href="#"
-                      className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-2xl text-white text-xl hover:shadow-lg hover:shadow-purple-500/50"
+                      className="bg-gradient-to-br from-funky-pink to-funky-teal p-4 rounded-2xl text-white text-xl hover:shadow-lg hover:shadow-funky-pink/50 relative overflow-hidden group"
                     >
-                      <Icon />
+                      <Icon className="relative z-10" />
+                      {/* Social icon glow effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-white/20 blur-xl transition-opacity duration-300"></div>
                     </motion.a>
                   ))}
                 </div>
@@ -172,9 +175,20 @@ const ContactUs = () => {
           <motion.form
             variants={itemVariants}
             onSubmit={handleSubmit}
-            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-purple-500/20"
+            className="bg-gradient-to-br from-purple-800/30 to-pink-800/30 p-8 rounded-3xl shadow-2xl backdrop-blur-lg border border-funky-teal/20 relative overflow-hidden group"
           >
-            <div className="grid grid-cols-1 gap-6">
+            {/* Form background animations */}
+            <div className="absolute inset-0 bg-gradient-to-br from-funky-pink/5 via-funky-teal/5 to-funky-orange/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 animate-nebula-pulse opacity-30"></div>
+
+            {/* Animated border effect */}
+            <div className="absolute inset-0 overflow-hidden opacity-30">
+              <div className="absolute w-full h-1 bg-white/30 top-0 animate-slide-right-delayed"></div>
+              <div className="absolute w-full h-1 bg-white/30 bottom-0 animate-slide-left-delayed"></div>
+              <div className="absolute h-full w-1 bg-white/30 left-0 animate-slide-down-delayed"></div>
+              <div className="absolute h-full w-1 bg-white/30 right-0 animate-slide-up-delayed"></div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 relative z-10">
               {[
                 { type: "text", placeholder: "Your Name", key: "name" },
                 { type: "email", placeholder: "Your Email", key: "email" },
@@ -184,42 +198,52 @@ const ContactUs = () => {
                   key={index}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  className="group"
                 >
                   <input
                     type={input.type}
                     placeholder={input.placeholder}
                     required
-                    className="w-full bg-purple-900/30 text-white placeholder-purple-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all backdrop-blur-sm"
+                    className="w-full bg-purple-900/30 text-funky-teal placeholder-funky-orange/70 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-funky-pink transition-all backdrop-blur-sm relative z-10"
                     onChange={(e) =>
                       setFormData({ ...formData, [input.key]: e.target.value })
                     }
                   />
+                  {/* Input focus animation */}
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-funky-pink to-funky-teal group-hover:w-full group-hover:left-0 transition-all duration-300"></div>
                 </motion.div>
               ))}
+
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="group"
               >
                 <textarea
                   placeholder="Your Message"
                   required
                   rows="4"
-                  className="w-full bg-purple-900/30 text-white placeholder-purple-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all backdrop-blur-sm resize-none"
+                  className="w-full bg-purple-900/30 text-funky-teal placeholder-funky-orange/70 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-funky-pink transition-all backdrop-blur-sm resize-none relative z-10"
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
                 ></textarea>
+                {/* Textarea focus animation */}
+                <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-funky-pink to-funky-teal group-hover:w-full group-hover:left-0 transition-all duration-300"></div>
               </motion.div>
+
               <motion.button
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 0 20px rgba(236, 72, 153, 0.5)",
+                  boxShadow: "0 0 20px rgba(222, 1, 87, 0.5)",
                 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white font-bold py-4 rounded-xl text-lg hover:opacity-90 transition-all"
+                className="w-full bg-gradient-to-r from-funky-pink via-funky-orange to-funky-red text-white font-bold py-4 rounded-xl text-lg hover:opacity-90 transition-all relative overflow-hidden group"
               >
-                Send Message
+                <span className="relative z-10">Send Message</span>
+                {/* Button shine effect */}
+                <span className="absolute -inset-full top-0 block w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transform -skew-x-12 group-hover:animate-shine"></span>
               </motion.button>
             </div>
           </motion.form>

@@ -11,6 +11,7 @@ import Background from "../content/ui/background";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LandingPage from "../components/Home/LandingPage";
+import PosPage from "../components/PosPage";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,6 +50,7 @@ const HomePage = () => {
       });
 
       // Set up animations for subsequent sections
+      // Move card to the right side during products section
       const homeTl = gsap.timeline({
         scrollTrigger: {
           trigger: "#products-section",
@@ -63,6 +65,77 @@ const HomePage = () => {
         scale: 0.7,
         x: "30vw",
         duration: 1,
+      });
+
+      // Move card to the left side during AboutUs section
+      const aboutTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#about-section",
+          start: "top bottom",
+          end: "top top",
+          scrub: true,
+          id: "card-animation-about",
+        },
+      });
+
+      aboutTl.to(cardContainer, {
+        x: "-30vw",
+        y: "-10vh",
+        rotateY: 180,
+        duration: 1,
+      });
+
+      // Move card back to right during carousel section
+      const carouselTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#carousel-section",
+          start: "top bottom",
+          end: "top top",
+          scrub: true,
+          id: "card-animation-carousel",
+        },
+      });
+
+      carouselTl.to(cardContainer, {
+        x: "25vw",
+        y: "5vh",
+        rotateY: 0,
+        scale: 0.6,
+        duration: 1,
+      });
+
+      // Move card to center during POS section
+      const posTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#pos-section",
+          start: "top bottom",
+          end: "top top",
+          scrub: true,
+          id: "card-animation-pos",
+        },
+      });
+
+      posTl.to(cardContainer, {
+        x: "0vw",
+        y: "0vh",
+        scale: 0.9,
+        duration: 1,
+      });
+
+      // Hide card during keypoints section
+      const hideCardTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".keypoints-section",
+          start: "top 80%",
+          end: "top 80%",
+          scrub: true,
+          id: "card-hide-keypoints",
+        },
+      });
+
+      hideCardTl.to(cardContainer, {
+        autoAlpha: 0,
+        duration: 0.5,
       });
     }
 
@@ -85,9 +158,16 @@ const HomePage = () => {
         <div id="products-section">
           <HomeProducts />
         </div>
-        <AboutUs />
-        <CarouselProducts />
-        <KeyPoints />
+        <div id="about-section">
+          <AboutUs />
+        </div>
+        <div id="carousel-section">
+          <CarouselProducts />
+        </div>
+        <div id="pos-section">
+          <PosPage />
+        </div>
+        {/* <KeyPoints /> */}
         <ContactUs />
         <Footer />
       </div>

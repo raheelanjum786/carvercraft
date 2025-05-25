@@ -60,18 +60,18 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-cyan-500 via-purple-600 to-pink-500 flex items-center justify-center overflow-hidden px-4 sm:px-6">
+    <div className="relative min-h-screen bg-[#041322] flex items-center justify-center overflow-hidden px-4 sm:px-6">
       {/* Funky background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-yellow-300 opacity-20 blur-3xl"></div>
-        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-pink-400 opacity-20 blur-3xl"></div>
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-funky-orange opacity-10 blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 rounded-full bg-funky-teal opacity-10 blur-3xl"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-80 h-80 rounded-full bg-funky-pink opacity-10 blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-funky-green opacity-10 blur-3xl"></div>
       </div>
 
       {/* Floating shapes */}
       <motion.div
-        className="absolute top-20 left-20 w-12 h-12 bg-yellow-300 rounded-lg opacity-70"
+        className="absolute top-20 left-20 w-12 h-12 bg-funky-orange opacity-30 rounded-lg"
         animate={{
           y: [0, -20, 0],
           rotate: [0, 15, 0],
@@ -85,7 +85,7 @@ const ForgotPassword = () => {
       />
 
       <motion.div
-        className="absolute bottom-32 right-20 w-16 h-16 bg-pink-400 rounded-full opacity-70"
+        className="absolute bottom-32 right-20 w-16 h-16 bg-funky-pink opacity-30 rounded-full"
         animate={{
           y: [0, 30, 0],
           x: [0, -20, 0],
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
       />
 
       <motion.div
-        className="absolute top-1/2 right-1/4 w-10 h-10 bg-green-400 rounded-lg opacity-70 rotate-45"
+        className="absolute top-1/2 right-1/4 w-10 h-10 bg-funky-teal opacity-30 rounded-lg rotate-45"
         animate={{
           y: [0, -15, 0],
           x: [0, 15, 0],
@@ -117,21 +117,21 @@ const ForgotPassword = () => {
         initial="hidden"
         animate="visible"
         variants={formVariants}
-        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/20"
+        className="relative z-10 w-full max-w-md p-8 rounded-2xl bg-gradient-to-br from-funky-pink/10 to-funky-teal/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-funky-pink/30"
       >
         <motion.div
           className="flex justify-center mb-6"
           whileHover={{ scale: 1.1, rotate: [0, -5, 5, -5, 0] }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
+          <div className="w-24 h-24 bg-gradient-to-br from-funky-orange via-funky-pink to-funky-teal rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
             <span className="text-4xl font-bold text-white">CC</span>
           </div>
         </motion.div>
 
         <motion.h2
           variants={itemVariants}
-          className="text-3xl font-extrabold text-center text-white mb-2 tracking-tight"
+          className="text-3xl font-extrabold text-center text-funky-orange mb-2 tracking-tight"
           style={{ textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}
         >
           Reset Password
@@ -139,7 +139,7 @@ const ForgotPassword = () => {
 
         <motion.p
           variants={itemVariants}
-          className="text-center text-white/80 mb-8"
+          className="text-center text-funky-green mb-8"
         >
           Enter your email to receive password reset instructions
         </motion.p>
@@ -154,8 +154,8 @@ const ForgotPassword = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-4 rounded-xl bg-white/20 border-2 border-white/30 
-              text-white placeholder-white/60 focus:outline-none focus:border-white/70 
+              className="w-full px-5 py-4 rounded-xl bg-black/30 border-2 border-funky-pink/50 
+              text-funky-green placeholder-funky-green/60 focus:outline-none focus:border-funky-teal focus:ring-2 focus:ring-funky-teal/30 
               transition-all duration-300 text-base"
               placeholder="Email"
               required
@@ -166,7 +166,7 @@ const ForgotPassword = () => {
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-green-300 text-center font-medium"
+              className="text-funky-green text-center font-medium"
             >
               {message}
             </motion.p>
@@ -176,69 +176,94 @@ const ForgotPassword = () => {
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-red-300 text-center font-medium"
+              className="text-funky-pink text-center font-medium"
             >
               {error}
             </motion.p>
           )}
 
-          <motion.button
+          <motion.div
             variants={itemVariants}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.2)",
-            }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 
-            text-white font-bold text-lg shadow-lg hover:from-yellow-500 hover:to-purple-700 
-            transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex flex-col space-y-4"
           >
-            {isLoading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Sending...
-              </span>
-            ) : (
-              "Send Reset Link"
-            )}
-          </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-4 px-6 bg-gradient-to-r from-funky-pink to-funky-teal hover:from-funky-teal hover:to-funky-pink 
+              text-white font-bold rounded-xl shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Sending...
+                </span>
+              ) : (
+                "Send Reset Link"
+              )}
+            </motion.button>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-center text-white/80 mt-4"
-          >
-            Remember your password?{" "}
-            <Link to="/login">
-              <motion.span
-                whileHover={{ scale: 1.05, color: "#ffffff" }}
-                className="font-bold text-white/90 underline decoration-wavy decoration-pink-500 underline-offset-4 cursor-pointer"
-              >
-                Back to Login
-              </motion.span>
-            </Link>
-          </motion.p>
+            <div className="text-center">
+              <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
+                <Link
+                  to="/auth/login"
+                  className="text-funky-teal hover:text-funky-pink transition-colors duration-300"
+                >
+                  Remember your password? Back to login
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
         </form>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-8 text-center"
+        >
+          <p className="text-funky-green/70 text-sm">
+            Don't have an account?{" "}
+            <motion.span whileHover={{ scale: 1.05 }} className="inline-block">
+              <Link
+                to="/auth/register"
+                className="text-funky-orange hover:text-funky-pink transition-colors duration-300 font-medium"
+              >
+                Sign up now
+              </Link>
+            </motion.span>
+          </p>
+        </motion.div>
+      </motion.div>
+
+      {/* Decorative elements */}
+      <motion.div
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-funky-green/50 text-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2 }}
+      >
+        <p>© 2023 CarverCraft. All rights reserved.</p>
       </motion.div>
     </div>
   );

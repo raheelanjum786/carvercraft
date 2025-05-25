@@ -465,33 +465,41 @@ const AdminHome = () => {
             className="bg-[#2D2D2D] p-4 sm:p-5 md:p-6 rounded-lg shadow-xl w-full"
           >
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
-              <h2 className="text-base sm:text-lg md:text-xl font-bold text-white">
+              <h2 className="text-base sm:text-lg md:text-xl font-bold text-black">
                 Recent Users
               </h2>
-              <button
-                onClick={() => {
-                  /* Add navigation to full user list */
-                }}
-                className="mt-3 sm:mt-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#34495E] text-white rounded-md hover:bg-[#3498DB] transition duration-300 text-sm sm:text-base"
-              >
-                View All
-              </button>
             </div>
 
-            <div className="overflow-hidden w-full">
-              <Table
-                dataSource={users}
-                columns={userColumns
-                  .map((col, index) => (index < 1 ? col : null))
-                  .filter(Boolean)} // Show only the first column
-                pagination={{ pageSize: 3 }}
-                className="user-table w-full"
-                rowKey="id"
-                style={{
-                  background: "transparent",
-                }}
-                scroll={{ x: true }}
-              />
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-white">
+                <thead>
+                  <tr className="border-b border-[#34495E]">
+                    <th className="py-3 px-4 text-left">User</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.slice(0, 3).map((user) => (
+                    <tr
+                      key={user.id}
+                      className="border-b border-[#34495E]/50 hover:bg-[#34495E]/20"
+                    >
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[#34495E] flex items-center justify-center">
+                            <FaUserCircle className="text-[#ECF0F1]" />
+                          </div>
+                          <div>
+                            <p className="font-medium">{user.name}</p>
+                            <p className="text-sm text-[#ECF0F1]">
+                              {user.email}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </motion.div>
         </div>

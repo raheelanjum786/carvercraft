@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { Suspense, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Suspense, useEffect, useState, useRef } from "react";
 import ProductCard from "../../content/ProductsCard/productCard";
 import { useSearchParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
@@ -11,6 +11,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const sectionRef = useRef(null);
 
   // Funky animations configuration
   const containerVariants = {
@@ -61,14 +62,144 @@ const Products = () => {
     }
   }, [category, products]);
 
+  // Create floating particles
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (section) {
+      const createParticle = () => {
+        const particle = document.createElement("div");
+        particle.className = "absolute w-1 h-1 bg-white/20 rounded-full";
+
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+
+        // Random animation duration
+        const duration = 5 + Math.random() * 10;
+        particle.style.animation = `floatAround ${duration}s ease-in-out infinite`;
+
+        // Remove after some time
+        setTimeout(() => {
+          particle.remove();
+        }, duration * 1000);
+
+        section.appendChild(particle);
+      };
+
+      // Create particles at intervals
+      const interval = setInterval(createParticle, 500);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []);
+
   return (
     <>
       <motion.div
-        className="relative bg-[#041322] pb-16 min-h-screen"
+        ref={sectionRef}
+        className="relative bg-[#041322] pb-32 min-h-screen overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
+        {/* Enhanced cosmic background animations */}
+        <div className="absolute inset-0">
+          {/* Original funky blobs with enhanced animations */}
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 0],
+              filter: ["blur(30px)", "blur(40px)", "blur(30px)"],
+              opacity: [0.1, 0.15, 0.1],
+            }}
+            transition={{ duration: 20, repeat: Infinity }}
+            className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-funky-orange to-funky-pink opacity-10 blur-3xl -top-48 -left-48"
+          ></motion.div>
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              rotate: [180, 0, 180],
+              filter: ["blur(40px)", "blur(50px)", "blur(40px)"],
+              opacity: [0.1, 0.15, 0.1],
+            }}
+            transition={{ duration: 15, repeat: Infinity }}
+            className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-l from-funky-teal to-funky-green opacity-10 blur-3xl -bottom-64 -right-64"
+          ></motion.div>
+
+          {/* New cosmic elements */}
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.05, 0.1, 0.05],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+            className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-funky-pink/20 via-purple-600/10 to-transparent blur-3xl top-1/4 left-1/3"
+          ></motion.div>
+
+          {/* Animated horizontal scan lines */}
+          <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-funky-teal/20 to-transparent top-[20%] animate-scan-horizontal"></div>
+          <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-funky-pink/20 to-transparent top-[60%] animate-scan-horizontal-reverse"></div>
+
+          {/* Animated vertical scan lines */}
+          <div className="absolute h-full w-[1px] bg-gradient-to-b from-transparent via-funky-orange/20 to-transparent left-[25%] animate-scan-vertical"></div>
+          <div className="absolute h-full w-[1px] bg-gradient-to-b from-transparent via-funky-teal/20 to-transparent right-[25%] animate-scan-vertical-reverse"></div>
+
+          {/* Animated cosmic grid */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjAuNSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] animate-subtle-shift opacity-20"></div>
+
+          {/* Cosmic dust particles */}
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-0.5 h-0.5 bg-funky-teal/40 rounded-full"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                x: [0, Math.random() * 50 - 25],
+                y: [0, Math.random() * 50 - 25],
+                opacity: [0, 0.8, 0],
+                scale: [0, 1, 0],
+              }}
+              transition={{
+                duration: 10 + Math.random() * 10,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+              }}
+            />
+          ))}
+
+          {/* Animated cosmic rings */}
+          <motion.div
+            className="absolute top-1/2 left-1/2 w-[80vw] h-[80vh] border border-funky-orange/5 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+            animate={{
+              rotate: [0, 360],
+              opacity: [0.05, 0.1, 0.05],
+              scale: [0.8, 1, 0.8],
+            }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 w-[60vw] h-[60vh] border border-funky-pink/5 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+            animate={{
+              rotate: [360, 0],
+              opacity: [0.05, 0.1, 0.05],
+              scale: [1, 0.9, 1],
+            }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          />
+
+          {/* Animated aurora at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-funky-teal/10 via-funky-pink/5 to-transparent animate-aurora opacity-20"></div>
+        </div>
+
         {/* Heading and Description */}
         <motion.div
           className="relative z-10 text-center pt-24 px-4"
@@ -77,68 +208,105 @@ const Products = () => {
           transition={{ type: "spring", bounce: 0.5 }}
         >
           <motion.h1
-            className="text-3xl sm:text-4xl text-[#E0A387] font-bold"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            className="text-5xl sm:text-6xl font-bold mb-4 tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-funky-pink via-funky-teal to-funky-orange"
+            animate={{
+              textShadow: [
+                "0 0 10px rgba(222,1,87,0.5)",
+                "0 0 15px rgba(25,215,232,0.5)",
+                "0 0 10px rgba(255,165,0,0.5)",
+                "0 0 10px rgba(222,1,87,0.5)",
+              ],
+              scale: [1, 1.02, 0.98, 1],
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
           >
             Our Groovy Products
           </motion.h1>
           <motion.p
-            className="text-[#E0A387] mt-2 text-sm sm:text-base"
+            className="text-funky-green mt-2 text-xl max-w-2xl mx-auto opacity-90"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            animate={{
+              opacity: 1,
+              y: [0, -5, 0],
+            }}
+            transition={{
+              delay: 0.5,
+              y: {
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              },
+            }}
           >
-            Dive into our far-out collection of products crafted with cosmic
-            vibes!
+            ✨ Dive into our far-out collection of products crafted with cosmic
+            vibes! ✨
           </motion.p>
         </motion.div>
 
-        {/* Filter Section */}
-        {/* <div className="flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 gap-4 z-10 relative">
-          <h2 className="text-lg sm:text-xl text-[#E0A387]">
-            Filter Products:
-          </h2>
-          <select
-            className="bg-[#E0A387] text-[#310A0B] p-2 sm:p-3 rounded w-full sm:w-auto"
-            onChange={(e) =>
-              (window.location.search = `?category=${e.target.value}`)
-            }
-          >
-            <option value="all">All</option>
-            <option value="new">New Arrivals</option>
-            <option value="sale">On Sale</option>
-          </select>
-        </div> */}
-
         {/* Content Container */}
-        <motion.div
-          className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-20 p-4 sm:p-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {isLoading ? (
-            <motion.div
-              className="text-[#E0A387] text-xl"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
-            >
-              Loading groovy stuff...
-            </motion.div>
-          ) : (
-            filteredProducts.map((product) => (
+        <AnimatePresence>
+          <motion.div
+            className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8 mt-12"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {isLoading ? (
               <motion.div
-                key={product.id}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="col-span-full flex justify-center items-center py-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
               >
-                <ProductCard product={product} />
+                {/* Enhanced cosmic loader */}
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-funky-pink border-t-transparent rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 w-16 h-16 border-4 border-funky-teal/30 border-b-transparent rounded-full animate-spin-slow"></div>
+                  <div className="absolute inset-0 w-16 h-16 border-4 border-funky-orange/20 border-l-transparent rounded-full animate-spin-slower"></div>
+                </div>
               </motion.div>
-            ))
-          )}
-        </motion.div>
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <motion.div
+                  key={product._id || product.id}
+                  variants={itemVariants}
+                  whileHover={{
+                    scale: 1.05,
+                    rotate: [-0.5, 0.5, -0.5],
+                    boxShadow: [
+                      "0 10px 30px -15px rgba(0,0,0,0.3)",
+                      "0 10px 30px -15px rgba(222,1,87,0.5)",
+                      "0 10px 30px -15px rgba(25,215,232,0.5)",
+                      "0 10px 30px -15px rgba(0,0,0,0.3)",
+                    ],
+                    transition: { duration: 0.3 },
+                  }}
+                  className="transform transition-all duration-300 hover:shadow-2xl relative group"
+                >
+                  {/* Card glow effect */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-funky-pink via-funky-teal to-funky-orange rounded-lg opacity-0 group-hover:opacity-50 blur-md transition-opacity duration-300 -z-10"></div>
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                className="col-span-full text-center py-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <motion.p
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    color: ["#FFA500", "#FF69B4", "#FFA500"],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="text-funky-orange text-xl"
+                >
+                  No products found in this category
+                </motion.p>
+              </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
       <Footer />
     </>

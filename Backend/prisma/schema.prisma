@@ -20,7 +20,9 @@ model User {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   sales            Sale[]      // New relation to Sale
+  reviews   Review[]
 }
+
 
 model Product {
   id          Int      @id @default(autoincrement())
@@ -28,7 +30,7 @@ model Product {
   categoryId  Int
   price       Float
   description String?
-  benefits    String?
+  // benefits field removed
   isLatest    Boolean  @default(false)
   status      String // e.g., "active", "inactive"
   imageUrls   String   @db.VarChar(500) // Store JSON string of image URLs
@@ -39,6 +41,7 @@ model Product {
   orderProducts OrderProduct[] // Relation to OrderProduct
   expenses      Expense[]
   cartItems     CartItem[] // Relation to CartItem
+  reviews   Review[]
 }
 
 model Category {
@@ -197,4 +200,18 @@ model SalesReport {
   channelData    String   @db.Text  // JSON string for channel breakdown
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  
+  // Relations
+  productId   Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
