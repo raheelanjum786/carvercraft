@@ -46,7 +46,7 @@ const AdminExpenseManager = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "http://localhost:4000/api/expenses/getAll"
+        "http://13.60.44.89:4000/api/expenses/getAll"
       );
       const data = await response.data;
       setExpenses(data);
@@ -64,7 +64,9 @@ const AdminExpenseManager = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      const response = await api.get("http://localhost:4000/api/products/get");
+      const response = await api.get(
+        "http://13.60.44.89:4000/api/products/get"
+      );
       const data = await response.data;
       setProducts(data);
     } catch (error) {
@@ -120,7 +122,7 @@ const AdminExpenseManager = () => {
       }
 
       const response = await api.post(
-        "http://localhost:4000/api/expenses/create",
+        "http://13.60.44.89:4000/api/expenses/create",
         submitData,
         {
           headers: { "Content-Type": "application/json" },
@@ -174,7 +176,7 @@ const AdminExpenseManager = () => {
       }
 
       const response = await api.put(
-        `http://localhost:4000/api/expenses/update/${currentExpense.id}`,
+        `http://13.60.44.89:4000/api/expenses/update/${currentExpense.id}`,
         submitData,
         {
           headers: { "Content-Type": "application/json" },
@@ -200,7 +202,7 @@ const AdminExpenseManager = () => {
 
     try {
       const response = await api.delete(
-        `http://localhost:4000/api/expenses/${id}`
+        `http://13.60.44.89:4000/api/expenses/${id}`
       );
 
       if (response.status !== 200) throw new Error("Failed to delete expense");

@@ -58,7 +58,7 @@ const Cart = () => {
       const user = JSON.parse(localStorage?.getItem("user") || "");
       try {
         const response = await api.get(
-          `http://localhost:4000/api/cart/get/${user.id}`
+          `http://13.60.44.89:4000/api/cart/get/${user.id}`
         );
         console.log("🛒 Cart fetched:", response.data);
         setCartItems(response.data);
@@ -74,7 +74,7 @@ const Cart = () => {
   console.log("Set Items", setCartItems);
   const handleQuantityChange = async (cartItemId, quantity) => {
     try {
-      await api.put("http://localhost:4000/api/cart/update", {
+      await api.put("http://13.60.44.89:4000/api/cart/update", {
         cartItemId,
         quantity,
       });
@@ -92,7 +92,7 @@ const Cart = () => {
 
   const handleRemoveItem = async (cartItemId) => {
     try {
-      await api.delete(`http://localhost:4000/api/cart/remove/${cartItemId}`);
+      await api.delete(`http://13.60.44.89:4000/api/cart/remove/${cartItemId}`);
       setCartItems((prevItems) =>
         prevItems.filter((item) => item.id !== cartItemId)
       );
@@ -115,7 +115,7 @@ const Cart = () => {
       const user = JSON.parse(localStorage?.getItem("user") || "");
       if (!user || !user.id) throw new Error("🔑 Authentication needed!");
 
-      await api.delete(`http://localhost:4000/api/cart/clear/${user.id}`);
+      await api.delete(`http://13.60.44.89:4000/api/cart/clear/${user.id}`);
       setCartItems([]);
       navigate("/buy-now", { state: { orderItems } });
     } catch (error) {

@@ -9,7 +9,7 @@ const RelatedProducts = () => {
     try {
       // Try to parse as JSON first
       const parsedUrl = JSON.parse(url);
-      return `http://localhost:4000/api${parsedUrl}`;
+      return `http://13.60.44.89:4000/api${parsedUrl}`;
     } catch (error) {
       return url;
     }
@@ -18,7 +18,9 @@ const RelatedProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/products/get");
+        const response = await fetch(
+          "http://13.60.44.89:4000/api/products/get"
+        );
         const data = await response.json();
         setProducts(data.slice(0, 4)); // Get first 4 products for related items
       } catch (error) {

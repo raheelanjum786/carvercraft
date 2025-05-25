@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
       };
 
       const response = await api.post(
-        "http://localhost:4000/api/cart/add",
+        "http://13.60.44.89:4000/api/cart/add",
         requestData
       );
       console.log("requestData", requestData);
@@ -57,7 +57,7 @@ const ProductCard = ({ product }) => {
               try {
                 // Try to parse as JSON first
                 const parsedUrls = JSON.parse(product.imageUrls);
-                return `http://localhost:4000/api${parsedUrls}`;
+                return `http://13.60.44.89:4000/api${parsedUrls}`;
               } catch (error) {
                 return product.imageUrls;
               }

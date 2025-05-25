@@ -13,7 +13,7 @@ const LatestProductCard = () => {
     const fetchData = async () => {
       try {
         const response = await api.get(
-          "http://localhost:4000/api/products/get"
+          "http://13.60.44.89:4000/api/products/get"
         );
         const data = response.data;
         const latestProducts = data.filter((product) => product.isLatest);
@@ -36,7 +36,7 @@ const LatestProductCard = () => {
       };
 
       const response = await api.post(
-        "http://localhost:4000/api/cart/add",
+        "http://13.60.44.89:4000/api/cart/add",
         requestData
       );
       if (response.status === 200) {
@@ -130,7 +130,7 @@ const LatestProductCard = () => {
                         src={
                           imageUrl.startsWith("http")
                             ? imageUrl
-                            : `http://localhost:4000/api${imageUrl}`
+                            : `http://13.60.44.89:4000/api${imageUrl}`
                         }
                         alt={`Product ${index + 1}`}
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-3 ${
@@ -149,7 +149,7 @@ const LatestProductCard = () => {
                         src={
                           imageUrl.startsWith("http")
                             ? imageUrl
-                            : `http://localhost:4000/api${imageUrl}`
+                            : `http://13.60.44.89:4000/api${imageUrl}`
                         }
                         alt="Product"
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-3 ${

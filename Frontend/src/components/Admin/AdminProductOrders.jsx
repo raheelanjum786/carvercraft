@@ -17,7 +17,7 @@ const AdminProductOrders = () => {
     const fetchOrders = async () => {
       try {
         const response = await api.get(
-          "http://localhost:4000/api/productOrder/getAll"
+          "http://13.60.44.89:4000/api/productOrder/getAll"
         );
         setOrders(response.data);
       } catch (error) {

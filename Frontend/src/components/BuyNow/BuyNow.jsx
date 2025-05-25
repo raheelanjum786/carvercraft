@@ -93,7 +93,7 @@ const BuyNow = () => {
 
     if (productOrders.length > 0) {
       const response = await api.post(
-        "http://localhost:4000/api/productOrder/create",
+        "http://13.60.44.89:4000/api/productOrder/create",
         {
           orders: productOrders,
         }

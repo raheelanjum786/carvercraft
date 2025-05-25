@@ -29,7 +29,7 @@ const AdminAddProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get(
-          "http://localhost:4000/api/categories/get"
+          "http://13.60.44.89:4000/api/categories/get"
         );
         setCategories(response.data);
       } catch (error) {
@@ -77,7 +77,7 @@ const AdminAddProduct = () => {
       });
 
       const response = await api.post(
-        "http://localhost:4000/api/products/add",
+        "http://13.60.44.89:4000/api/products/add",
         productData,
         {
           headers: {

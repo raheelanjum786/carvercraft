@@ -62,7 +62,7 @@ const AdminSalesReview = () => {
       try {
         setLoading(true);
         const response = await api.get(
-          "http://localhost:4000/api/sales/overview"
+          "http://13.60.44.89:4000/api/sales/overview"
         );
         const data = response.data;
 

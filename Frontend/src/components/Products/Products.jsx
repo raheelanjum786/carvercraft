@@ -40,7 +40,7 @@ const Products = () => {
     const fetchData = async () => {
       try {
         const response = await api.get(
-          "http://localhost:4000/api/products/get"
+          "http://13.60.44.89:4000/api/products/get"
         );
         setProducts(response.data);
         setIsLoading(false);

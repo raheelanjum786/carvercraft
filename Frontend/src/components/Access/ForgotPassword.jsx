@@ -18,7 +18,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await api.post(
-        "http://localhost:4000/api/auth/users/forgot-password",
+        "http://13.60.44.89:4000/api/auth/users/forgot-password",
         {
           email,
         }
