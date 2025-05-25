@@ -18,7 +18,7 @@ const ProductGallery = ({ product }) => {
             try {
               // Try to parse as JSON first
               const parsedUrls = JSON.parse(product.imageUrls);
-              return `http://51.21.182.124:4000/api${parsedUrls}`;
+              return `http://51.21.182.124/api${parsedUrls}`;
             } catch (error) {
               return product.imageUrls;
             }
@@ -57,7 +57,7 @@ const ProductGallery = ({ product }) => {
                 src={(() => {
                   try {
                     const parsedUrls = JSON.parse(product.imageUrls);
-                    return `http://51.21.182.124:4000/api${parsedUrls}`;
+                    return `http://51.21.182.124/api${parsedUrls}`;
                   } catch (error) {
                     return img;
                   }

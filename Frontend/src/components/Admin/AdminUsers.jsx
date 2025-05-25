@@ -53,7 +53,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124:4000/api/auth/users/get-users"
+          "http://51.21.182.124/api/auth/users/get-users"
         );
         setUsers(response.data);
       } catch (error) {
@@ -78,7 +78,7 @@ const AdminUsers = () => {
   const handleDelete = async (userId, e) => {
     e.stopPropagation(); // Stop event propagation
     try {
-      await api.delete(`http://51.21.182.124:4000/api/auth/users/${userId}`);
+      await api.delete(`http://51.21.182.124/api/auth/users/${userId}`);
       setUsers(users.filter((user) => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -88,7 +88,7 @@ const AdminUsers = () => {
   const handleModalOk = async () => {
     try {
       await api.put(
-        `http://51.21.182.124:4000/api/auth/users/${editingUser._id}`,
+        `http://51.21.182.124/api/auth/users/${editingUser._id}`,
         editingUser
       );
 

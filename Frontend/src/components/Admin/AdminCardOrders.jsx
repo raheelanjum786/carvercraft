@@ -20,7 +20,7 @@ const AdminCardOrders = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "http://51.21.182.124:4000/api/cardOrders/admin/all"
+        "http://51.21.182.124/api/cardOrders/admin/all"
       );
       setOrders(response.data);
     } catch (error) {
@@ -46,12 +46,9 @@ const AdminCardOrders = () => {
 
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
-      await api.patch(
-        `http://51.21.182.124:4000/api/cardOrders/${orderId}/status`,
-        {
-          status: newStatus,
-        }
-      );
+      await api.patch(`http://51.21.182.124/api/cardOrders/${orderId}/status`, {
+        status: newStatus,
+      });
 
       setOrders(
         orders.map((order) =>
@@ -282,7 +279,7 @@ const AdminCardOrders = () => {
                     </h4>
                     <div className="flex justify-center">
                       <img
-                        src={`http://51.21.182.124:4000/api${selectedOrder.designUrl}`}
+                        src={`http://51.21.182.124/api${selectedOrder.designUrl}`}
                         alt="Customer Design"
                         className="max-h-64 object-contain"
                         onError={(e) => {

@@ -29,7 +29,7 @@ const AdminAddProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get(
-          "http://51.21.182.124:4000/api/categories/get"
+          "http://51.21.182.124/api/categories/get"
         );
         setCategories(response.data);
       } catch (error) {
@@ -77,7 +77,7 @@ const AdminAddProduct = () => {
       });
 
       const response = await api.post(
-        "http://51.21.182.124:4000/api/products/add",
+        "http://51.21.182.124/api/products/add",
         productData,
         {
           headers: {

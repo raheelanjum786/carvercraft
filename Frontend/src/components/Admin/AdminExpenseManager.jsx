@@ -46,7 +46,7 @@ const AdminExpenseManager = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "http://51.21.182.124:4000/api/expenses/getAll"
+        "http://51.21.182.124/api/expenses/getAll"
       );
       const data = await response.data;
       setExpenses(data);
@@ -64,9 +64,7 @@ const AdminExpenseManager = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      const response = await api.get(
-        "http://51.21.182.124:4000/api/products/get"
-      );
+      const response = await api.get("http://51.21.182.124/api/products/get");
       const data = await response.data;
       setProducts(data);
     } catch (error) {
@@ -122,7 +120,7 @@ const AdminExpenseManager = () => {
       }
 
       const response = await api.post(
-        "http://51.21.182.124:4000/api/expenses/create",
+        "http://51.21.182.124/api/expenses/create",
         submitData,
         {
           headers: { "Content-Type": "application/json" },
@@ -176,7 +174,7 @@ const AdminExpenseManager = () => {
       }
 
       const response = await api.put(
-        `http://51.21.182.124:4000/api/expenses/update/${currentExpense.id}`,
+        `http://51.21.182.124/api/expenses/update/${currentExpense.id}`,
         submitData,
         {
           headers: { "Content-Type": "application/json" },
@@ -202,7 +200,7 @@ const AdminExpenseManager = () => {
 
     try {
       const response = await api.delete(
-        `http://51.21.182.124:4000/api/expenses/${id}`
+        `http://51.21.182.124/api/expenses/${id}`
       );
 
       if (response.status !== 200) throw new Error("Failed to delete expense");

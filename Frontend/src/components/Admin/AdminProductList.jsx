@@ -20,8 +20,8 @@ const AdminProductList = () => {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          api.get("http://51.21.182.124:4000/api/products/get"),
-          api.get("http://51.21.182.124:4000/api/categories/get"),
+          api.get("http://51.21.182.124/api/products/get"),
+          api.get("http://51.21.182.124/api/categories/get"),
         ]);
         setProducts(productsRes.data);
         setCategories(categoriesRes.data);
@@ -36,7 +36,7 @@ const AdminProductList = () => {
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await api.delete(`http://51.21.182.124:4000/api/products/${productId}`);
+        await api.delete(`http://51.21.182.124/api/products/${productId}`);
         // Refresh the products list after successful deletion
         setProducts(products.filter((product) => product.id !== productId));
       } catch (error) {
@@ -69,7 +69,7 @@ const AdminProductList = () => {
       }
 
       const response = await api.put(
-        `http://51.21.182.124:4000/api/products/update/${updatedProduct.id}`,
+        `http://51.21.182.124/api/products/update/${updatedProduct.id}`,
         productData,
         {
           headers: {
@@ -389,7 +389,7 @@ const AdminProductList = () => {
                               return images.map((imageUrl, index) => (
                                 <div key={index} className="relative">
                                   <img
-                                    src={`http://51.21.182.124:4000/api${imageUrl}`}
+                                    src={`http://51.21.182.124/api${imageUrl}`}
                                     alt={`Product ${index + 1}`}
                                     className="w-24 h-24 object-cover rounded"
                                   />
@@ -442,7 +442,7 @@ const AdminProductList = () => {
                               return images.map((imageUrl, index) => (
                                 <img
                                   key={index}
-                                  src={`http://51.21.182.124:4000/api${imageUrl}`}
+                                  src={`http://51.21.182.124/api${imageUrl}`}
                                   alt={`Product ${index + 1}`}
                                   className="w-32 h-32 object-cover rounded"
                                 />

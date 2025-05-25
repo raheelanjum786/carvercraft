@@ -28,7 +28,7 @@ const ProductDescription = () => {
     const fetchProduct = async () => {
       try {
         const response = await api.get(
-          `http://51.21.182.124:4000/api/products/get/${id}`
+          `http://51.21.182.124/api/products/get/${id}`
         );
         setProduct(response.data);
       } catch (error) {

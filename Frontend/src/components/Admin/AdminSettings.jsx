@@ -58,7 +58,7 @@ const AdminSettings = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post(
-          "http://51.21.182.124:4000/api/admin/settings/change-password",
+          "http://51.21.182.124/api/admin/settings/change-password",
           {
             currentPassword: formData.currentPassword,
             newPassword: formData.newPassword,
@@ -94,7 +94,7 @@ const AdminSettings = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post(
-          "http://51.21.182.124:4000/api/admin/settings/add-admin",
+          "http://51.21.182.124/api/admin/settings/add-admin",
           newAdminData,
           {
             headers: {
