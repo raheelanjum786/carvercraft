@@ -17,16 +17,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HomePage = () => {
   useEffect(() => {
-    // Add smooth scrolling behavior to the entire page
     document.documentElement.style.scrollBehavior = "smooth";
 
-    // Set up the card model container to be fixed position for scrolling animations
     const cardContainer = document.getElementById("card-model-container");
     if (cardContainer) {
-      // Initially hide the card model completely
       gsap.set(cardContainer, { autoAlpha: 0 });
 
-      // Create a timeline for the card model appearance and movement
       const cardTl = gsap.timeline({
         scrollTrigger: {
           trigger: "#home-section",
