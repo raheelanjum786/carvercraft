@@ -43,16 +43,18 @@ import error from "./assets/error.png";
 const App = () => {
   return (
     <div className="bg-white w-full h-screen relative overflow-hidden">
-      <div className="flex justify-center items-center">
-        <h1 className="text-4xl md:text-7xl lg:text-7xl text-gray-700 font-bold text-center mt-20">
-          404 Error
-        </h1>
-      </div>
-      <div className="flex flex-col justify-center items-center absolute bottom-20 left-1/2 transform -translate-x-1/2 mb-10">
-        <img src={error} alt="error" className="w-20 h-20" />
-        <h1 className="text-lg md:text-3xl lg:text-5xl text-center mt-4">
-          Your server is blocked
-        </h1>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <div className="flex justify-center items-center">
+          <h1 className="text-4xl md:text-7xl lg:text-7xl text-gray-700 font-bold text-center mt-20">
+            404 Page not found
+          </h1>
+        </div>
+        <div className="flex flex-col justify-center items-center my-20">
+          <img src={error} alt="error" className="w-20 h-20" />
+          <h1 className="text-lg md:text-3xl lg:text-5xl text-center mt-4 text-gray-600">
+            Your server is blocked
+          </h1>
+        </div>
       </div>
     </div>
     // <Router>
